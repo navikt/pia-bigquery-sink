@@ -26,6 +26,7 @@ class DefaultBigQueryClient(
     ) { block() }
 
     override fun migrate() = withLoggingContext {
+        log.info { "Kjører migrering" }
         schemaRegistry
             .mapValues { it.value.toTableInfo(datasetId) }
             .forEach { (_, tableInfo) ->

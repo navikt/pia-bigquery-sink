@@ -22,7 +22,7 @@ fields:
     description: "Stikkord for hendelsen"
     maxLength:
   - name: data
-    type: JSON
+    type: STRING
     mode: NULLABLE
     description: "Tilleggsinformasjon til hendelsen"
     maxLength:
