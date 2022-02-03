@@ -26,13 +26,15 @@ class DefaultBigQueryClient(
     ) { block() }
 
     override fun migrate() = withLoggingContext {
-        schemaRegistry.mapValues { it.value.toTableInfo(datasetId) }.forEach { (tableName, tableInfo) ->
-            val table = bigQuery.getTable(tableInfo.tableId)
-            if (table == null) {
-                log.info { "Oppretter tabell: '$tableName'" }
-                bigQuery.create(tableInfo)
+        schemaRegistry
+            .mapValues { it.value.toTableInfo(datasetId) }
+            .forEach { (_, tableInfo) ->
+                val existingTable = bigQuery.getTable(tableInfo.tableId)
+                if (existingTable == null) {
+                    val createdTable = bigQuery.create(tableInfo)
+                    log.info { "Opprettet tabell: '${createdTable.tableId.table}'" }
+                }
             }
-        }
     }
 
     override fun ping(): Boolean = withLoggingContext {
