@@ -1,21 +1,25 @@
 package no.nav.hjelpemidler.bigquery.sink
 
-import com.google.cloud.bigquery.BigQuery
 import com.google.cloud.bigquery.BigQueryOptions
 import com.google.cloud.bigquery.DatasetId
+import com.google.cloud.bigquery.InsertAllRequest.RowToInsert
+import com.google.cloud.bigquery.TableId
+import com.google.cloud.bigquery.TableInfo
 import mu.KotlinLogging
 import mu.withLoggingContext
+import no.nav.hjelpemidler.bigquery.sink.BigQueryClient.BigQueryClientException
 
 interface BigQueryClient {
-    fun migrate()
-    fun ping(): Boolean
+    fun datasetPresent(datasetId: DatasetId): Boolean
+    fun tablePresent(tableId: TableId): Boolean
+    fun create(tableInfo: TableInfo): TableInfo
+    fun insert(tableId: TableId, row: RowToInsert)
+
+    class BigQueryClientException(message: String) : RuntimeException(message)
 }
 
-class DefaultBigQueryClient(
-    private val datasetId: DatasetId,
-    private val schemaRegistry: SchemaRegistry,
-) : BigQueryClient {
-    private val bigQuery: BigQuery = BigQueryOptions.newBuilder()
+class DefaultBigQueryClient(private val datasetId: DatasetId) : BigQueryClient {
+    private val bigQuery = BigQueryOptions.newBuilder()
         .setProjectId(datasetId.project)
         .build()
         .service
@@ -25,27 +29,37 @@ class DefaultBigQueryClient(
         "datasetId" to datasetId.dataset
     ) { block() }
 
-    override fun migrate() = withLoggingContext {
-        log.info { "Kjører migrering" }
-        schemaRegistry
-            .mapValues { it.value.toTableInfo(datasetId) }
-            .forEach { (_, tableInfo) ->
-                val existingTable = bigQuery.getTable(tableInfo.tableId)
-                if (existingTable == null) {
-                    val createdTable = bigQuery.create(tableInfo)
-                    log.info { "Opprettet tabell: '${createdTable.tableId.table}'" }
-                }
-            }
+    override fun datasetPresent(datasetId: DatasetId): Boolean = withLoggingContext {
+        bigQuery.getDataset(datasetId) != null
     }
 
-    override fun ping(): Boolean = withLoggingContext {
-        when (bigQuery.getDataset(datasetId)) {
-            null -> log.error { "Fikk ikke kontakt med BigQuery" }.let { false }
-            else -> log.info { "Fikk kontakt med BigQuery" }.let { true }
+    override fun tablePresent(tableId: TableId): Boolean = withLoggingContext {
+        bigQuery.getTable(tableId) != null
+    }
+
+    override fun create(tableInfo: TableInfo): TableInfo = withLoggingContext {
+        val createdTable = bigQuery.create(tableInfo)
+        log.info { "Opprettet tabell: '${createdTable.tableId.table}'" }
+        createdTable
+    }
+
+    override fun insert(tableId: TableId, row: RowToInsert) {
+        val tableName = tableId.table
+        val table = requireNotNull(bigQuery.getTable(tableId)) {
+            "Mangler tabell: '$tableName' i BigQuery"
+        }
+        val rows = listOf(row)
+        log.debug {
+            "Setter inn rader i BigQuery, rader: '$rows'"
+        }
+        val response = table.insert(rows)
+        when {
+            response.hasErrors() -> throw BigQueryClientException(
+                "Lagring i BigQuery feilet: '${response.insertErrors}'"
+            )
+            else -> log.info { "Tilbakemelding ble lagret i tabell: '$tableName'" }
         }
     }
-
-    class BigQueryClientException(message: String) : RuntimeException(message)
 
     companion object {
         private val log = KotlinLogging.logger {}
@@ -53,12 +67,23 @@ class DefaultBigQueryClient(
 }
 
 class LocalBigQueryClient : BigQueryClient {
-    override fun migrate() =
-        log.info { "migrate() called" }
-
-    override fun ping(): Boolean {
-        log.info { "ping() called" }
+    override fun datasetPresent(datasetId: DatasetId): Boolean {
+        log.info { "datasetPresent(datasetId) called with datasetId: '$datasetId'" }
         return true
+    }
+
+    override fun tablePresent(tableId: TableId): Boolean {
+        log.info { "tablePresent(tableId) called with tableId: '$tableId'" }
+        return true
+    }
+
+    override fun create(tableInfo: TableInfo): TableInfo {
+        log.info { "create(tableInfo) called with tableInfo: '$tableInfo'" }
+        return tableInfo
+    }
+
+    override fun insert(tableId: TableId, row: RowToInsert) {
+        log.info { "insert(tableId, row) called with tableId: '$tableId', row: '$row'" }
     }
 
     companion object {

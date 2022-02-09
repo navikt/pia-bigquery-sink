@@ -17,16 +17,13 @@ fun ktor(name: String) = "io.ktor:ktor-$name:1.6.7"
 dependencies {
     implementation(kotlin("stdlib"))
 
-    // Jackson
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
-
     // Ktor Server
     implementation(ktor("server-core"))
     implementation(ktor("server-netty"))
     implementation(ktor("metrics-micrometer"))
 
-    implementation("com.github.navikt:rapids-and-rivers:2022.02.02-14.07.dc18de6a253c")
     implementation("com.natpryce:konfig:1.6.10.0")
+    implementation("com.github.navikt:rapids-and-rivers:2022.02.02-14.07.dc18de6a253c")
     implementation("com.google.cloud:google-cloud-bigquery:2.8.0")
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.2")
 

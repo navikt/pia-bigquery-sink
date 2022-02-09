@@ -2,11 +2,9 @@ package no.nav.hjelpemidler.bigquery.sink
 
 import com.google.cloud.bigquery.Field
 import com.google.cloud.bigquery.Field.Mode
+import com.google.cloud.bigquery.FieldList
 import com.google.cloud.bigquery.Schema
 import com.google.cloud.bigquery.StandardSQLTypeName
-import com.google.cloud.bigquery.StandardTableDefinition
-import com.google.cloud.bigquery.TableId
-import com.google.cloud.bigquery.TableInfo
 
 class SchemaBuilder {
     private val fields = mutableListOf<Field>()
@@ -32,6 +30,15 @@ class SchemaBuilder {
         block: Field.Builder.() -> Unit = {},
     ): Field = field(name, StandardSQLTypeName.STRING, block)
 
+    fun struct(
+        name: String,
+        block: Field.Builder.() -> Unit = {},
+        subFields: SchemaBuilder.() -> Unit = {},
+    ): Field = Field.newBuilder(name, StandardSQLTypeName.STRUCT, FieldList.of(SchemaBuilder().apply(subFields).fields))
+        .apply(block)
+        .build()
+        .also { fields.add(it) }
+
     fun timestamp(
         name: String,
         block: Field.Builder.() -> Unit = {},
@@ -40,10 +47,9 @@ class SchemaBuilder {
     fun Field.Builder.nullable(): Field.Builder = setMode(Mode.NULLABLE)
     fun Field.Builder.required(): Field.Builder = setMode(Mode.REQUIRED)
     fun Field.Builder.repeated(): Field.Builder = setMode(Mode.REPEATED)
+    fun Field.Builder.description(description: String): Field.Builder = setDescription(description)
 }
 
-fun table(tableId: TableId, block: SchemaBuilder.() -> Unit): TableInfo {
-    val schemaBuilder = SchemaBuilder().apply(block)
-    val tableDefinition = StandardTableDefinition.of(schemaBuilder.build())
-    return TableInfo.newBuilder(tableId, tableDefinition).build()
-}
+fun schema(block: SchemaBuilder.() -> Unit): Schema = SchemaBuilder()
+    .apply(block)
+    .build()

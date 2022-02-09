@@ -4,14 +4,13 @@ import io.mockk.mockk
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
 import java.util.UUID
 
 internal class BigQueryHendelseMottakTest {
 
-    private val bigQueryClientMock: BigQueryClient = mockk(relaxed = true)
+    private val bigQueryServiceMock: BigQueryService = mockk(relaxed = true)
     private val rapid = TestRapid().also { rapidsConnection ->
-        BigQueryHendelseMottak(rapidsConnection, bigQueryClientMock)
+        BigQueryHendelseMottak(rapidsConnection, bigQueryServiceMock)
     }
 
     @BeforeEach
@@ -28,8 +27,9 @@ internal class BigQueryHendelseMottakTest {
         """
             {
               "eventId": "${UUID.randomUUID()}",
-              "eventName": "hm-bigquery-hendelse",
-              "opprettet": "${LocalDateTime.now()}",
+              "eventName": "hm-bigquery-sink-hendelse",
+              "schemaId": "test_v1",
+              "payload": {},
             }
         """.trimIndent()
     )

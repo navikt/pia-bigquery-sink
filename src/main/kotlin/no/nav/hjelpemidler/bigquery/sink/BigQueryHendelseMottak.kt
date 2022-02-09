@@ -10,7 +10,7 @@ import no.nav.helse.rapids_rivers.River.PacketListener
 
 class BigQueryHendelseMottak(
     rapidsConnection: RapidsConnection,
-    private val bigQueryClient: BigQueryClient,
+    private val bigQueryService: BigQueryService,
 ) : PacketListener {
     private companion object {
         private val log = KotlinLogging.logger {}
@@ -18,22 +18,21 @@ class BigQueryHendelseMottak(
 
     init {
         River(rapidsConnection).apply {
-            validate { it.demandValue("eventName", "hm-bigquery-hendelse") }
-            validate { it.requireKey("destination", "payload") }
-            validate { it.interestedIn("created") }
+            validate { it.demandValue("eventName", "hm-bigquery-sink-hendelse") }
+            validate { it.requireKey("schemaId", "payload") }
         }.register(this)
     }
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
-        val destination = packet["destination"].asText()
-        val created = packet["created"].asText()
+        val schemaId = packet["schemaId"].asSchemaId()
         val payload = packet["payload"]
 
         withLoggingContext(
-            "destination" to destination,
-            "created" to created,
+            "schemaName" to schemaId.name,
+            "schemaVersion" to schemaId.version.toString(),
         ) {
-            log.info { payload.toString() }
+            log.info { "Mottok hendelse for lagring i BigQuery" }
+            bigQueryService.insert(BigQuerySinkEvent(schemaId, payload))
         }
     }
 }

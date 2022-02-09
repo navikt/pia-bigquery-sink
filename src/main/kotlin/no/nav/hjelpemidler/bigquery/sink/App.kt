@@ -4,24 +4,20 @@ import com.google.cloud.bigquery.DatasetId
 import no.nav.helse.rapids_rivers.RapidApplication
 
 fun main() {
-    val schemaRegistry = SchemaRegistry.create("/db/schema")
+    val datasetId = DatasetId.of(Config[Gcp.team_project_id], Config[BigQuery.dataset_id])
+    val schemaRegistry = SchemaRegistry.create()
     val bigQueryClient: BigQueryClient = when (Config.environment) {
         Environment.LOCAL -> LocalBigQueryClient()
-        else -> DefaultBigQueryClient(
-            DatasetId.of(
-                Config[Gcp.team_project_id],
-                Config[BigQuery.dataset_id],
-            ),
-            schemaRegistry
-        )
+        else -> DefaultBigQueryClient(datasetId)
     }
-
-    bigQueryClient.migrate()
+    val bigQueryService: BigQueryService = BigQueryService(datasetId, schemaRegistry, bigQueryClient).apply {
+        migrate()
+    }
 
     RapidApplication
         .create(Config.asMap())
         .also { rapidsConnection ->
-            BigQueryHendelseMottak(rapidsConnection, bigQueryClient)
+            BigQueryHendelseMottak(rapidsConnection, bigQueryService)
         }
         .start()
 }

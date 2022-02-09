@@ -15,10 +15,10 @@ def generate_id() -> str:
 
 def main() -> None:
     message = {
-        'eventId': str(uuid.uuid4()),
-        'eventName': 'hm-bigquery-hendelse',
-        'created': datetime.now().isoformat(),
-        'destination': 'hendelse_v1',
+        '@id': str(uuid.uuid4()),
+        '@opprettet': datetime.now().isoformat(),
+        'eventName': 'hm-bigquery-sink-hendelse',
+        'schemaId': 'hendelse_v1',
         'payload': {
             'navn': 'fordelingsresultat',
             'kilde': 'hm-saksberiker',

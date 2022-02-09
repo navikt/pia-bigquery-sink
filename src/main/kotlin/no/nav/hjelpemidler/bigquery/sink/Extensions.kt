@@ -1,9 +1,13 @@
 package no.nav.hjelpemidler.bigquery.sink
 
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
+import com.google.cloud.bigquery.DatasetId
+import com.google.cloud.bigquery.TableId
 
-/**
- * Produce value suitable for insertion in BigQuery.
- */
-fun LocalDateTime.toDateTime(): String = truncatedTo(ChronoUnit.MICROS).toString()
+fun DatasetId.table(table: String): TableId = TableId.of(project, dataset, table)
+
+fun Map<String, String>.toStructEntries(
+    nameKey: String = "navn",
+    valueKey: String = "verdi",
+): List<Map<String, String>> = map {
+    mapOf(nameKey to it.key, valueKey to it.value)
+}

@@ -7,7 +7,8 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
 import com.fasterxml.jackson.module.kotlin.treeToValue
-import com.google.cloud.bigquery.InsertAllRequest
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 val jsonMapper: JsonMapper = jacksonMapperBuilder()
     .addModule(JavaTimeModule())
@@ -15,10 +16,10 @@ val jsonMapper: JsonMapper = jacksonMapperBuilder()
     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
     .build()
 
-inline fun <reified T> JsonNode.asObject() = jsonMapper.treeToValue<T>(this)
+fun JsonNode.asLocalDateTime(): LocalDateTime = LocalDateTime.parse(asText()).truncatedTo(ChronoUnit.MICROS)
 
-fun JsonNode.asMap() = when {
-    isArray -> null
-    isObject -> jsonMapper.treeToValue<Map<String, Any?>>(this)
-    else -> InsertAllRequest.RowToInsert.of(emptyMap<String, String>())
+fun JsonNode.asSchemaId(): SchemaId = asText().split("_v").let {
+    SchemaId(it.first(), it.last().toInt())
 }
+
+fun JsonNode.asKeyValueMap(): Map<String, String> = jsonMapper.treeToValue(this)

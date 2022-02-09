@@ -63,7 +63,7 @@ object Config {
 
         Gcp.team_project_id to "teamdigihot",
 
-        Kafka.brokers to "host.docker.internal:9092",
+        Kafka.brokers to "172.31.169.37:9092",
         Kafka.consumer_group_id to "hm-bigquery-sink-v1",
         Kafka.rapid_topic to "teamdigihot.hm-soknadsbehandling-v1",
         Kafka.keystore_path to "",
