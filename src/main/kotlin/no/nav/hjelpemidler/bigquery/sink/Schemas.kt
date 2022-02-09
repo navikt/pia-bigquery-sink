@@ -49,7 +49,7 @@ object HendelseSchema : SchemaDefinition {
     }
 
     override fun transform(payload: JsonNode): RowToInsert = RowToInsert.of(mapOf(
-        "opprettet" to payload["opprettet"].asLocalDateTime(),
+        "opprettet" to payload["opprettet"].asLocalDateTime().toString(),
         "navn" to payload["navn"].asText(),
         "kilde" to payload["kilde"].asText(),
         "stikkord" to payload["stikkord"].asKeyValueMap().toStructEntries(),
