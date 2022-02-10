@@ -1,4 +1,4 @@
-package no.nav.hjelpemidler.bigquery.sink
+package no.nav.hjelpemidler.bigquery.sink.schema
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.DatasetId
@@ -9,15 +9,26 @@ import com.google.cloud.bigquery.TableId
 import com.google.cloud.bigquery.TableInfo
 
 data class SchemaId(val name: String, val version: Int) {
+
     fun toTableId(datasetId: DatasetId): TableId = TableId.of(
         datasetId.project,
         datasetId.dataset,
-        "${name}_v${version}"
+        listOf(name, version).joinToString(SEPARATOR),
     )
+
+    companion object {
+        private const val SEPARATOR = "_v"
+
+        fun of(value: String) = value.split(SEPARATOR).let {
+            SchemaId(it.first(), it.last().toInt())
+        }
+    }
 }
 
 interface SchemaDefinition {
     val schemaId: SchemaId
+
+    fun entry() = schemaId to this
 
     fun define(): Schema
 
@@ -29,15 +40,7 @@ interface SchemaDefinition {
     }
 }
 
-class SchemaRegistry(
-    private val schemas: Map<SchemaId, SchemaDefinition>,
-) : Map<SchemaId, SchemaDefinition> by schemas {
-
-    companion object {
-        private val schemas: List<SchemaDefinition> = listOf(
-            HendelseSchema,
-        )
-
-        fun create(): SchemaRegistry = SchemaRegistry(schemas.associateBy { it.schemaId })
-    }
-}
+val schemaRegistry: Map<SchemaId, SchemaDefinition> = mapOf(
+    hendelse_v1.entry(),
+    tilbakeforing_gosys_tilbakemelding_v1.entry(),
+)

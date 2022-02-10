@@ -4,10 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.DatasetId
 import mu.KotlinLogging
 import mu.withLoggingContext
+import no.nav.hjelpemidler.bigquery.sink.schema.SchemaId
+import no.nav.hjelpemidler.bigquery.sink.schema.schemaRegistry
 
 class BigQueryService(
     private val datasetId: DatasetId,
-    private val schemaRegistry: SchemaRegistry,
     private val client: BigQueryClient,
 ) {
     private fun <T> withLoggingContext(block: () -> T) = withLoggingContext(
@@ -35,7 +36,7 @@ class BigQueryService(
     fun insert(event: BigQuerySinkEvent) = withLoggingContext {
         val schemaId = event.schemaId
         val schemaDefinition = requireNotNull(schemaRegistry[schemaId]) {
-            "Mangler skjema: '$schemaId' i SchemaRegistry, følgende skjema finnes: ${schemaRegistry.keys}"
+            "Mangler skjema: '$schemaId' i schemaRegistry, følgende skjema finnes: ${schemaRegistry.keys}"
         }
         val tableId = schemaId.toTableId(datasetId)
 

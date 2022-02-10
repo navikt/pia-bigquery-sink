@@ -14,12 +14,14 @@ def generate_id() -> str:
 
 
 def main() -> None:
+    now = datetime.now().isoformat()
     message = {
         '@id': str(uuid.uuid4()),
-        '@opprettet': datetime.now().isoformat(),
+        '@opprettet': now,
         'eventName': 'hm-bigquery-sink-hendelse',
         'schemaId': 'hendelse_v1',
         'payload': {
+            'opprettet': now,
             'navn': 'fordelingsresultat',
             'kilde': 'hm-saksberiker',
             'data': {

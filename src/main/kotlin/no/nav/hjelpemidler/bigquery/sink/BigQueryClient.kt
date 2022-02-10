@@ -43,21 +43,21 @@ class DefaultBigQueryClient(private val datasetId: DatasetId) : BigQueryClient {
         createdTable
     }
 
-    override fun insert(tableId: TableId, row: RowToInsert) {
+    override fun insert(tableId: TableId, row: RowToInsert) = withLoggingContext {
         val tableName = tableId.table
         val table = requireNotNull(bigQuery.getTable(tableId)) {
             "Mangler tabell: '$tableName' i BigQuery"
         }
         val rows = listOf(row)
         log.debug {
-            "Setter inn rader i BigQuery, rader: '$rows'"
+            "Setter inn rader i tabell: '$tableName', rader: '$rows'"
         }
         val response = table.insert(rows)
         when {
             response.hasErrors() -> throw BigQueryClientException(
                 "Lagring i BigQuery feilet: '${response.insertErrors}'"
             )
-            else -> log.info { "Tilbakemelding ble lagret i tabell: '$tableName'" }
+            else -> log.info { "Rader ble lagret i tabell: '$tableName'" }
         }
     }
 

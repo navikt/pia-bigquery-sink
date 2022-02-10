@@ -13,6 +13,7 @@ repositories {
 }
 
 fun ktor(name: String) = "io.ktor:ktor-$name:1.6.7"
+fun kotest(name: String) = "io.kotest:kotest-$name:5.1.0"
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -36,6 +37,8 @@ dependencies {
     // Testing
     testImplementation(kotlin("test"))
     testImplementation(ktor("server-test-host"))
+    testImplementation(kotest("runner-junit5"))
+    testImplementation(kotest("assertions-core"))
     testImplementation("io.mockk:mockk:1.12.2")
 }
 
