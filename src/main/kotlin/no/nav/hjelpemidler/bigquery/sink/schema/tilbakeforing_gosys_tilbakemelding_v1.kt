@@ -11,13 +11,13 @@ val tilbakeforing_gosys_tilbakemelding_v1 = object : SchemaDefinition {
     override val schemaId: SchemaId = SchemaId(name = "tilbakeforing_gosys_tilbakemelding", version = 1)
 
     override fun define(): Schema = schema {
-        string("saksnummer") {
-            required()
-            description("Saksnummer i HOTSAK")
-        }
         datetime("opprettet") {
             required()
             description("Dato og klokkeslett for tilbakeføring")
+        }
+        string("saksnummer") {
+            required()
+            description("Saksnummer i HOTSAK")
         }
         string("enhetsnummer") {
             required()
@@ -27,15 +27,15 @@ val tilbakeforing_gosys_tilbakemelding_v1 = object : SchemaDefinition {
             nullable()
             description("Hjelpemiddelsentralens navn")
         }
-        string("dokument_beskrivelse") {
+        string("dokumentbeskrivelse") {
             nullable()
             description("Beskrivelse av dokumentet")
         }
-        string("tilbakemelding_valgte_arsaker") {
+        string("valgte_arsaker") {
             repeated()
             description("Valgte årsaker til tilbakeføring")
         }
-        string("tilbakemelding_begrunnelse") {
+        string("begrunnelse") {
             nullable()
             description("Valgfri begrunnelse for tilbakeføring")
         }
@@ -46,13 +46,13 @@ val tilbakeforing_gosys_tilbakemelding_v1 = object : SchemaDefinition {
     }
 
     override fun transform(payload: JsonNode): RowToInsert = RowToInsert.of(mapOf(
-        payload.use("saksnummer") { asText() },
         payload.use("opprettet") { asDateTime() },
+        payload.use("saksnummer") { asText() },
         payload.use("enhetsnummer") { asText() },
         payload.use("enhetsnavn") { asText() },
-        payload.use("dokument_beskrivelse") { asText() },
-        payload.use("tilbakemelding_valgte_arsaker") { asObject<Set<String>>() },
-        payload.use("tilbakemelding_begrunnelse") { asText() },
+        payload.use("dokumentbeskrivelse") { asText() },
+        payload.use("valgte_arsaker") { asObject<Set<String>>() },
+        payload.use("begrunnelse") { asText() },
         "tidsstempel" to "AUTO",
     ))
 }

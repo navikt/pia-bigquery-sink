@@ -25,24 +25,24 @@ internal class SchemaTest {
     @Test
     internal fun `payload transformed to tilbakeforing_gosys_tilbakemelding_v1 row`() {
         val payload = jsonMapper.readTree("""{
-            "saksnummer": "saksnummer",
+            "saksnummer": "1",
             "opprettet": "${LocalDateTime.now()}",
-            "enhetsnummer": "enhetsnummer",
-            "enhetsnavn": "enhetsnavn",
-            "dokument_beskrivelse": "dokument_beskrivelse",
-            "tilbakemelding_valgte_arsaker": [
+            "enhetsnummer": "2970",
+            "enhetsnavn": "NAV Test",
+            "dokumentbeskrivelse": "foobar",
+            "valgte_arsaker": [
                 "arsak"
             ],
-            "tilbakemelding_begrunnelse": "tilbakemelding_begrunnelse"
+            "begrunnelse": "foobar"
         }""".trimIndent())
         val content = tilbakeforing_gosys_tilbakemelding_v1.transform(payload).content
         assertSoftly {
-            content shouldContain ("saksnummer" to "saksnummer")
-            content shouldContain ("enhetsnummer" to "enhetsnummer")
-            content shouldContain ("enhetsnavn" to "enhetsnavn")
-            content shouldContain ("dokument_beskrivelse" to "dokument_beskrivelse")
-            content shouldContain ("tilbakemelding_valgte_arsaker" to setOf("arsak"))
-            content shouldContain ("tilbakemelding_begrunnelse" to "tilbakemelding_begrunnelse")
+            content shouldContain ("saksnummer" to "1")
+            content shouldContain ("enhetsnummer" to "2970")
+            content shouldContain ("enhetsnavn" to "NAV Test")
+            content shouldContain ("dokumentbeskrivelse" to "foobar")
+            content shouldContain ("valgte_arsaker" to setOf("arsak"))
+            content shouldContain ("begrunnelse" to "foobar")
             content shouldContain ("tidsstempel" to "AUTO")
         }
     }
