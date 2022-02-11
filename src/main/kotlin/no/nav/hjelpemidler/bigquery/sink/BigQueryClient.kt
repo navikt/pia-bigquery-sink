@@ -30,11 +30,15 @@ class DefaultBigQueryClient(private val datasetId: DatasetId) : BigQueryClient {
     ) { block() }
 
     override fun datasetPresent(datasetId: DatasetId): Boolean = withLoggingContext {
-        bigQuery.getDataset(datasetId) != null
+        val present = bigQuery.getDataset(datasetId) != null
+        log.info { "dataset: $datasetId, present: $present" }
+        present
     }
 
     override fun tablePresent(tableId: TableId): Boolean = withLoggingContext {
-        bigQuery.getTable(tableId) != null
+        val present = bigQuery.getTable(tableId) != null
+        log.info { "table: $tableId, present: $present" }
+        present
     }
 
     override fun create(tableInfo: TableInfo): TableInfo = withLoggingContext {
