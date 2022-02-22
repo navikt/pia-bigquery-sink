@@ -32,6 +32,34 @@ internal class SchemaRegistryTest {
     }
 
     @Test
+    internal fun `payload transformed to hendelse_v2 row`() {
+        val payload = jsonMapper.readTree("""{
+            "opprettet": "${LocalDateTime.now()}",
+            "navn": "navn",
+            "kilde": "kilde",
+            "data": {
+                "someKey": "someValue"
+            }
+        }""".trimIndent())
+        val content = hendelse_v2.transform(payload).content
+        content shouldContain ("tidsstempel" to "AUTO")
+    }
+
+    @Test
+    internal fun `payload transformed to saksstatistikk_v1 row`() {
+        val payload = jsonMapper.readTree("""{
+            "sakId": "1",
+            "behandlingId": "1",
+            "saksbehandler": null,
+            "saksbehandlerIdent": null
+        }""".trimIndent())
+        val content = saksstatistikk_v1.transform(payload).content
+        content shouldContain ("sak_id" to "1")
+        content shouldContain ("behandling_id" to "1")
+        content shouldContain ("tidsstempel" to "AUTO")
+    }
+
+    @Test
     internal fun `payload transformed to tilbakeforing_gosys_tilbakemelding_v1 row`() {
         val payload = jsonMapper.readTree("""{
             "saksnummer": "1",
