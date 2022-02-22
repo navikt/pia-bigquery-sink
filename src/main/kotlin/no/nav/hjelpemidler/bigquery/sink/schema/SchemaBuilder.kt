@@ -1,41 +1,9 @@
 package no.nav.hjelpemidler.bigquery.sink.schema
 
 import com.google.cloud.bigquery.Field
-import com.google.cloud.bigquery.Field.Mode
 import com.google.cloud.bigquery.FieldList
 import com.google.cloud.bigquery.Schema
 import com.google.cloud.bigquery.StandardSQLTypeName
-
-class FieldBuilder(private val name: String, private val type: StandardSQLTypeName) {
-    private var mode: Mode = Mode.NULLABLE
-    private var description: String? = null
-    private var subFields: FieldList? = null
-
-    fun nullable() {
-        this.mode = Mode.NULLABLE
-    }
-
-    fun required() {
-        this.mode = Mode.REQUIRED
-    }
-
-    fun repeated() {
-        this.mode = Mode.REPEATED
-    }
-
-    fun description(description: String) {
-        this.description = description
-    }
-
-    fun subFields(block: SchemaBuilder.() -> Unit) {
-        this.subFields = SchemaBuilder().apply(block).fieldList()
-    }
-
-    fun build(): Field = Field.newBuilder(name, type, subFields)
-        .setMode(mode)
-        .setDescription(description)
-        .build()
-}
 
 class SchemaBuilder {
     private val fields = mutableListOf<Field>()
@@ -78,7 +46,3 @@ class SchemaBuilder {
         block: FieldBuilder.() -> Unit = {},
     ): Field = field(name, StandardSQLTypeName.TIMESTAMP, block)
 }
-
-fun schema(block: SchemaBuilder.() -> Unit): Schema = SchemaBuilder()
-    .apply(block)
-    .build()

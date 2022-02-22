@@ -17,6 +17,7 @@ fun kotest(name: String) = "io.kotest:kotest-$name:5.1.0"
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(kotlin("reflect"))
 
     // Ktor Server
     implementation(ktor("server-core"))

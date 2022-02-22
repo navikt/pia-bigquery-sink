@@ -1,12 +1,21 @@
-package no.nav.hjelpemidler.bigquery.sink.schema
+package no.nav.hjelpemidler.bigquery.sink.registry
 
+import com.google.cloud.bigquery.DatasetId
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.maps.shouldContain
+import io.kotest.matchers.shouldBe
 import no.nav.hjelpemidler.bigquery.sink.jsonMapper
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
-internal class SchemaTest {
+internal class SchemaRegistryTest {
+    @Test
+    internal fun `creating arbitrary TableInfo should not fail`() {
+        val definition = schemaRegistry.values.first()
+        val datasetId = DatasetId.of("project", "dataset")
+        val tableInfo = definition.toTableInfo(datasetId)
+        tableInfo.tableId shouldBe definition.schemaId.toTableId(datasetId)
+    }
 
     @Test
     internal fun `payload transformed to hendelse_v1 row`() {

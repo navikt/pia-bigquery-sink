@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.DatasetId
 import mu.KotlinLogging
 import mu.withLoggingContext
-import no.nav.hjelpemidler.bigquery.sink.schema.SchemaId
-import no.nav.hjelpemidler.bigquery.sink.schema.schemaRegistry
+import no.nav.hjelpemidler.bigquery.sink.registry.schemaRegistry
+import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 
 class BigQueryService(
     private val datasetId: DatasetId,
@@ -49,6 +49,6 @@ class BigQueryService(
 }
 
 data class BigQuerySinkEvent(
-    val schemaId: SchemaId,
+    val schemaId: SchemaDefinition.Id,
     val payload: JsonNode,
 )

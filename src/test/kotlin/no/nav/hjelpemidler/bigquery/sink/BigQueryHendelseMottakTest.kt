@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test
 import java.util.UUID
 
 internal class BigQueryHendelseMottakTest {
-
     private val bigQueryServiceMock: BigQueryService = mockk(relaxed = true)
     private val rapid = TestRapid().also { rapidsConnection ->
         BigQueryHendelseMottak(rapidsConnection, bigQueryServiceMock)

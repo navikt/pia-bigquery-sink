@@ -5,11 +5,10 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
-internal class SchemaIdTest {
-
+internal class SchemaDefinitionTest {
     @Test
     internal fun `should create valid SchemaId from String`() {
-        val schemaId = SchemaId.of("foobar_v1")
+        val schemaId = SchemaDefinition.Id.of("foobar_v1")
         assertSoftly {
             schemaId.name shouldBe "foobar"
             schemaId.version shouldBe 1
@@ -20,7 +19,7 @@ internal class SchemaIdTest {
     internal fun `should create valid TableId from SchemaId`() {
         val tableName = "foobar_v1"
         val datasetId = DatasetId.of("foo", "bar")
-        val schemaId = SchemaId.of(tableName)
+        val schemaId = SchemaDefinition.Id.of(tableName)
         val tableId = schemaId.toTableId(datasetId)
         assertSoftly {
             tableId.project shouldBe datasetId.project
