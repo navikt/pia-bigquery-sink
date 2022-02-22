@@ -9,6 +9,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaId
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 val jsonMapper: JsonMapper = jacksonMapperBuilder()
@@ -20,11 +21,16 @@ val jsonMapper: JsonMapper = jacksonMapperBuilder()
 inline fun <reified T> JsonNode.asObject() = jsonMapper.treeToValue<T>(this)
 
 fun JsonNode.asLocalDateTime(): LocalDateTime = LocalDateTime.parse(asText())
-
+fun JsonNode.asZonedDateTime(): ZonedDateTime = ZonedDateTime.parse(asText())
 fun JsonNode.asDateTime(): String = asLocalDateTime().truncatedTo(ChronoUnit.MICROS).toString()
-
+fun JsonNode.asTimestamp(): String = asZonedDateTime().truncatedTo(ChronoUnit.MICROS).toInstant().toString()
 fun JsonNode.asSchemaId(): SchemaId = SchemaId.of(asText())
 
 fun <T> JsonNode.use(key: String, transform: JsonNode.() -> T): Pair<String, T?> = key to get(key)?.let {
     transform(it)
 }
+
+infix fun JsonNode.toText(key: String): Pair<String, String?> = key to this[key]?.asText()
+infix fun JsonNode.toBoolean(key: String): Pair<String, Boolean?> = key to this[key]?.asBoolean()
+infix fun JsonNode.toDateTime(key: String): Pair<String, String?> = key to this[key]?.asDateTime()
+infix fun JsonNode.toTimestamp(key: String): Pair<String, String?> = key to this[key]?.asTimestamp()

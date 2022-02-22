@@ -53,6 +53,11 @@ class SchemaBuilder {
         .build()
         .also { fields.add(it) }
 
+    fun boolean(
+        name: String,
+        block: FieldBuilder.() -> Unit = {},
+    ): Field = field(name, StandardSQLTypeName.BOOL, block)
+
     fun datetime(
         name: String,
         block: FieldBuilder.() -> Unit = {},

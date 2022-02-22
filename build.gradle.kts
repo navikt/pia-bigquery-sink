@@ -25,8 +25,9 @@ dependencies {
 
     implementation("com.natpryce:konfig:1.6.10.0")
     implementation("com.github.navikt:rapids-and-rivers:2022.02.02-14.07.dc18de6a253c")
-    implementation("com.google.cloud:google-cloud-bigquery:2.8.0")
+    implementation("com.google.cloud:google-cloud-bigquery:2.9.0")
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.2")
+    implementation("org.reflections:reflections:0.10.2")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:2.1.21")
@@ -55,7 +56,7 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.withType<Jar> {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes["Main-Class"] = application.mainClass
     }

@@ -39,8 +39,3 @@ interface SchemaDefinition {
         return TableInfo.of(schemaId.toTableId(datasetId), tableDefinition)
     }
 }
-
-val schemaRegistry: Map<SchemaId, SchemaDefinition> = mapOf(
-    hendelse_v1.entry(),
-    tilbakeforing_gosys_tilbakemelding_v1.entry(),
-)
