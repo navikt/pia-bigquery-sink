@@ -31,7 +31,7 @@ class BigQueryHendelseMottak(
             "schemaName" to schemaId.name,
             "schemaVersion" to schemaId.version.toString(),
         ) {
-            log.info { "Mottok hendelse for lagring i BigQuery" }
+            log.debug { "Mottok hendelse for lagring i BigQuery" }
             bigQueryService.insert(BigQuerySinkEvent(schemaId, payload))
         }
     }

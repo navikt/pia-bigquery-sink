@@ -26,10 +26,20 @@ class SchemaBuilder {
         block: FieldBuilder.() -> Unit = {},
     ): Field = field(name, StandardSQLTypeName.BOOL, block)
 
+    fun date(
+        name: String,
+        block: FieldBuilder.() -> Unit = {},
+    ): Field = field(name, StandardSQLTypeName.DATE, block)
+
     fun datetime(
         name: String,
         block: FieldBuilder.() -> Unit = {},
     ): Field = field(name, StandardSQLTypeName.DATETIME, block)
+
+    fun integer(
+        name: String,
+        block: FieldBuilder.() -> Unit = {},
+    ): Field = field(name, StandardSQLTypeName.INT64, block)
 
     fun string(
         name: String,

@@ -18,13 +18,14 @@ val jsonMapper: JsonMapper = jacksonMapperBuilder()
     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
     .build()
 
-inline fun <reified T> JsonNode.asObject() = jsonMapper.treeToValue<T>(this)
+inline fun <reified T> JsonNode.asObject(): T = jsonMapper.treeToValue(this)
 
 fun JsonNode.asLocalDateTime(): LocalDateTime = LocalDateTime.parse(asText())
 fun JsonNode.asZonedDateTime(): ZonedDateTime = ZonedDateTime.parse(asText())
 fun JsonNode.asDateTime(): String = asLocalDateTime().truncatedTo(ChronoUnit.MICROS).toString()
 fun JsonNode.asTimestamp(): String = asZonedDateTime().truncatedTo(ChronoUnit.MICROS).toInstant().toString()
 fun JsonNode.asSchemaId(): SchemaDefinition.Id = SchemaDefinition.Id.of(asText())
+fun JsonNode.asMap(): Map<String, Any?> = asObject()
 
 fun <T> JsonNode.use(key: String, transform: JsonNode.() -> T): Pair<String, T?> = key to get(key)?.let {
     transform(it)

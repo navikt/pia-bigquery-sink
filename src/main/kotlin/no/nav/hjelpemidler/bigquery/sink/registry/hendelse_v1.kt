@@ -48,7 +48,7 @@ val hendelse_v1 = object : SchemaDefinition {
         }
     }
 
-    override fun transform(payload: JsonNode): RowToInsert = RowToInsert.of(mapOf(
+    override fun transform(payload: JsonNode): RowToInsert = mapOf(
         payload.use("opprettet") { asDateTime() },
         payload.use("navn") { asText() },
         payload.use("kilde") { asText() },
@@ -58,5 +58,5 @@ val hendelse_v1 = object : SchemaDefinition {
             }
         },
         "tidsstempel" to "AUTO",
-    ))
+    ).toRowToInsert()
 }

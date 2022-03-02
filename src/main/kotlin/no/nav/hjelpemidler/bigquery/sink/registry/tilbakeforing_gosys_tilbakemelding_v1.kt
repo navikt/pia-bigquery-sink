@@ -52,7 +52,7 @@ val tilbakeforing_gosys_tilbakemelding_v1 = object : SchemaDefinition {
         }
     }
 
-    override fun transform(payload: JsonNode): RowToInsert = RowToInsert.of(mapOf(
+    override fun transform(payload: JsonNode): RowToInsert = mapOf(
         payload.use("opprettet") { asDateTime() },
         payload.use("saksnummer") { asText() },
         payload.use("enhetsnummer") { asText() },
@@ -61,5 +61,5 @@ val tilbakeforing_gosys_tilbakemelding_v1 = object : SchemaDefinition {
         payload.use("valgte_arsaker") { asObject<Set<String>>() },
         payload.use("begrunnelse") { asText() },
         "tidsstempel" to "AUTO",
-    ))
+    ).toRowToInsert()
 }

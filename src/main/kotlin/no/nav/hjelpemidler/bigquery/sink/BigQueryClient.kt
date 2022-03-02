@@ -61,7 +61,7 @@ class DefaultBigQueryClient(private val datasetId: DatasetId) : BigQueryClient {
             response.hasErrors() -> throw BigQueryClientException(
                 "Lagring i BigQuery feilet: '${response.insertErrors}'"
             )
-            else -> log.info { "Rader ble lagret i tabell: '$tableName'" }
+            else -> log.debug { "Rader ble lagret i tabell: '$tableName'" }
         }
     }
 

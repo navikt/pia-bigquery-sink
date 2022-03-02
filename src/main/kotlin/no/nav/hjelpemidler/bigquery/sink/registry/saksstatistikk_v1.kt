@@ -127,7 +127,7 @@ val saksstatistikk_v1 = object : SchemaDefinition {
         }
     }
 
-    override fun transform(payload: JsonNode): RowToInsert = RowToInsert.of(mapOf(
+    override fun transform(payload: JsonNode): RowToInsert = mapOf(
         payload["sakId"] toText "sak_id",
         payload["behandlingId"] toText "behandling_id",
         payload["saksbehandler"] toText "saksbehandler",
@@ -153,5 +153,5 @@ val saksstatistikk_v1 = object : SchemaDefinition {
         payload["avsender"] toText "avsender",
         payload["versjon"] toText "versjon",
         "tidsstempel" to "AUTO",
-    ))
+    ).toRowToInsert()
 }
