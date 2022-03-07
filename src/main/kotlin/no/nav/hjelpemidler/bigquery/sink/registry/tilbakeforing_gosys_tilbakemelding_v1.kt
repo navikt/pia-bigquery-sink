@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.InsertAllRequest.RowToInsert
 import com.google.cloud.bigquery.TableDefinition
 import no.nav.hjelpemidler.bigquery.sink.asDateTime
+import no.nav.hjelpemidler.bigquery.sink.asHash
 import no.nav.hjelpemidler.bigquery.sink.asObject
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
@@ -54,7 +55,7 @@ val tilbakeforing_gosys_tilbakemelding_v1 = object : SchemaDefinition {
 
     override fun transform(payload: JsonNode): RowToInsert = mapOf(
         payload.use("opprettet") { asDateTime() },
-        payload.use("saksnummer") { asText() },
+        payload.use("saksnummer") { asHash() },
         payload.use("enhetsnummer") { asText() },
         payload.use("enhetsnavn") { asText() },
         payload.use("dokumentbeskrivelse") { asText() },
