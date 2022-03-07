@@ -7,6 +7,7 @@ import com.google.cloud.bigquery.TimePartitioning
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
 import no.nav.hjelpemidler.bigquery.sink.toBoolean
+import no.nav.hjelpemidler.bigquery.sink.toHash
 import no.nav.hjelpemidler.bigquery.sink.toText
 import no.nav.hjelpemidler.bigquery.sink.toTimestamp
 
@@ -128,11 +129,11 @@ val saksstatistikk_v1 = object : SchemaDefinition {
     }
 
     override fun transform(payload: JsonNode): RowToInsert = mapOf(
-        payload["sakId"] toText "sak_id",
-        payload["behandlingId"] toText "behandling_id",
-        payload["saksbehandler"] toText "saksbehandler",
-        payload["saksbehandlerIdent"] toText "saksbehandler_ident",
-        payload["personIdent"] toText "person_ident",
+        payload["sakId"] toHash "sak_id",
+        payload["behandlingId"] toHash "behandling_id",
+        payload["saksbehandler"] toHash "saksbehandler",
+        payload["saksbehandlerIdent"] toHash "saksbehandler_ident",
+        payload["personIdent"] toHash "person_ident",
         payload["registrertTid"] toTimestamp "registrert_tid",
         payload["endretTid"] toTimestamp "endret_tid",
         payload["tekniskTid"] toTimestamp "teknisk_tid",

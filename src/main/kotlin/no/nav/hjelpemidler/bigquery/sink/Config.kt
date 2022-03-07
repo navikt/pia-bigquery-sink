@@ -42,6 +42,7 @@ object Gcp {
 
 object BigQuery {
     val dataset_id by envVar
+    val hash_suffix by envVar
 }
 
 object Kafka {
@@ -71,7 +72,8 @@ object Config {
         Kafka.credstore_password to "",
         Kafka.reset_policy to "earliest",
 
-        BigQuery.dataset_id to "hm_bigquery_sink_v1_dataset_local"
+        BigQuery.dataset_id to "hm_bigquery_sink_v1_dataset_local",
+        BigQuery.hash_suffix to "foobar",
     )
 
     private val devProperties = ConfigurationMap(
@@ -79,7 +81,7 @@ object Config {
 
         http_port to "8080",
 
-        BigQuery.dataset_id to "hm_bigquery_sink_v1_dataset_dev"
+        BigQuery.dataset_id to "hm_bigquery_sink_v1_dataset_dev",
     )
 
     private val prodProperties = ConfigurationMap(
@@ -87,7 +89,7 @@ object Config {
 
         http_port to "8080",
 
-        BigQuery.dataset_id to "hm_bigquery_sink_v1_dataset_prod"
+        BigQuery.dataset_id to "hm_bigquery_sink_v1_dataset_prod",
     )
 
     private val properties: Configuration by lazy {
@@ -103,6 +105,8 @@ object Config {
 
     operator fun <T> get(key: Key<T>): T = properties[key]
     operator fun get(key: String): String = get(Key(key, stringType))
+
+    fun getOrNull(key: String): String? = properties.getOrNull(Key(key, stringType))
 
     fun asMap(): Map<String, String> = properties.list().reversed().fold(emptyMap()) { map, pair ->
         map + pair.second

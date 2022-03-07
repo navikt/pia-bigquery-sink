@@ -20,6 +20,7 @@ val jsonMapper: JsonMapper = jacksonMapperBuilder()
 
 inline fun <reified T> JsonNode.asObject(): T = jsonMapper.treeToValue(this)
 
+fun JsonNode.asHash(): String = Hash.encode(asText())
 fun JsonNode.asLocalDateTime(): LocalDateTime = LocalDateTime.parse(asText())
 fun JsonNode.asZonedDateTime(): ZonedDateTime = ZonedDateTime.parse(asText())
 fun JsonNode.asDateTime(): String = asLocalDateTime().truncatedTo(ChronoUnit.MICROS).toString()
@@ -32,6 +33,7 @@ fun <T> JsonNode.use(key: String, transform: JsonNode.() -> T): Pair<String, T?>
 }
 
 infix fun JsonNode?.toText(key: String): Pair<String, String?> = key to this?.asText()
+infix fun JsonNode?.toHash(key: String): Pair<String, String?> = key to this?.asHash()
 infix fun JsonNode?.toBoolean(key: String): Pair<String, Boolean?> = key to this?.asBoolean()
 infix fun JsonNode?.toDateTime(key: String): Pair<String, String?> = key to this?.asDateTime()
 infix fun JsonNode?.toTimestamp(key: String): Pair<String, String?> = key to this?.asTimestamp()

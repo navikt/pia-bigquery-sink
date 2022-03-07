@@ -4,6 +4,7 @@ import com.google.cloud.bigquery.DatasetId
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
+import no.nav.hjelpemidler.bigquery.sink.Hash
 import no.nav.hjelpemidler.bigquery.sink.jsonMapper
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -87,8 +88,8 @@ internal class SchemaRegistryTest {
             "saksbehandlerIdent": null
         }""".trimIndent())
         val content = saksstatistikk_v1.transform(payload).content
-        content shouldContain ("sak_id" to "1")
-        content shouldContain ("behandling_id" to "1")
+        content shouldContain ("sak_id" to Hash.encode("1"))
+        content shouldContain ("behandling_id" to Hash.encode("1"))
         content shouldContain ("tidsstempel" to "AUTO")
     }
 
