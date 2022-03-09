@@ -26,7 +26,7 @@ val bestillingsordning_v1 = object : SchemaDefinition {
                 repeated()
                 description("Produkter (hmsnr) ikke på bestillingsordning")
             }
-            string("bruker_har_hjelpemidler_fra_for") {
+            boolean("bruker_har_hjelpemidler_fra_for") {
                 required()
                 description("Bruker har hjelpemidler fra før")
             }
@@ -46,6 +46,7 @@ val bestillingsordning_v1 = object : SchemaDefinition {
     override fun transform(payload: JsonNode): RowToInsert = mapOf(
         payload.use("opprettet") { asDateTime() },
         payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
+        payload.use("bruker_har_hjelpemidler_fra_for"),
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
