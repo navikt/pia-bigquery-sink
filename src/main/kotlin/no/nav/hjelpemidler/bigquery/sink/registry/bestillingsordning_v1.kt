@@ -26,6 +26,10 @@ val bestillingsordning_v1 = object : SchemaDefinition {
                 repeated()
                 description("Produkter (hmsnr) ikke på bestillingsordning")
             }
+            string("bruker_har_hjelpemidler_fra_for") {
+                required()
+                description("Bruker har hjelpemidler fra før")
+            }
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
