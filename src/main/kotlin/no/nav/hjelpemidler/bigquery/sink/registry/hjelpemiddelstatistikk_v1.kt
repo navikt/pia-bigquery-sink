@@ -131,7 +131,7 @@ val hjelpemiddelstatistikk_v1 = object : SchemaDefinition {
             description("Rammeavtalepostens rangering")
         }
         string("kilde") {
-            required()
+            nullable()
             description("Søknad / Ordre / Søknad og ordre")
         }
     }
