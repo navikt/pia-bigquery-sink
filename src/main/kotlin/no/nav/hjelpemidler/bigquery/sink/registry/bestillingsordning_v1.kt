@@ -47,7 +47,7 @@ val bestillingsordning_v1 = object : SchemaDefinition {
     override fun transform(payload: JsonNode): RowToInsert = mapOf(
         payload.use("opprettet") { asDateTime() },
         payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
-        payload["bruker_har_hjelpemidler_fra_for"] toBoolean "bruker_har_hjelpemidler_fra_for",
+        payload.use("bruker_har_hjelpemidler_fra_for") { asBoolean() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
