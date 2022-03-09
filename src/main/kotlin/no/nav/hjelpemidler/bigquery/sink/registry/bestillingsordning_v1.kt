@@ -9,7 +9,6 @@ import no.nav.hjelpemidler.bigquery.sink.asObject
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
 import no.nav.hjelpemidler.bigquery.sink.use
-import no.nav.hjelpemidler.bigquery.sink.toBoolean
 
 val bestillingsordning_v1 = object : SchemaDefinition {
     override val schemaId: SchemaDefinition.Id = SchemaDefinition.Id(
@@ -47,7 +46,7 @@ val bestillingsordning_v1 = object : SchemaDefinition {
     override fun transform(payload: JsonNode): RowToInsert = mapOf(
         payload.use("opprettet") { asDateTime() },
         payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
-        payload.use("bruker_har_hjelpemidler_fra_for") { asBoolean() },
+        "bruker_har_hjelpemidler_fra_for" to (payload["bruker_har_hjelpemidler_fra_for"]?.asBoolean() ?: false),
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
