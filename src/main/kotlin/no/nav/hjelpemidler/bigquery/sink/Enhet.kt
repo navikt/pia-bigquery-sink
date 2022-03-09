@@ -7,5 +7,5 @@ object Enhet {
         jsonMapper.readValue<Map<String, String>>(it)
     }
 
-    fun finnEnhetsnavn(enhetsnummer: String?): String? = enheter[enhetsnummer]
+    fun finnEnhetsnavn(enhetsnummer: String?): String = enheter.getOrDefault(enhetsnummer, enhetsnummer ?: "Ukjent")
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.InsertAllRequest.RowToInsert
 import com.google.cloud.bigquery.TableDefinition
 import com.google.cloud.bigquery.TimePartitioning
+import no.nav.hjelpemidler.bigquery.sink.Enhet
 import no.nav.hjelpemidler.bigquery.sink.asMap
 import no.nav.hjelpemidler.bigquery.sink.schema.FieldBuilder
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
@@ -74,8 +75,11 @@ val hjelpemiddelstatistikk_v1 = object : SchemaDefinition {
 
     override fun transform(payload: JsonNode): RowToInsert = payload
         .asMap()
+        .plus("enhetsnavn" to Enhet.finnEnhetsnavn(payload.enhetsnummer()))
         .plus("tidsstempel" to "AUTO")
         .toRowToInsert()
+
+    private fun JsonNode.enhetsnummer() = get("enhetsnummer").asText()
 
     private fun FieldBuilder.hjelpemiddelfelter() = subFields {
         string("hmsnr") {
@@ -126,9 +130,9 @@ val hjelpemiddelstatistikk_v1 = object : SchemaDefinition {
             nullable()
             description("Rammeavtalepostens rangering")
         }
-        string("status") {
+        string("kilde") {
             required()
-            description("")
+            description("Søknad / Ordre / Søknad og ordre")
         }
     }
 }
