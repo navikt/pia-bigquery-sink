@@ -48,7 +48,7 @@ val bestillingsordning_v1 = object : SchemaDefinition {
         payload.use("opprettet") { asDateTime() },
         payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
         //payload.use("bruker_har_hjelpemidler_fra_for"),
-        payload["bruker_har_hjelpemidler_fra_for"] toBoolean "bruker_har_hjelpemidler_fra_for"
+        payload["bruker_har_hjelpemidler_fra_for"] toBoolean "bruker_har_hjelpemidler_fra_for",
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
