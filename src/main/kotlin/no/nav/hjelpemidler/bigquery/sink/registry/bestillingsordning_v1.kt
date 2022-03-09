@@ -9,6 +9,7 @@ import no.nav.hjelpemidler.bigquery.sink.asObject
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
 import no.nav.hjelpemidler.bigquery.sink.use
+import no.nav.hjelpemidler.bigquery.sink.toBoolean
 
 val bestillingsordning_v1 = object : SchemaDefinition {
     override val schemaId: SchemaDefinition.Id = SchemaDefinition.Id(
