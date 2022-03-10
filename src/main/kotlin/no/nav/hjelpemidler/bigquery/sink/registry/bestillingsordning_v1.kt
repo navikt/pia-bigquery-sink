@@ -34,6 +34,10 @@ val bestillingsordning_v1 = object : SchemaDefinition {
                 required()
                 description("Bruker har hjelpemidler fra før")
             }
+            boolean("bruker_har_vedtak_fra_for") {
+                required()
+                description("Bruker har vedtak i Infotrygd fra før")
+            }
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
@@ -52,6 +56,7 @@ val bestillingsordning_v1 = object : SchemaDefinition {
         payload.use("produkter") { asObject<Set<String>>() },
         payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
         "bruker_har_hjelpemidler_fra_for" to (payload["bruker_har_hjelpemidler_fra_for"]?.asBoolean() ?: false),
+        "bruker_har_vedtak_fra_for" to (payload["bruker_har_vedtak_fra_for"]?.asBoolean() ?: false),
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
