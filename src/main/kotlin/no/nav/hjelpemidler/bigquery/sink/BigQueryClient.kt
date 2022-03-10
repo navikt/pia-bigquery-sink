@@ -2,11 +2,8 @@ package no.nav.hjelpemidler.bigquery.sink
 
 import com.google.cloud.bigquery.BigQueryOptions
 import com.google.cloud.bigquery.DatasetId
-import com.google.cloud.bigquery.FieldList
 import com.google.cloud.bigquery.InsertAllRequest.RowToInsert
-import com.google.cloud.bigquery.Schema
 import com.google.cloud.bigquery.Table
-import com.google.cloud.bigquery.TableDefinition
 import com.google.cloud.bigquery.TableId
 import com.google.cloud.bigquery.TableInfo
 import mu.KotlinLogging
@@ -14,10 +11,29 @@ import mu.withLoggingContext
 import no.nav.hjelpemidler.bigquery.sink.BigQueryClient.BigQueryClientException
 
 interface BigQueryClient {
+    /**
+     * Sjekk om datasett finnes
+     */
     fun datasetPresent(datasetId: DatasetId): Boolean
+
+    /**
+     * Sjekk om tabell finnes
+     */
     fun tablePresent(tableId: TableId): Boolean
+
+    /**
+     * Opprett tabell i BigQuery
+     */
     fun create(tableInfo: TableInfo): TableInfo
+
+    /**
+     * Oppdater tabell i BigQuery
+     */
     fun update(tableId: TableId, updatedTableInfo: TableInfo): Boolean
+
+    /**
+     * Sett in rad i BigQuery-tabell
+     */
     fun insert(tableId: TableId, row: RowToInsert)
 
     class BigQueryClientException(message: String) : RuntimeException(message)
@@ -33,13 +49,6 @@ class DefaultBigQueryClient(private val datasetId: DatasetId) : BigQueryClient {
         "projectId" to datasetId.project,
         "datasetId" to datasetId.dataset
     ) { block() }
-
-    private val TableInfo.schema: Schema
-        get() = requireNotNull(getDefinition<TableDefinition>().schema) {
-            "Tabell: '${tableId.table}' mangler skjema"
-        }
-
-    private val FieldList.names: Set<String> get() = map { it.name }.toSet()
 
     private fun getTable(tableId: TableId): Table = requireNotNull(bigQuery.getTable(tableId)) {
         "Mangler tabell: '${tableId.table}' i BigQuery"
@@ -68,16 +77,13 @@ class DefaultBigQueryClient(private val datasetId: DatasetId) : BigQueryClient {
         updatedTableInfo: TableInfo,
     ): Boolean = withLoggingContext {
         val table = getTable(tableId)
-        val existingFields = table.schema.fields.names
-        val updatedFields = updatedTableInfo.schema.fields.names
-        val newFields = updatedFields.minus(existingFields)
-        when {
-            newFields.isEmpty() -> {
-                log.info { "Ingen nye kolonner, ingen oppdatering av tabell: ${tableId.table} nødvendig" }
+        when (TableInfo.of(tableId, table.getDefinition())) {
+            updatedTableInfo -> {
+                log.info { "Skjema for tabell: ${tableId.table} er uendret, oppdaterer ikke tabell i BigQuery" }
                 false
             }
             else -> {
-                log.info { "Legger til nye kolonner i tabell: ${tableId.table}, kolonner: $newFields" }
+                log.info { "Skjema for tabell: ${tableId.table} er endret, oppdaterer tabell i BigQuery" }
                 val updatedTable = table.toBuilder()
                     .setDescription(updatedTableInfo.description)
                     .setDefinition(updatedTableInfo.getDefinition())
