@@ -101,13 +101,13 @@ val hjelpemiddelstatistikk_v1 = object : SchemaDefinition {
                         nullable()
                         description("Rammeavtalepostens rangering")
                     }
-                    string("kilde") {
-                        nullable()
-                        description("Søknad / Ordre / Søknad og ordre")
-                    }
                     integer("antall") {
                         nullable()
                         description("Antallet hjelpemidler")
+                    }
+                    string("kilde") {
+                        nullable()
+                        description("Søknad / Ordre / Søknad og ordre")
                     }
                     struct("tilbehor") {
                         repeated()
