@@ -16,7 +16,8 @@ interface SchemaDefinition {
 
     fun transform(payload: JsonNode): RowToInsert
 
-    fun toTableInfo(datasetId: DatasetId): TableInfo = TableInfo.newBuilder(schemaId.toTableId(datasetId), define())
+    fun toTableInfo(datasetId: DatasetId): TableInfo = TableInfo
+        .newBuilder(schemaId.toTableId(datasetId), define())
         .build()
 
     data class Id(val name: String, val version: Int) {

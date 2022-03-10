@@ -6,7 +6,6 @@ import com.google.cloud.bigquery.TableDefinition
 import com.google.cloud.bigquery.TimePartitioning
 import no.nav.hjelpemidler.bigquery.sink.Enhet
 import no.nav.hjelpemidler.bigquery.sink.asMap
-import no.nav.hjelpemidler.bigquery.sink.schema.FieldBuilder
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
 
@@ -53,12 +52,82 @@ val hjelpemiddelstatistikk_v1 = object : SchemaDefinition {
             struct("hjelpemidler") {
                 repeated()
                 description("Hjelpemidlene det er søkt om")
-                hjelpemiddelfelter()
-            }
-            struct("tilbehor") {
-                repeated()
-                description("Tilbehørene det er søkt om")
-                hjelpemiddelfelter()
+                subFields {
+                    string("hmsnr") {
+                        nullable()
+                        description("Hjelpemiddelets HMS-nr.")
+                    }
+                    string("produkt_id") {
+                        required()
+                        description("Produktseriens ID")
+                    }
+                    string("produktnavn") {
+                        required()
+                        description("Produktseriens navn")
+                    }
+                    string("artikkel_id") {
+                        required()
+                        description("Hjelpemiddelets ID")
+                    }
+                    string("artikkelnavn") {
+                        required()
+                        description("Hjelpemiddelets navn")
+                    }
+                    string("isokode") {
+                        required()
+                        description("Hjelpemiddelets ISO-klassifisering (kode)")
+                    }
+                    string("isotittel") {
+                        required()
+                        description("Hjelpemiddelets ISO-klassifisering (navn)")
+                    }
+                    string("isokortnavn") {
+                        nullable()
+                        description("Hjelpemiddelets ISO-klassifisering (kort)")
+                    }
+                    string("kategori") {
+                        nullable()
+                        description("Hjelpemiddelets kategori")
+                    }
+                    string("avtalepost_id") {
+                        nullable()
+                        description("Rammeavtalepostens ID")
+                    }
+                    string("avtaleposttittel") {
+                        nullable()
+                        description("Rammeavtalepostens navn")
+                    }
+                    string("avtalepostrangering") {
+                        nullable()
+                        description("Rammeavtalepostens rangering")
+                    }
+                    string("kilde") {
+                        nullable()
+                        description("Søknad / Ordre / Søknad og ordre")
+                    }
+                    integer("antall") {
+                        nullable()
+                        description("Antallet hjelpemidler")
+                    }
+                    struct("tilbehor") {
+                        repeated()
+                        description("Tilbehørene det er søkt om")
+                        subFields {
+                            string("hmsnr") {
+                                required()
+                                description("Tilbehørets HMS-nr.")
+                            }
+                            string("navn") {
+                                required()
+                                description("Tilbehørets navn")
+                            }
+                            integer("antall") {
+                                nullable()
+                                description("Antallet tilbehør")
+                            }
+                        }
+                    }
+                }
             }
             timestamp("tidsstempel") {
                 required()
@@ -80,59 +149,4 @@ val hjelpemiddelstatistikk_v1 = object : SchemaDefinition {
         .toRowToInsert()
 
     private fun JsonNode.enhetsnummer() = get("enhetsnummer").asText()
-
-    private fun FieldBuilder.hjelpemiddelfelter() = subFields {
-        string("hmsnr") {
-            nullable()
-            description("Hjelpemiddelets HMS-nr.")
-        }
-        string("produkt_id") {
-            required()
-            description("Produktseriens ID")
-        }
-        string("produktnavn") {
-            required()
-            description("Produktseriens navn")
-        }
-        string("artikkel_id") {
-            required()
-            description("Hjelpemiddelets ID")
-        }
-        string("artikkelnavn") {
-            required()
-            description("Hjelpemiddelets navn")
-        }
-        string("isokode") {
-            required()
-            description("Hjelpemiddelets ISO-klassifisering (kode)")
-        }
-        string("isotittel") {
-            required()
-            description("Hjelpemiddelets ISO-klassifisering (navn)")
-        }
-        string("isokortnavn") {
-            nullable()
-            description("Hjelpemiddelets ISO-klassifisering (kort)")
-        }
-        string("kategori") {
-            nullable()
-            description("Hjelpemiddelets kategori")
-        }
-        string("avtalepost_id") {
-            nullable()
-            description("Rammeavtalepostens ID")
-        }
-        string("avtaleposttittel") {
-            nullable()
-            description("Rammeavtalepostens navn")
-        }
-        string("avtalepostrangering") {
-            nullable()
-            description("Rammeavtalepostens rangering")
-        }
-        string("kilde") {
-            required()
-            description("Søknad / Ordre / Søknad og ordre")
-        }
-    }
 }

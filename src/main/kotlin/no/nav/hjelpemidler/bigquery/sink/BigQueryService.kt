@@ -25,11 +25,20 @@ class BigQueryService(
 
     fun migrate() = withLoggingContext {
         log.info { "Kjører migrering" }
-        schemaRegistry
-            .mapValues { it.value.toTableInfo(datasetId) }
+        val tableInfoById = schemaRegistry.mapValues {
+            it.value.toTableInfo(datasetId)
+        }
+        // create missing tables
+        tableInfoById
             .filterValues { !client.tablePresent(it.tableId) }
             .forEach { (_, tableInfo) ->
                 client.create(tableInfo)
+            }
+        // add missing columns
+        tableInfoById
+            .filterValues { client.tablePresent(it.tableId) }
+            .forEach { (_, tableInfo) ->
+                client.update(tableInfo.tableId, tableInfo)
             }
     }
 
