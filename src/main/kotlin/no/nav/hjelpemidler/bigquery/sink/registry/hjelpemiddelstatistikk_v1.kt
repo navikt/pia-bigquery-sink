@@ -105,6 +105,10 @@ val hjelpemiddelstatistikk_v1 = object : SchemaDefinition {
                         nullable()
                         description("Søknad / Ordre / Søknad og ordre")
                     }
+                    integer("antall") {
+                        nullable()
+                        description("Antallet hjelpemidler")
+                    }
                     struct("tilbehor") {
                         repeated()
                         description("Tilbehørene det er søkt om")
