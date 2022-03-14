@@ -8,6 +8,7 @@ import no.nav.hjelpemidler.bigquery.sink.asDateTime
 import no.nav.hjelpemidler.bigquery.sink.asObject
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
+import no.nav.hjelpemidler.bigquery.sink.toText
 import no.nav.hjelpemidler.bigquery.sink.use
 
 val bestillingsordning_v1 = object : SchemaDefinition {
@@ -38,6 +39,10 @@ val bestillingsordning_v1 = object : SchemaDefinition {
                 required()
                 description("Bruker har vedtak i Infotrygd fra før")
             }
+            boolean("kommunenavn") {
+                required()
+                description("Kommunen som innsender tilhører")
+            }
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
@@ -57,6 +62,7 @@ val bestillingsordning_v1 = object : SchemaDefinition {
         payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
         "bruker_har_hjelpemidler_fra_for" to (payload["bruker_har_hjelpemidler_fra_for"]?.asBoolean() ?: false),
         "bruker_har_vedtak_fra_for" to (payload["bruker_har_vedtak_fra_for"]?.asBoolean() ?: false),
+        payload["kommunenavn"] toText "kommunenavn",
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
