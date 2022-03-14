@@ -39,7 +39,7 @@ val bestillingsordning_v1 = object : SchemaDefinition {
                 required()
                 description("Bruker har vedtak i Infotrygd fra før")
             }
-            boolean("kommunenavn") {
+            string("kommunenavn") {
                 required()
                 description("Kommunen som innsender tilhører")
             }
