@@ -39,6 +39,10 @@ val bestillingsordning_v1 = object : SchemaDefinition {
                 required()
                 description("Bruker har vedtak i Infotrygd fra før")
             }
+            boolean("formidler_har_bestillerkurs") {
+                required()
+                description("Formidler har gjennomført kurs for bestillingsordningen")
+            }
             string("kommunenavn") {
                 required()
                 description("Kommunen som innsender tilhører")
@@ -62,6 +66,7 @@ val bestillingsordning_v1 = object : SchemaDefinition {
         payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
         "bruker_har_hjelpemidler_fra_for" to (payload["bruker_har_hjelpemidler_fra_for"]?.asBoolean() ?: false),
         "bruker_har_vedtak_fra_for" to (payload["bruker_har_vedtak_fra_for"]?.asBoolean() ?: false),
+        "formidler_har_bestillerkurs" to (payload["formidler_har_bestillerkurs"]?.asBoolean() ?: false),
         payload["kommunenavn"] toText "kommunenavn",
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
