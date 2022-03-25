@@ -40,7 +40,6 @@ val bestillingsordning_v1 = object : SchemaDefinition {
                 description("Bruker har vedtak i Infotrygd fra før")
             }
             boolean("formidler_har_bestillerkurs") {
-                required()
                 description("Formidler har gjennomført kurs for bestillingsordningen")
             }
             string("kommunenavn") {
@@ -50,9 +49,6 @@ val bestillingsordning_v1 = object : SchemaDefinition {
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
-            }
-            boolean("formidler_har_bestillerkurs") {
-                description("Formidler har gjennomført kurs for bestilling")
             }
         }
         timePartitioning(TimePartitioning.Type.MONTH) {
