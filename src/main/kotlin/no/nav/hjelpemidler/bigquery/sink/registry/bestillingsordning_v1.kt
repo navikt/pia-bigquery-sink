@@ -51,6 +51,9 @@ val bestillingsordning_v1 = object : SchemaDefinition {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
             }
+            boolean("formidler_har_bestillerkurs") {
+                description("Formidler har gjennomført kurs for bestilling")
+            }
         }
         timePartitioning(TimePartitioning.Type.MONTH) {
             setField("opprettet")
