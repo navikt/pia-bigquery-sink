@@ -119,6 +119,14 @@ val saksstatistikk_v1 = object : SchemaDefinition {
                 required()
                 description("Tidsstempel for lagring av raden")
             }
+            timestamp("sf_opprettet_tid") {
+                nullable()
+                description("Tidsstempel for når SF ble opprettet i OEBS")
+            }
+            timestamp("sf_lukket_tid") {
+                nullable()
+                description("Tidsstempel for når SF ble lukket i OEBS")
+            }
         }
         timePartitioning(TimePartitioning.Type.MONTH) {
             setField("endret_tid")
@@ -154,5 +162,7 @@ val saksstatistikk_v1 = object : SchemaDefinition {
         payload["avsender"] toText "avsender",
         payload["versjon"] toText "versjon",
         "tidsstempel" to "AUTO",
+        payload["sfOpprettetTid"] toTimestamp "sf_opprettet_tid",
+        payload["sfLukketTid"] toTimestamp "sf_lukket_tid",
     ).toRowToInsert()
 }
