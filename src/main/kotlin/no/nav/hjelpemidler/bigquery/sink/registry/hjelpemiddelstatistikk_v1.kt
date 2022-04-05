@@ -47,7 +47,7 @@ val hjelpemiddelstatistikk_v1 = object : SchemaDefinition {
             }
             string("brukers_funksjonsnedsettelser") {
                 repeated()
-                description("Brukers funksjonsnedsettelser")
+                description("Brukers funksjonsnedsettelser (bevegelse / hørsel / kognisjon)")
             }
             struct("hjelpemidler") {
                 repeated()
