@@ -21,6 +21,10 @@ val tilbakeforing_gosys_tilbakemelding_v1 = object : SchemaDefinition {
                 required()
                 description("Dato og klokkeslett for tilbakeføring")
             }
+            string("saksnummer") {
+                required()
+                description("Saksnummer i HOTSAK")
+            }
             string("enhetsnummer") {
                 required()
                 description("Hjelpemiddelsentralens enhetsnummer")
@@ -50,6 +54,7 @@ val tilbakeforing_gosys_tilbakemelding_v1 = object : SchemaDefinition {
 
     override fun transform(payload: JsonNode): RowToInsert = mapOf(
         payload.use("opprettet") { asDateTime() },
+        payload.use("saksnummer") { "" },
         payload.use("enhetsnummer") { asText() },
         payload.use("enhetsnavn") { asText() },
         payload.use("dokumentbeskrivelse") { asText() },
