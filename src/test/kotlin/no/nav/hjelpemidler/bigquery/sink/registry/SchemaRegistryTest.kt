@@ -132,7 +132,6 @@ internal class SchemaRegistryTest {
         }""".trimIndent())
         val content = tilbakeforing_gosys_tilbakemelding_v1.transform(payload).content
         assertSoftly {
-            content shouldContain ("saksnummer" to Hash.encode("1"))
             content shouldContain ("enhetsnummer" to "2970")
             content shouldContain ("enhetsnavn" to "NAV Test")
             content shouldContain ("dokumentbeskrivelse" to "foobar")
