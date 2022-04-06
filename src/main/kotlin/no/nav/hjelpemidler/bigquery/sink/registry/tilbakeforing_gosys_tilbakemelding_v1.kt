@@ -23,7 +23,7 @@ val tilbakeforing_gosys_tilbakemelding_v1 = object : SchemaDefinition {
             }
             string("saksnummer") {
                 required()
-                description("Saksnummer i HOTSAK")
+                description("Saksnummer i HOTSAK (benyttes ikke, er tom streng for alle innslag)")
             }
             string("enhetsnummer") {
                 required()
