@@ -38,7 +38,6 @@ dependencies {
 
     // Testing
     testImplementation(kotlin("test"))
-    testImplementation(ktor("server-test-host"))
     testImplementation(kotest("runner-junit5"))
     testImplementation(kotest("assertions-core"))
     testImplementation("io.mockk:mockk:1.12.3")
