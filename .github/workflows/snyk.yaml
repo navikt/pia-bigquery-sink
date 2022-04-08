@@ -1,4 +1,5 @@
 name: Snyk scanning of dependencies
+
 on:
   push:
     paths-ignore:
@@ -9,15 +10,16 @@ on:
       - Jenkinsfile
     branches:
       - main
+
 jobs:
   snyk:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/gradle-jdk16@master
+        uses: snyk/actions/gradle-jdk11@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: monitor
-          args: --configuration-attributes=usage:java-runtime --project-name=${{ github.repository }} --remote-repo-url=https://github.com/${{ github.repository }}.git --org=hjelpemiddelbehov
+          args: --configuration-attributes=usage:java-runtime --project-name=${{ github.repository }} --remote-repo-url=https://github.com/${{ github.repository }}.git --org=hjelpemiddelbehov ./
