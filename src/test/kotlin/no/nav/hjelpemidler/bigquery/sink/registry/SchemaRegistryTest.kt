@@ -43,6 +43,31 @@ internal class SchemaRegistryTest {
     }
 
     @Test
+    internal fun `payload transformed to bestillingsordning_v2 row`() {
+        val payload = jsonMapper.readTree("""{
+             "opprettet": "${LocalDateTime.now()}",
+             "produkter": [
+                "123"
+             ],
+             "produkter_ikke_pa_bestillingsordning": [
+                "123"
+             ],
+             "bruker_har_hjelpemidler_fra_for":  "true",
+             "bruker_har_infotrygd_vedtak_fra_for":"true",
+             "bruker_har_hotsak_vedtak_fra_for": "true",
+             "kommunenavn": "Oslo"
+            }""".trimMargin())
+        val content = bestillingsordning_v2.transform(payload).content
+        content.shouldContain("tidsstempel" to "AUTO")
+        content.shouldContain("produkter" to setOf("123"))
+        content.shouldContain("produkter_ikke_pa_bestillingsordning" to setOf("123"))
+        content.shouldContain("bruker_har_hjelpemidler_fra_for" to true)
+        content.shouldContain("bruker_har_infotrygd_vedtak_fra_for" to true)
+        content.shouldContain("bruker_har_hotsak_vedtak_fra_for" to true)
+        content.shouldContain("kommunenavn" to "Oslo")
+    }
+
+    @Test
     internal fun `payload transformed to hendelse_v1 row`() {
         val payload = jsonMapper.readTree("""{
             "opprettet": "${LocalDateTime.now()}",
