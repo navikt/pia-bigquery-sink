@@ -45,6 +45,9 @@ val bestillingsordning_v2 = object : SchemaDefinition {
             boolean("bruker_har_hotsak_vedtak_fra_for") {
                 description("Bruker har vedtak i Hotsak fra før")
             }
+            boolean("soknad_har_tilbehor") {
+                description("Minst ett hjelpemiddel i søknaden har tilbehør")
+            }
             string("kommunenavn") {
                 required()
                 description("Kommunen som innsender tilhører")
@@ -70,6 +73,7 @@ val bestillingsordning_v2 = object : SchemaDefinition {
         "bruker_har_hjelpemidler_fra_for" to (payload["bruker_har_hjelpemidler_fra_for"]?.asBoolean() ?: false),
         "bruker_har_infotrygd_vedtak_fra_for" to (payload["bruker_har_infotrygd_vedtak_fra_for"]?.asBoolean() ?: false),
         "bruker_har_hotsak_vedtak_fra_for" to (payload["bruker_har_hotsak_vedtak_fra_for"]?.asBoolean() ?: false),
+        "soknad_har_tilbehor" to (payload["soknad_har_tilbehor"]?.asBoolean() ?: false),
         payload["kommunenavn"] toText "kommunenavn",
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
