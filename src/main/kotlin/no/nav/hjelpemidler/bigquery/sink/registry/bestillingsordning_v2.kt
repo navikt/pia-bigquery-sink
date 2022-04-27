@@ -30,9 +30,17 @@ val bestillingsordning_v2 = object : SchemaDefinition {
                 repeated()
                 description("Produkter (hmsnr) det søkes om")
             }
+            string("tilbehor") {
+                repeated()
+                description("Tilbehør (hmsnr) det søkes om")
+            }
             string("produkter_ikke_pa_bestillingsordning") {
                 repeated()
                 description("Produkter (hmsnr) ikke på bestillingsordning")
+            }
+            string("tilbehor_ikke_pa_bestillingsordning") {
+                repeated()
+                description("Tilbehør (hmsnr) ikke på bestillingsordning")
             }
             boolean("bruker_har_hjelpemidler_fra_for") {
                 required()
@@ -69,7 +77,9 @@ val bestillingsordning_v2 = object : SchemaDefinition {
         payload.use("opprettet") { asDateTime() },
         payload["soknadid"] toText "soknadid",
         payload.use("produkter") { asObject<Set<String>>() },
+        payload.use("tilbehor") { asObject<Set<String>>() },
         payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
+        payload.use("tilbehor_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
         "bruker_har_hjelpemidler_fra_for" to (payload["bruker_har_hjelpemidler_fra_for"]?.asBoolean() ?: false),
         "bruker_har_infotrygd_vedtak_fra_for" to (payload["bruker_har_infotrygd_vedtak_fra_for"]?.asBoolean() ?: false),
         "bruker_har_hotsak_vedtak_fra_for" to (payload["bruker_har_hotsak_vedtak_fra_for"]?.asBoolean() ?: false),
