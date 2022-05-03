@@ -49,7 +49,17 @@ class BigQueryService(
         }
         val tableId = schemaId.toTableId(datasetId)
 
-        client.insert(tableId, schemaDefinition.transform(event.payload))
+        runCatching {
+            client.insert(tableId, schemaDefinition.transform(event.payload))
+        }.onFailure { exception ->
+            withLoggingContext(
+                "schemaId" to "schemaId",
+                "payload" to event.payload.toString(),
+            ) {
+                log.error(exception) { "insert feilet" }
+            }
+            throw exception
+        }
     }
 
     companion object {
