@@ -60,6 +60,9 @@ val bestillingsordning_v2 = object : SchemaDefinition {
                 required()
                 description("Kommunen som innsender tilhører")
             }
+            boolean("levering_til_folkeregistrert_adresse") {
+                description("Utlevering er satt til brukers folkeregistrerte adresse")
+            }
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
