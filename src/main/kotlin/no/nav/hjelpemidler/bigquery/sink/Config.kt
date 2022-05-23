@@ -15,6 +15,7 @@ enum class Environment {
     fun pair(): Pair<String, String> = Pair(KEY.name, name)
 
     internal companion object {
+        
         private val KEY = Key("ENVIRONMENT", stringType)
 
         internal fun from(config: Config): Environment = valueOf(config[KEY])
