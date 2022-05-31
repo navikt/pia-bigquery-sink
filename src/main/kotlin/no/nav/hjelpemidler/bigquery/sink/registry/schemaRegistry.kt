@@ -13,4 +13,5 @@ val schemaRegistry: Map<SchemaDefinition.Id, SchemaDefinition> = mapOf(
     saksstatistikk_v1.entry(),
     bestillingsordning_v1.entry(),
     bestillingsordning_v2.entry(),
+    bestillingsordning_v3.entry(),
 )

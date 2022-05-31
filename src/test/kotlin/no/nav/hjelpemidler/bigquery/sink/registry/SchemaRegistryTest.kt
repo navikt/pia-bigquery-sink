@@ -20,7 +20,8 @@ internal class SchemaRegistryTest {
 
     @Test
     internal fun `payload transformed to bestillingsordning_v1 row`() {
-        val payload = jsonMapper.readTree("""{
+        val payload = jsonMapper.readTree(
+            """{
              "opprettet": "${LocalDateTime.now()}",
              "produkter": [
                 "123"
@@ -32,7 +33,8 @@ internal class SchemaRegistryTest {
              "bruker_har_vedtak_fra_for":"true",
              "formidler_har_bestillerkurs": "true",
              "kommunenavn": "Oslo"
-            }""".trimMargin())
+            }""".trimMargin()
+        )
         val content = bestillingsordning_v1.transform(payload).content
         content.shouldContain("tidsstempel" to "AUTO")
         content.shouldContain("produkter" to setOf("123"))
@@ -44,7 +46,8 @@ internal class SchemaRegistryTest {
 
     @Test
     internal fun `payload transformed to bestillingsordning_v2 row`() {
-        val payload = jsonMapper.readTree("""{
+        val payload = jsonMapper.readTree(
+            """{
              "opprettet": "${LocalDateTime.now()}",
              "produkter": [
                 "123"
@@ -56,7 +59,8 @@ internal class SchemaRegistryTest {
              "bruker_har_infotrygd_vedtak_fra_for":"true",
              "bruker_har_hotsak_vedtak_fra_for": "true",
              "kommunenavn": "Oslo"
-            }""".trimMargin())
+            }""".trimMargin()
+        )
         val content = bestillingsordning_v2.transform(payload).content
         content.shouldContain("tidsstempel" to "AUTO")
         content.shouldContain("produkter" to setOf("123"))
@@ -68,36 +72,71 @@ internal class SchemaRegistryTest {
     }
 
     @Test
+    internal fun `payload transformed to bestillingsordning_v3 row`() {
+        val payload = jsonMapper.readTree(
+            """{
+             "opprettet": "${LocalDateTime.now()}",
+             "soknadid": "abc-123-def-456",
+             "version": "v1.2.3",
+             "kan_vere_bestilling": "true",
+             "alle_hoved_produkter_pa_bestillingsordning": "true",
+             "alle_tilbehor_pa_bestillingsordning": "true",
+             "bruker_har_hjelpemidler_fra_for":  "null",
+             "bruker_har_infotrygd_vedtak_fra_for":"false",
+             "bruker_har_hotsak_vedtak_fra_for": "true",
+             "levering_til_folkeregistrert_adresse": "true"
+            }""".trimMargin()
+        )
+        val content = bestillingsordning_v3.transform(payload).content
+        content.shouldContain("tidsstempel" to "AUTO")
+        content.shouldContain("soknadid" to "abc-123-def-456")
+        content.shouldContain("version" to "v1.2.3")
+        content.shouldContain("alle_hoved_produkter_pa_bestillingsordning" to true)
+        content.shouldContain("alle_tilbehor_pa_bestillingsordning" to true)
+        content.shouldContain("bruker_har_hjelpemidler_fra_for" to false)
+        content.shouldContain("bruker_har_infotrygd_vedtak_fra_for" to false)
+        content.shouldContain("bruker_har_hotsak_vedtak_fra_for" to true)
+        content.shouldContain("levering_til_folkeregistrert_adresse" to true)
+    }
+
+    @Test
     internal fun `payload transformed to hendelse_v1 row`() {
-        val payload = jsonMapper.readTree("""{
+        val payload = jsonMapper.readTree(
+            """{
             "opprettet": "${LocalDateTime.now()}",
             "navn": "navn",
             "kilde": "kilde",
             "data": {
                 "someKey": "someValue"
             }
-        }""".trimIndent())
+        }
+            """.trimIndent()
+        )
         val content = hendelse_v1.transform(payload).content
         content shouldContain ("tidsstempel" to "AUTO")
     }
 
     @Test
     internal fun `payload transformed to hendelse_v2 row`() {
-        val payload = jsonMapper.readTree("""{
+        val payload = jsonMapper.readTree(
+            """{
             "opprettet": "${LocalDateTime.now()}",
             "navn": "navn",
             "kilde": "kilde",
             "data": {
                 "someKey": "someValue"
             }
-        }""".trimIndent())
+        }
+            """.trimIndent()
+        )
         val content = hendelse_v2.transform(payload).content
         content shouldContain ("tidsstempel" to "AUTO")
     }
 
     @Test
     internal fun `payload transformed to hjelpemiddelstatistikk_v1 row`() {
-        val payload = jsonMapper.readTree("""{
+        val payload = jsonMapper.readTree(
+            """{
             "vedtaksdato": "${LocalDateTime.now()}",
             "vedtaksresultat": "Innvilget",
             "enhetsnummer": "Ukjent",
@@ -123,19 +162,23 @@ internal class SchemaRegistryTest {
               }
             ]
           }
-        """.trimIndent())
+            """.trimIndent()
+        )
         val content = hjelpemiddelstatistikk_v1.transform(payload).content
         content shouldContain ("tidsstempel" to "AUTO")
     }
 
     @Test
     internal fun `payload transformed to saksstatistikk_v1 row`() {
-        val payload = jsonMapper.readTree("""{
+        val payload = jsonMapper.readTree(
+            """{
             "sakId": "1",
             "behandlingId": "1",
             "saksbehandler": null,
             "saksbehandlerIdent": null
-        }""".trimIndent())
+        }
+            """.trimIndent()
+        )
         val content = saksstatistikk_v1.transform(payload).content
         content shouldContain ("sak_id" to Hash.encode("1"))
         content shouldContain ("behandling_id" to Hash.encode("1"))
@@ -144,7 +187,8 @@ internal class SchemaRegistryTest {
 
     @Test
     internal fun `payload transformed to tilbakeforing_gosys_tilbakemelding_v1 row`() {
-        val payload = jsonMapper.readTree("""{
+        val payload = jsonMapper.readTree(
+            """{
             "saksnummer": "1",
             "opprettet": "${LocalDateTime.now()}",
             "enhetsnummer": "2970",
@@ -154,7 +198,9 @@ internal class SchemaRegistryTest {
                 "arsak"
             ],
             "begrunnelse": "foobar"
-        }""".trimIndent())
+        }
+            """.trimIndent()
+        )
         val content = tilbakeforing_gosys_tilbakemelding_v1.transform(payload).content
         assertSoftly {
             content shouldContain ("enhetsnummer" to "2970")
