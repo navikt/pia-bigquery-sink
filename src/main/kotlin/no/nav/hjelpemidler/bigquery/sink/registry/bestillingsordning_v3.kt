@@ -53,7 +53,7 @@ val bestillingsordning_v3 = object : SchemaDefinition {
             boolean("levering_til_folkeregistrert_adresse") {
                 description("Utlevering er satt til brukers folkeregistrerte adresse")
             }
-            boolean("bruker_bor_ikke_på_institusjon") {
+            boolean("bruker_bor_ikke_pa_institusjon") {
                 description("Bruker bor ikke på institusjon")
             }
             boolean("bruker_bor_ikke_i_utlandet") {
@@ -86,7 +86,7 @@ val bestillingsordning_v3 = object : SchemaDefinition {
         "bruker_har_infotrygd_vedtak_fra_for" to (payload["bruker_har_infotrygd_vedtak_fra_for"]?.asBoolean() ?: false),
         "bruker_har_hotsak_vedtak_fra_for" to (payload["bruker_har_hotsak_vedtak_fra_for"]?.asBoolean() ?: false),
         "levering_til_folkeregistrert_adresse" to (payload["levering_til_folkeregistrert_adresse"]?.asBoolean() ?: false),
-        "bruker_bor_ikke_på_institusjon" to (payload["bruker_bor_ikke_på_institusjon"]?.asBoolean() ?: false),
+        "bruker_bor_ikke_pa_institusjon" to (payload["bruker_bor_ikke_pa_institusjon"]?.asBoolean() ?: false),
         "bruker_bor_ikke_i_utlandet" to (payload["bruker_bor_ikke_i_utlandet"]?.asBoolean() ?: false),
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
