@@ -84,9 +84,13 @@ internal class SchemaRegistryTest {
              "bruker_har_hjelpemidler_fra_for":  "null",
              "bruker_har_infotrygd_vedtak_fra_for":"false",
              "bruker_har_hotsak_vedtak_fra_for": "true",
-             "levering_til_folkeregistrert_adresse": "true"
+             "levering_til_folkeregistrert_adresse": "true",
+             "bruker_bor_ikke_pa_institusjon": "true",
+             "bruker_bor_ikke_i_utlandet": "true",
+             "bruker_er_ikke_skjermet_person": "true"
             }""".trimMargin()
         )
+
         val content = bestillingsordning_v3.transform(payload).content
         content.shouldContain("tidsstempel" to "AUTO")
         content.shouldContain("soknadid" to "abc-123-def-456")
@@ -97,6 +101,9 @@ internal class SchemaRegistryTest {
         content.shouldContain("bruker_har_infotrygd_vedtak_fra_for" to false)
         content.shouldContain("bruker_har_hotsak_vedtak_fra_for" to true)
         content.shouldContain("levering_til_folkeregistrert_adresse" to true)
+        content.shouldContain("bruker_bor_ikke_pa_institusjon" to true)
+        content.shouldContain("bruker_bor_ikke_i_utlandet" to true)
+        content.shouldContain("bruker_er_ikke_skjermet_person" to true)
     }
 
     @Test

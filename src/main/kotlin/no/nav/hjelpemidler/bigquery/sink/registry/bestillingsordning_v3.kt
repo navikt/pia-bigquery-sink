@@ -59,6 +59,9 @@ val bestillingsordning_v3 = object : SchemaDefinition {
             boolean("bruker_bor_ikke_i_utlandet") {
                 description("Bruker bor ikke i utlandet")
             }
+            boolean("bruker_er_ikke_skjermet_person") {
+                description("Bruker er ikke skjermet person")
+            }
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
@@ -88,6 +91,7 @@ val bestillingsordning_v3 = object : SchemaDefinition {
         "levering_til_folkeregistrert_adresse" to (payload["levering_til_folkeregistrert_adresse"]?.asBoolean() ?: false),
         "bruker_bor_ikke_pa_institusjon" to (payload["bruker_bor_ikke_pa_institusjon"]?.asBoolean() ?: false),
         "bruker_bor_ikke_i_utlandet" to (payload["bruker_bor_ikke_i_utlandet"]?.asBoolean() ?: false),
+        "bruker_er_ikke_skjermet_person" to (payload["bruker_er_ikke_skjermet_person"]?.asBoolean() ?: false),
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
