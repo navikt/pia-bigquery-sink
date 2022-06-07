@@ -65,6 +65,9 @@ val bestillingsordning_v3 = object : SchemaDefinition {
             boolean("inneholder_ikke_fritekst") {
                 description("Inneholder ikke fritekst")
             }
+            boolean("er_formidler_i_bestillingsordningpilot") {
+                description("Er formidler i bestillingsordningpilot")
+            }
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
@@ -96,6 +99,7 @@ val bestillingsordning_v3 = object : SchemaDefinition {
         "bruker_bor_ikke_i_utlandet" to (payload["bruker_bor_ikke_i_utlandet"]?.asBoolean() ?: false),
         "bruker_er_ikke_skjermet_person" to (payload["bruker_er_ikke_skjermet_person"]?.asBoolean() ?: false),
         "inneholder_ikke_fritekst" to (payload["inneholder_ikke_fritekst"]?.asBoolean() ?: false),
+        "er_formidler_i_bestillingsordningpilot" to (payload["er_formidler_i_bestillingsordningpilot"]?.asBoolean()),
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
