@@ -5,6 +5,7 @@ import com.google.cloud.bigquery.InsertAllRequest.RowToInsert
 import com.google.cloud.bigquery.TableDefinition
 import com.google.cloud.bigquery.TimePartitioning
 import no.nav.hjelpemidler.bigquery.sink.asDateTime
+import no.nav.hjelpemidler.bigquery.sink.asObject
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
 import no.nav.hjelpemidler.bigquery.sink.toText
@@ -68,6 +69,22 @@ val bestillingsordning_v3 = object : SchemaDefinition {
             boolean("er_formidler_i_bestillingsordningpilot") {
                 description("Er formidler i bestillingsordningpilot")
             }
+            string("produkter") {
+                repeated()
+                description("Produkter (hmsnr) det søkes om")
+            }
+            string("tilbehor") {
+                repeated()
+                description("Tilbehør (hmsnr) det søkes om")
+            }
+            string("produkter_ikke_pa_bestillingsordning") {
+                repeated()
+                description("Produkter (hmsnr) ikke på bestillingsordning")
+            }
+            string("tilbehor_ikke_pa_bestillingsordning") {
+                repeated()
+                description("Tilbehør (hmsnr) ikke på bestillingsordning")
+            }
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
@@ -100,6 +117,10 @@ val bestillingsordning_v3 = object : SchemaDefinition {
         "bruker_er_ikke_skjermet_person" to (payload["bruker_er_ikke_skjermet_person"]?.asBoolean() ?: false),
         "inneholder_ikke_fritekst" to (payload["inneholder_ikke_fritekst"]?.asBoolean() ?: false),
         "er_formidler_i_bestillingsordningpilot" to (payload["er_formidler_i_bestillingsordningpilot"]?.asBoolean()),
+        payload.use("produkter") { asObject<Set<String>>() },
+        payload.use("tilbehor") { asObject<Set<String>>() },
+        payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
+        payload.use("tilbehor_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
