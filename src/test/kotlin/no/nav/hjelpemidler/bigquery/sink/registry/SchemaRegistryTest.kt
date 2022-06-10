@@ -187,8 +187,8 @@ internal class SchemaRegistryTest {
             """.trimIndent()
         )
         val content = saksstatistikk_v1.transform(payload).content
-        content shouldContain ("sak_id" to Hash.encode("1"))
-        content shouldContain ("behandling_id" to Hash.encode("1"))
+        content shouldContain ("sak_id" to "1")
+        content shouldContain ("behandling_id" to "1")
         content shouldContain ("tidsstempel" to "AUTO")
     }
 
