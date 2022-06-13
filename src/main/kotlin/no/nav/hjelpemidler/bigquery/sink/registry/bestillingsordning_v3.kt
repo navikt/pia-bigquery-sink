@@ -85,6 +85,10 @@ val bestillingsordning_v3 = object : SchemaDefinition {
                 repeated()
                 description("Tilbehør (hmsnr) ikke på bestillingsordning")
             }
+            string("kategorier") {
+                repeated()
+                description("Kategorier som produkter det søkes om tilhører")
+            }
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
@@ -121,6 +125,7 @@ val bestillingsordning_v3 = object : SchemaDefinition {
         payload.use("tilbehor") { asObject<Set<String>>() },
         payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
         payload.use("tilbehor_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
+        payload.use("kategorier") { asObject<Set<String>>() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
