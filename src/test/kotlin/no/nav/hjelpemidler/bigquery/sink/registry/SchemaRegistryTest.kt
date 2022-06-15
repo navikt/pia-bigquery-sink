@@ -4,7 +4,6 @@ import com.google.cloud.bigquery.DatasetId
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
-import no.nav.hjelpemidler.bigquery.sink.Hash
 import no.nav.hjelpemidler.bigquery.sink.jsonMapper
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime

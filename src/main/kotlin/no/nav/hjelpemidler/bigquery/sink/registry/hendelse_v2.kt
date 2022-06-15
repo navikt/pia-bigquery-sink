@@ -8,6 +8,7 @@ import no.nav.hjelpemidler.bigquery.sink.asDateTime
 import no.nav.hjelpemidler.bigquery.sink.asObject
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
+import no.nav.hjelpemidler.bigquery.sink.toText
 import no.nav.hjelpemidler.bigquery.sink.use
 
 val hendelse_v2 = object : SchemaDefinition {
@@ -42,6 +43,10 @@ val hendelse_v2 = object : SchemaDefinition {
                     }
                 }
             }
+            string("geografisk_tilknytning") {
+                nullable()
+                description("F.eks. sentral eller kommune hendelsen er knyttet til")
+            }
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
@@ -64,6 +69,7 @@ val hendelse_v2 = object : SchemaDefinition {
                 mapOf("navn" to it.key, "verdi" to it.value)
             }
         },
+        payload["geografiskTilknytning"] toText "geografisk_tilknytning",
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
