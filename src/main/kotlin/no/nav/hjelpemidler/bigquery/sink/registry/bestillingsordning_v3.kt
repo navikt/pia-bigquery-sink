@@ -93,6 +93,9 @@ val bestillingsordning_v3 = object : SchemaDefinition {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
             }
+            boolean("bruker_er_tilknyttet_hjmsentral_paa_pilot") {
+                description("Bruker er tilknyttet en hjelpemiddelsentral som er på pilot for bestillingsordning")
+            }
         }
         timePartitioning(TimePartitioning.Type.MONTH) {
             setField("opprettet")
@@ -121,6 +124,7 @@ val bestillingsordning_v3 = object : SchemaDefinition {
         "bruker_er_ikke_skjermet_person" to (payload["bruker_er_ikke_skjermet_person"]?.asBoolean() ?: false),
         "inneholder_ikke_fritekst" to (payload["inneholder_ikke_fritekst"]?.asBoolean() ?: false),
         "er_formidler_i_bestillingsordningpilot" to (payload["er_formidler_i_bestillingsordningpilot"]?.asBoolean()),
+        "bruker_er_tilknyttet_hjmsentral_paa_pilot" to (payload["bruker_er_tilknyttet_hjmsentral_paa_pilot"]?.asBoolean() ?: false),
         payload.use("produkter") { asObject<Set<String>>() },
         payload.use("tilbehor") { asObject<Set<String>>() },
         payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
