@@ -127,7 +127,7 @@ val saksstatistikk_v1 = object : SchemaDefinition {
                 nullable()
                 description("Tidsstempel for når SF ble lukket i OEBS")
             }
-            string("soknad_id") {
+            string("soknadid") {
                 nullable()
             }
         }
@@ -167,6 +167,6 @@ val saksstatistikk_v1 = object : SchemaDefinition {
         "tidsstempel" to "AUTO",
         payload["sfOpprettetTid"] toTimestamp "sf_opprettet_tid",
         payload["sfLukketTid"] toTimestamp "sf_lukket_tid",
-        payload["soknadId"] toTextValue "soknad_id",
+        payload["soknadId"] toTextValue "soknadid",
     ).toRowToInsert()
 }
