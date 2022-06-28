@@ -8,6 +8,7 @@ import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
 import no.nav.hjelpemidler.bigquery.sink.toBoolean
 import no.nav.hjelpemidler.bigquery.sink.toText
+import no.nav.hjelpemidler.bigquery.sink.toTextValue
 import no.nav.hjelpemidler.bigquery.sink.toTimestamp
 
 val saksstatistikk_v1 = object : SchemaDefinition {
@@ -126,6 +127,9 @@ val saksstatistikk_v1 = object : SchemaDefinition {
                 nullable()
                 description("Tidsstempel for når SF ble lukket i OEBS")
             }
+            timestamp("soknad_id") {
+                nullable()
+            }
         }
         timePartitioning(TimePartitioning.Type.MONTH) {
             setField("endret_tid")
@@ -138,8 +142,8 @@ val saksstatistikk_v1 = object : SchemaDefinition {
     override fun transform(payload: JsonNode): RowToInsert = mapOf(
         payload["sakId"] toText "sak_id",
         payload["behandlingId"] toText "behandling_id",
-        payload["saksbehandler"] toText "saksbehandler",
-        payload["saksbehandlerIdent"] toText "saksbehandler_ident",
+        payload["saksbehandler"] toTextValue "saksbehandler",
+        payload["saksbehandlerIdent"] toTextValue "saksbehandler_ident",
         payload["personIdent"] toText "person_ident",
         payload["registrertTid"] toTimestamp "registrert_tid",
         payload["endretTid"] toTimestamp "endret_tid",
@@ -152,7 +156,7 @@ val saksstatistikk_v1 = object : SchemaDefinition {
         payload["behandlingType"] toText "behandling_type",
         payload["behandlingMetode"] toText "behandling_metode",
         payload["behandlingStatus"] toText "behandling_status",
-        payload["behandlingResultat"] toText "behandling_resultat",
+        payload["behandlingResultat"] toTextValue "behandling_resultat",
         payload["opprettetAv"] toText "opprettet_av",
         payload["opprettetEnhet"] toText "opprettet_enhet",
         payload["ansvarligEnhet"] toText "ansvarlig_enhet",
@@ -163,5 +167,6 @@ val saksstatistikk_v1 = object : SchemaDefinition {
         "tidsstempel" to "AUTO",
         payload["sfOpprettetTid"] toTimestamp "sf_opprettet_tid",
         payload["sfLukketTid"] toTimestamp "sf_lukket_tid",
+        payload["soknadId"] toTextValue "soknad_id",
     ).toRowToInsert()
 }
