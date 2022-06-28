@@ -127,7 +127,7 @@ val saksstatistikk_v1 = object : SchemaDefinition {
                 nullable()
                 description("Tidsstempel for når SF ble lukket i OEBS")
             }
-            timestamp("soknad_id") {
+            string("soknad_id") {
                 nullable()
             }
         }
