@@ -10,7 +10,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-fun ktor(name: String) = "io.ktor:ktor-$name:2.0.0"
+fun ktor(name: String) = "io.ktor:ktor-$name:2.0.2"
 fun kotest(name: String) = "io.kotest:kotest-$name:5.1.0"
 
 dependencies {
@@ -22,25 +22,25 @@ dependencies {
     implementation(ktor("server-cio"))
     implementation(ktor("server-metrics-micrometer"))
 
-    implementation("com.github.navikt:rapids-and-rivers:2022.04.21-09.34.08966130226f") {
+    implementation("com.github.navikt:rapids-and-rivers:2022061809451655538329.d6deccc62862") {
         exclude(group = "ch.qos.logback")
     }
 
     implementation("com.natpryce:konfig:1.6.10.0")
     implementation("com.google.cloud:google-cloud-bigquery:2.10.10")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.8.5")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.9.0")
     implementation("org.reflections:reflections:0.10.2")
 
     // Logging
-    implementation("io.github.microutils:kotlin-logging:2.1.21")
+    implementation("io.github.microutils:kotlin-logging:2.1.23")
     runtimeOnly("ch.qos.logback:logback-classic:1.2.11")
-    runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.1.1")
+    runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.2")
 
     // Testing
     testImplementation(kotlin("test"))
     testImplementation(kotest("runner-junit5"))
     testImplementation(kotest("assertions-core"))
-    testImplementation("io.mockk:mockk:1.12.3")
+    testImplementation("io.mockk:mockk:1.12.4")
 }
 
 application {
