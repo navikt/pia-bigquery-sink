@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.7.10"
     application
 }
 
@@ -10,11 +10,11 @@ repositories {
     maven("https://jitpack.io")
 }
 
-fun ktor(name: String) = "io.ktor:ktor-$name:2.0.2"
-fun kotest(name: String) = "io.kotest:kotest-$name:5.1.0"
+fun ktor(name: String) = "io.ktor:ktor-$name:2.0.3"
+fun kotest(name: String) = "io.kotest:kotest-$name:5.3.2"
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
 
     // Ktor Server
@@ -27,8 +27,8 @@ dependencies {
     }
 
     implementation("com.natpryce:konfig:1.6.10.0")
-    implementation("com.google.cloud:google-cloud-bigquery:2.10.10")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.9.0")
+    implementation("com.google.cloud:google-cloud-bigquery:2.13.8")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.9.1")
     implementation("org.reflections:reflections:0.10.2")
 
     // Logging

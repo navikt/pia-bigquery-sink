@@ -31,7 +31,7 @@ fun <T> JsonNode.use(key: String, transform: JsonNode.() -> T): Pair<String, T?>
     transform(it)
 }
 
-infix fun JsonNode?.toText(key: String): Pair<String, String?> = key to this?.asText()
-infix fun JsonNode?.toTextValue(key: String): Pair<String, String?> = key to this?.textValue()
-infix fun JsonNode?.toBoolean(key: String): Pair<String, Boolean?> = key to this?.asBoolean()
-infix fun JsonNode?.toTimestamp(key: String): Pair<String, String?> = key to this?.asTimestamp()
+infix fun JsonNode?.asTextWithName(key: String): Pair<String, String?> = key to this?.asText()
+infix fun JsonNode?.textValueWithName(key: String): Pair<String, String?> = key to this?.textValue()
+infix fun JsonNode?.asBooleanWithName(key: String): Pair<String, Boolean?> = key to this?.asBoolean()
+infix fun JsonNode?.asTimestampWithName(key: String): Pair<String, String?> = key to this?.asTimestamp()

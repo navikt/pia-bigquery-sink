@@ -6,10 +6,10 @@ import com.google.cloud.bigquery.TableDefinition
 import com.google.cloud.bigquery.TimePartitioning
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
-import no.nav.hjelpemidler.bigquery.sink.toBoolean
-import no.nav.hjelpemidler.bigquery.sink.toText
-import no.nav.hjelpemidler.bigquery.sink.toTextValue
-import no.nav.hjelpemidler.bigquery.sink.toTimestamp
+import no.nav.hjelpemidler.bigquery.sink.asBooleanWithName
+import no.nav.hjelpemidler.bigquery.sink.asTextWithName
+import no.nav.hjelpemidler.bigquery.sink.textValueWithName
+import no.nav.hjelpemidler.bigquery.sink.asTimestampWithName
 
 val saksstatistikk_v1 = object : SchemaDefinition {
     override val schemaId: SchemaDefinition.Id = SchemaDefinition.Id(
@@ -140,33 +140,33 @@ val saksstatistikk_v1 = object : SchemaDefinition {
     }
 
     override fun transform(payload: JsonNode): RowToInsert = mapOf(
-        payload["sakId"] toText "sak_id",
-        payload["sakId"] toText "behandling_id",
-        payload["saksbehandler"] toTextValue "saksbehandler",
-        payload["saksbehandlerIdent"] toTextValue "saksbehandler_ident",
-        payload["personIdent"] toText "person_ident",
-        payload["registrertTid"] toTimestamp "registrert_tid",
-        payload["endretTid"] toTimestamp "endret_tid",
-        payload["tekniskTid"] toTimestamp "teknisk_tid",
-        payload["mottattTid"] toTimestamp "mottatt_tid",
-        payload["ferdigBehandletTid"] toTimestamp "ferdig_behandlet_tid",
-        payload["vedtakTid"] toTimestamp "vedtak_tid",
-        payload["sakYtelse"] toText "sak_ytelse",
-        payload["underType"] toText "under_type",
-        payload["behandlingType"] toText "behandling_type",
-        payload["behandlingMetode"] toText "behandling_metode",
-        payload["behandlingStatus"] toText "behandling_status",
-        payload["behandlingResultat"] toTextValue "behandling_resultat",
-        payload["opprettetAv"] toText "opprettet_av",
-        payload["opprettetEnhet"] toText "opprettet_enhet",
-        payload["ansvarligEnhet"] toText "ansvarlig_enhet",
-        payload["totrinnsbehandling"] toBoolean "totrinnsbehandling",
-        payload["sakUtland"] toText "sak_utland",
-        payload["avsender"] toText "avsender",
-        payload["versjon"] toText "versjon",
+        payload["sakId"] asTextWithName "sak_id",
+        payload["sakId"] asTextWithName "behandling_id",
+        payload["saksbehandler"] textValueWithName "saksbehandler",
+        payload["saksbehandlerIdent"] textValueWithName "saksbehandler_ident",
+        payload["personIdent"] asTextWithName "person_ident",
+        payload["registrertTid"] asTimestampWithName "registrert_tid",
+        payload["endretTid"] asTimestampWithName "endret_tid",
+        payload["tekniskTid"] asTimestampWithName "teknisk_tid",
+        payload["mottattTid"] asTimestampWithName "mottatt_tid",
+        payload["ferdigBehandletTid"] asTimestampWithName "ferdig_behandlet_tid",
+        payload["vedtakTid"] asTimestampWithName "vedtak_tid",
+        payload["sakYtelse"] asTextWithName "sak_ytelse",
+        payload["underType"] asTextWithName "under_type",
+        payload["behandlingType"] asTextWithName "behandling_type",
+        payload["behandlingMetode"] asTextWithName "behandling_metode",
+        payload["behandlingStatus"] asTextWithName "behandling_status",
+        payload["behandlingResultat"] textValueWithName "behandling_resultat",
+        payload["opprettetAv"] asTextWithName "opprettet_av",
+        payload["opprettetEnhet"] asTextWithName "opprettet_enhet",
+        payload["ansvarligEnhet"] asTextWithName "ansvarlig_enhet",
+        payload["totrinnsbehandling"] asBooleanWithName "totrinnsbehandling",
+        payload["sakUtland"] asTextWithName "sak_utland",
+        payload["avsender"] asTextWithName "avsender",
+        payload["versjon"] asTextWithName "versjon",
         "tidsstempel" to "AUTO",
-        payload["sfOpprettetTid"] toTimestamp "sf_opprettet_tid",
-        payload["sfLukketTid"] toTimestamp "sf_lukket_tid",
-        payload["soknadId"] toTextValue "soknadid",
+        payload["sfOpprettetTid"] asTimestampWithName "sf_opprettet_tid",
+        payload["sfLukketTid"] asTimestampWithName "sf_lukket_tid",
+        payload["soknadId"] textValueWithName "soknadid",
     ).toRowToInsert()
 }

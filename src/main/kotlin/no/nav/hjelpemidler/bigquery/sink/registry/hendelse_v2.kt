@@ -8,7 +8,7 @@ import no.nav.hjelpemidler.bigquery.sink.asDateTime
 import no.nav.hjelpemidler.bigquery.sink.asObject
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
-import no.nav.hjelpemidler.bigquery.sink.toTextValue
+import no.nav.hjelpemidler.bigquery.sink.textValueWithName
 import no.nav.hjelpemidler.bigquery.sink.use
 
 val hendelse_v2 = object : SchemaDefinition {
@@ -69,7 +69,7 @@ val hendelse_v2 = object : SchemaDefinition {
                 mapOf("navn" to it.key, "verdi" to it.value)
             }
         },
-        payload["geografiskTilknytning"] toTextValue "geografisk_tilknytning",
+        payload["geografiskTilknytning"] textValueWithName "geografisk_tilknytning",
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }

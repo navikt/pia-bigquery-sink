@@ -8,7 +8,7 @@ import no.nav.hjelpemidler.bigquery.sink.asDateTime
 import no.nav.hjelpemidler.bigquery.sink.asObject
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
-import no.nav.hjelpemidler.bigquery.sink.toText
+import no.nav.hjelpemidler.bigquery.sink.asTextWithName
 import no.nav.hjelpemidler.bigquery.sink.use
 
 // Opprettet ifbm. at sjekk mot bestillingsordning nå blir utført i hm-soknad-api
@@ -107,8 +107,8 @@ val bestillingsordning_v3 = object : SchemaDefinition {
 
     override fun transform(payload: JsonNode): RowToInsert = mapOf(
         payload.use("opprettet") { asDateTime() },
-        payload["soknadid"] toText "soknadid",
-        payload["version"] toText "version",
+        payload["soknadid"] asTextWithName "soknadid",
+        payload["version"] asTextWithName "version",
         "kan_vere_bestilling" to (payload["kan_vere_bestilling"]?.asBoolean() ?: false),
         "alle_hoved_produkter_pa_bestillingsordning" to (
             payload["alle_hoved_produkter_pa_bestillingsordning"]?.asBoolean()

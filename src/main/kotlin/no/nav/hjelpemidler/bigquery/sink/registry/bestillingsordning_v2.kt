@@ -8,7 +8,7 @@ import no.nav.hjelpemidler.bigquery.sink.asDateTime
 import no.nav.hjelpemidler.bigquery.sink.asObject
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
-import no.nav.hjelpemidler.bigquery.sink.toText
+import no.nav.hjelpemidler.bigquery.sink.asTextWithName
 import no.nav.hjelpemidler.bigquery.sink.use
 
 val bestillingsordning_v2 = object : SchemaDefinition {
@@ -78,7 +78,7 @@ val bestillingsordning_v2 = object : SchemaDefinition {
 
     override fun transform(payload: JsonNode): RowToInsert = mapOf(
         payload.use("opprettet") { asDateTime() },
-        payload["soknadid"] toText "soknadid",
+        payload["soknadid"] asTextWithName "soknadid",
         payload.use("produkter") { asObject<Set<String>>() },
         payload.use("tilbehor") { asObject<Set<String>>() },
         payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
@@ -87,7 +87,7 @@ val bestillingsordning_v2 = object : SchemaDefinition {
         "bruker_har_infotrygd_vedtak_fra_for" to (payload["bruker_har_infotrygd_vedtak_fra_for"]?.asBoolean() ?: false),
         "bruker_har_hotsak_vedtak_fra_for" to (payload["bruker_har_hotsak_vedtak_fra_for"]?.asBoolean() ?: false),
         "soknad_har_tilbehor" to (payload["soknad_har_tilbehor"]?.asBoolean() ?: false),
-        payload["kommunenavn"] toText "kommunenavn",
+        payload["kommunenavn"] asTextWithName "kommunenavn",
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }

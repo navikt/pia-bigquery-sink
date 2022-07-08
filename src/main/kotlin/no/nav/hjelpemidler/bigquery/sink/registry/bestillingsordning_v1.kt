@@ -8,7 +8,7 @@ import no.nav.hjelpemidler.bigquery.sink.asDateTime
 import no.nav.hjelpemidler.bigquery.sink.asObject
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
-import no.nav.hjelpemidler.bigquery.sink.toText
+import no.nav.hjelpemidler.bigquery.sink.asTextWithName
 import no.nav.hjelpemidler.bigquery.sink.use
 
 val bestillingsordning_v1 = object : SchemaDefinition {
@@ -70,7 +70,7 @@ val bestillingsordning_v1 = object : SchemaDefinition {
         "bruker_har_vedtak_fra_for" to (payload["bruker_har_vedtak_fra_for"]?.asBoolean() ?: false),
         "formidler_har_bestillerkurs" to (payload["formidler_har_bestillerkurs"]?.asBoolean() ?: false),
         "soknad_har_tilbehor" to (payload["soknad_har_tilbehor"]?.asBoolean() ?: false),
-        payload["kommunenavn"] toText "kommunenavn",
+        payload["kommunenavn"] asTextWithName "kommunenavn",
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
