@@ -8,7 +8,9 @@ import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.rapids_rivers.River.PacketListener
+import no.nav.hjelpemidler.bigquery.sink.brille.brilleRegistry
 import no.nav.hjelpemidler.bigquery.sink.registry.hendelse_v2
+import no.nav.hjelpemidler.bigquery.sink.registry.schemaRegistry
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import java.time.LocalDate
 import java.time.Month
@@ -47,7 +49,14 @@ class BigQueryHendelseMottak(
             "schemaVersion" to schemaId.version.toString(),
         ) {
             log.debug { "Mottok hendelse for lagring i BigQuery" }
-            bigQueryService.insert(BigQuerySinkEvent(schemaId, payload))
+            val registry = if (schemaRegistry.containsKey(schemaId)) {
+                schemaRegistry
+            } else if (brilleRegistry.containsKey(schemaId)) {
+                brilleRegistry
+            } else {
+                error("Fant ikke register for tabell: $schemaId")
+            }
+            bigQueryService.insert(registry, BigQuerySinkEvent(schemaId, payload))
         }
     }
 

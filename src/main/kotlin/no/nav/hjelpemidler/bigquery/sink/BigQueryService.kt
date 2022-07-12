@@ -1,32 +1,24 @@
 package no.nav.hjelpemidler.bigquery.sink
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.google.cloud.bigquery.DatasetId
 import mu.KotlinLogging
 import mu.withLoggingContext
 import no.nav.hjelpemidler.bigquery.sink.registry.schemaRegistry
+import no.nav.hjelpemidler.bigquery.sink.schema.Registry
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 
 class BigQueryService(
-    private val datasetId: DatasetId,
+    private val projectId: String,
     private val client: BigQueryClient,
 ) {
     private fun <T> withLoggingContext(block: () -> T) = withLoggingContext(
-        "projectId" to datasetId.project,
-        "datasetId" to datasetId.dataset
+        "projectId" to projectId,
     ) { block() }
 
-    fun ping(): Boolean = withLoggingContext {
-        when (client.datasetPresent(datasetId)) {
-            false -> log.error { "Fikk ikke kontakt med BigQuery" }.let { false }
-            true -> log.info { "Fikk kontakt med BigQuery" }.let { true }
-        }
-    }
-
-    fun migrate() = withLoggingContext {
+    fun migrate(registry: Registry) = withLoggingContext {
         log.info { "Kjører migrering" }
-        val tableInfoById = schemaRegistry.mapValues {
-            it.value.toTableInfo(datasetId)
+        val tableInfoById = registry.mapValues {
+            it.value.toTableInfo(registry.datasetId)
         }
         // create missing tables
         tableInfoById
@@ -42,12 +34,12 @@ class BigQueryService(
             }
     }
 
-    fun insert(event: BigQuerySinkEvent) = withLoggingContext {
+    fun insert(registry: Registry, event: BigQuerySinkEvent) = withLoggingContext {
         val schemaId = event.schemaId
-        val schemaDefinition = requireNotNull(schemaRegistry[schemaId]) {
+        val schemaDefinition = requireNotNull(registry[schemaId]) {
             "Mangler skjema: '$schemaId' i schemaRegistry, følgende skjema finnes: ${schemaRegistry.keys}"
         }
-        val tableId = schemaId.toTableId(datasetId)
+        val tableId = schemaId.toTableId(registry.datasetId)
 
         runCatching {
             client.insert(tableId, schemaDefinition.transform(event.payload))

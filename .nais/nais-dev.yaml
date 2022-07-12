@@ -42,3 +42,5 @@ spec:
     bigQueryDatasets:
       - name: hm_bigquery_sink_v1_dataset_dev
         permission: READWRITE
+      - name: hm_bigquery_sink_v1_dataset_brille_dev
+        permission: READWRITE

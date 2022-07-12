@@ -39,15 +39,14 @@ interface BigQueryClient {
     class BigQueryClientException(message: String) : RuntimeException(message)
 }
 
-class DefaultBigQueryClient(private val datasetId: DatasetId) : BigQueryClient {
+class DefaultBigQueryClient(private val projectId: String) : BigQueryClient {
     private val bigQuery = BigQueryOptions.newBuilder()
-        .setProjectId(datasetId.project)
+        .setProjectId(projectId)
         .build()
         .service
 
     private fun <T> withLoggingContext(block: () -> T) = withLoggingContext(
-        "projectId" to datasetId.project,
-        "datasetId" to datasetId.dataset
+        "projectId" to projectId,
     ) { block() }
 
     private fun getTable(tableId: TableId): Table = requireNotNull(bigQuery.getTable(tableId)) {

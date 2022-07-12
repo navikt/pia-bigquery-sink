@@ -15,7 +15,7 @@ enum class Environment {
     fun pair(): Pair<String, String> = Pair(KEY.name, name)
 
     internal companion object {
-        
+
         private val KEY = Key("ENVIRONMENT", stringType)
 
         internal fun from(config: Config): Environment = valueOf(config[KEY])
@@ -43,7 +43,7 @@ object Gcp {
 
 object BigQuery {
     val dataset_id by envVar
-    val hash_suffix by envVar
+    val brille_dataset_id by envVar
 }
 
 object Kafka {
@@ -74,7 +74,7 @@ object Config {
         Kafka.reset_policy to "earliest",
 
         BigQuery.dataset_id to "hm_bigquery_sink_v1_dataset_local",
-        BigQuery.hash_suffix to "foobar",
+        BigQuery.brille_dataset_id to "hm_bigquery_sink_v1_dataset_brille_local",
     )
 
     private val devProperties = ConfigurationMap(
@@ -83,6 +83,7 @@ object Config {
         http_port to "8080",
 
         BigQuery.dataset_id to "hm_bigquery_sink_v1_dataset_dev",
+        BigQuery.brille_dataset_id to "hm_bigquery_sink_v1_dataset_brille_dev",
     )
 
     private val prodProperties = ConfigurationMap(
@@ -91,6 +92,7 @@ object Config {
         http_port to "8080",
 
         BigQuery.dataset_id to "hm_bigquery_sink_v1_dataset_prod",
+        BigQuery.brille_dataset_id to "hm_bigquery_sink_v1_dataset_brille_prod",
     )
 
     private val properties: Configuration by lazy {
