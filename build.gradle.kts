@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.10"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
     application
 }
 
@@ -14,7 +15,7 @@ fun ktor(name: String) = "io.ktor:ktor-$name:2.0.3"
 fun kotest(name: String) = "io.kotest:kotest-$name:5.3.2"
 
 dependencies {
-    implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
 
     // Ktor Server
@@ -53,16 +54,4 @@ tasks.test {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "17"
-}
-
-tasks.withType<Jar> {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    manifest {
-        attributes["Main-Class"] = application.mainClass
-    }
-    from(
-        configurations.runtimeClasspath.get().map {
-            if (it.isDirectory) it else zipTree(it)
-        }
-    )
 }
