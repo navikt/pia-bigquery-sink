@@ -55,4 +55,9 @@ class SchemaBuilder {
         name: String,
         block: FieldBuilder.() -> Unit = {},
     ): Field = field(name, StandardSQLTypeName.TIMESTAMP, block)
+
+    fun decimal(
+        name: String,
+        block: FieldBuilder.() -> Unit = {},
+    ): Field = field(name, StandardSQLTypeName.NUMERIC, block)
 }

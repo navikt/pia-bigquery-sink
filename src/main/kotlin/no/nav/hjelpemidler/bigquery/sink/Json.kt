@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -20,8 +21,10 @@ val jsonMapper: JsonMapper = jacksonMapperBuilder()
 
 inline fun <reified T> JsonNode.asObject(): T = jsonMapper.treeToValue(this)
 
+fun JsonNode.asLocalDate(): LocalDate = LocalDate.parse(asText())
 fun JsonNode.asLocalDateTime(): LocalDateTime = LocalDateTime.parse(asText())
 fun JsonNode.asZonedDateTime(): ZonedDateTime = ZonedDateTime.parse(asText())
+fun JsonNode.asDate(): String = asLocalDateTime().toString()
 fun JsonNode.asDateTime(): String = asLocalDateTime().truncatedTo(ChronoUnit.MICROS).toString()
 fun JsonNode.asTimestamp(): String = asZonedDateTime().truncatedTo(ChronoUnit.MICROS).toInstant().toString()
 fun JsonNode.asSchemaId(): SchemaDefinition.Id = SchemaDefinition.Id.of(asText())

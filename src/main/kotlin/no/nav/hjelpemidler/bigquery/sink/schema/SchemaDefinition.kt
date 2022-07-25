@@ -10,7 +10,7 @@ import com.google.cloud.bigquery.TableInfo
 interface SchemaDefinition {
     val schemaId: Id
 
-    fun entry() = schemaId to this
+    fun entry(): Pair<Id, SchemaDefinition> = schemaId to this
 
     fun define(): TableDefinition
 
