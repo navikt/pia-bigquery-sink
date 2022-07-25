@@ -5,9 +5,11 @@ import com.google.cloud.bigquery.InsertAllRequest
 import com.google.cloud.bigquery.TableDefinition
 import no.nav.hjelpemidler.bigquery.sink.asDate
 import no.nav.hjelpemidler.bigquery.sink.asDateTime
+import no.nav.hjelpemidler.bigquery.sink.intValueWithName
 import no.nav.hjelpemidler.bigquery.sink.registry.toRowToInsert
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
+import no.nav.hjelpemidler.bigquery.sink.textValueWithName
 import no.nav.hjelpemidler.bigquery.sink.use
 
 val vedtak_v1 = object : SchemaDefinition {
@@ -21,7 +23,7 @@ val vedtak_v1 = object : SchemaDefinition {
             string("orgnr") {
                 required()
             }
-            string("organisasjon") {
+            string("org_navn") {
                 required()
             }
             integer("barnets_alder") {
@@ -71,18 +73,18 @@ val vedtak_v1 = object : SchemaDefinition {
 
     override fun transform(payload: JsonNode): InsertAllRequest.RowToInsert = mapOf(
         payload.use("orgnr") { textValue() },
-        payload.use("organisasjon") { textValue() },
-        payload.use("barnets_alder") { intValue() },
-        payload.use("hoyre_sfere") { textValue() },
-        payload.use("hoyre_sylinder") { textValue() },
-        payload.use("venstre_sfere") { textValue() },
-        payload.use("venstre_sylinder") { textValue() },
+        payload["orgNavn"] textValueWithName "org_navn",
+        payload["barnetsAlder"] intValueWithName "barnets_alder",
+        "hoyre_sfere" to payload.at("/brilleseddel/høyreSfære").doubleValue(),
+        "hoyre_sylinder" to payload.at("/brilleseddel/høyreSylinder").doubleValue(),
+        "venstre_sfere" to payload.at("/brilleseddel/venstreSfære").doubleValue(),
+        "venstre_sylinder" to payload.at("/brilleseddel/venstreSylinder").doubleValue(),
         payload.use("bestillingsdato") { asDate() },
         payload.use("brillepris") { textValue() },
         payload.use("behandlingsresultat") { textValue() },
         payload.use("sats") { textValue() },
-        payload.use("sats_belop") { intValue() },
-        payload.use("sats_beskrivelse") { textValue() },
+        payload["satsBeløp"] intValueWithName "sats_belop",
+        payload["satsBeskrivelse"] textValueWithName "sats_beskrivelse",
         payload.use("belop") { textValue() },
         payload.use("opprettet") { asDateTime() },
         "tidsstempel" to "AUTO",
