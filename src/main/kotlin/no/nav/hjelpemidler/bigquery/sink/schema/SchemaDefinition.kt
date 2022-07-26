@@ -16,6 +16,8 @@ interface SchemaDefinition {
 
     fun transform(payload: JsonNode): RowToInsert
 
+    fun skip(payload: JsonNode): Boolean = false
+
     fun toTableInfo(datasetId: DatasetId): TableInfo = TableInfo
         .newBuilder(schemaId.toTableId(datasetId), define())
         .build()

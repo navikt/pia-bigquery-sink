@@ -1,6 +1,7 @@
 package no.nav.hjelpemidler.bigquery.sink.brille
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.contains
 import com.google.cloud.bigquery.InsertAllRequest
 import com.google.cloud.bigquery.TableDefinition
 import com.google.cloud.bigquery.TimePartitioning
@@ -94,4 +95,6 @@ val vedtak_v1 = object : SchemaDefinition {
         payload.use("belop") { decimalValue() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
+
+    override fun skip(payload: JsonNode): Boolean = payload.contains("brilleseddel") // gammel event fra hm-brille-api
 }
