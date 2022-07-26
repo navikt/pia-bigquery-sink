@@ -88,7 +88,7 @@ val vedtak_v1 = object : SchemaDefinition {
         "venstre_sfere" to payload.at("/brilleseddel/venstreSfære").doubleValue(),
         "venstre_sylinder" to payload.at("/brilleseddel/venstreSylinder").doubleValue(),
         payload.use("bestillingsdato") { asDate() },
-        payload.use("brillepris") { textValue() },
+        payload.use("brillepris") { decimalValue().toString() },
         payload.use("behandlingsresultat") { textValue() },
         payload.use("sats") { textValue() },
         payload["satsBeløp"] intValueWithName "sats_belop",
