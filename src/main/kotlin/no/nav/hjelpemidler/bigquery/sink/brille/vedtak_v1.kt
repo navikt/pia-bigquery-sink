@@ -93,7 +93,7 @@ val vedtak_v1 = object : SchemaDefinition {
         payload.use("sats") { textValue() },
         payload["satsBeløp"] intValueWithName "sats_belop",
         payload["satsBeskrivelse"] textValueWithName "sats_beskrivelse",
-        payload.use("belop") { decimalValue().toString() },
+        "belop" to payload["beløp"].decimalValue().toString(),
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }

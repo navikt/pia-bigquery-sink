@@ -41,6 +41,10 @@ class BigQueryService(
         }
         val tableId = schemaId.toTableId(registry.datasetId)
 
+        if (Config.environment == Environment.DEV) log.info {
+            "payload: '${event.payload}'"
+        }
+
         runCatching {
             client.insert(tableId, schemaDefinition.transform(event.payload))
         }.onFailure { exception ->
