@@ -3,6 +3,7 @@ package no.nav.hjelpemidler.bigquery.sink.brille
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.InsertAllRequest
 import com.google.cloud.bigquery.TableDefinition
+import com.google.cloud.bigquery.TimePartitioning
 import no.nav.hjelpemidler.bigquery.sink.asDate
 import no.nav.hjelpemidler.bigquery.sink.asDateTime
 import no.nav.hjelpemidler.bigquery.sink.intValueWithName
@@ -68,6 +69,12 @@ val vedtak_v1 = object : SchemaDefinition {
             timestamp("tidsstempel") {
                 required()
             }
+        }
+        timePartitioning(TimePartitioning.Type.MONTH) {
+            setField("opprettet")
+        }
+        clustering {
+            setFields(listOf("opprettet"))
         }
     }
 
