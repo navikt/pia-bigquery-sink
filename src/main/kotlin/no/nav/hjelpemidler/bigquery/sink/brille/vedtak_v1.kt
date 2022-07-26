@@ -6,11 +6,9 @@ import com.google.cloud.bigquery.TableDefinition
 import com.google.cloud.bigquery.TimePartitioning
 import no.nav.hjelpemidler.bigquery.sink.asDate
 import no.nav.hjelpemidler.bigquery.sink.asDateTime
-import no.nav.hjelpemidler.bigquery.sink.intValueWithName
 import no.nav.hjelpemidler.bigquery.sink.registry.toRowToInsert
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
-import no.nav.hjelpemidler.bigquery.sink.textValueWithName
 import no.nav.hjelpemidler.bigquery.sink.use
 
 val vedtak_v1 = object : SchemaDefinition {
@@ -81,19 +79,19 @@ val vedtak_v1 = object : SchemaDefinition {
     override fun transform(payload: JsonNode): InsertAllRequest.RowToInsert = mapOf(
         payload.use("opprettet") { asDateTime() },
         payload.use("orgnr") { textValue() },
-        payload["orgNavn"] textValueWithName "org_navn",
-        payload["barnetsAlder"] intValueWithName "barnets_alder",
-        "hoyre_sfere" to payload.at("/brilleseddel/høyreSfære").doubleValue(),
-        "hoyre_sylinder" to payload.at("/brilleseddel/høyreSylinder").doubleValue(),
-        "venstre_sfere" to payload.at("/brilleseddel/venstreSfære").doubleValue(),
-        "venstre_sylinder" to payload.at("/brilleseddel/venstreSylinder").doubleValue(),
+        payload.use("org_navn") { textValue() },
+        payload.use("barnets_alder") { intValue() },
+        payload.use("hoyre_sfere") { decimalValue() },
+        payload.use("hoyre_sylinder") { decimalValue() },
+        payload.use("venstre_sfere") { decimalValue() },
+        payload.use("venstre_sylinder") { decimalValue() },
         payload.use("bestillingsdato") { asDate() },
-        payload.use("brillepris") { decimalValue().toString() },
+        payload.use("brillepris") { decimalValue() },
         payload.use("behandlingsresultat") { textValue() },
         payload.use("sats") { textValue() },
-        payload["satsBeløp"] intValueWithName "sats_belop",
-        payload["satsBeskrivelse"] textValueWithName "sats_beskrivelse",
-        "belop" to payload["beløp"].decimalValue().toString(),
+        payload.use("sats_belop") { intValue() },
+        payload.use("sats_beskrivelse") { textValue() },
+        payload.use("belop") { decimalValue() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
