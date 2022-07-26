@@ -45,6 +45,11 @@ class BigQueryService(
             "payload: '${event.payload}'"
         }
 
+        if (schemaDefinition.skip(event.payload)) {
+            log.info { "skip: true, payload: '${event.payload}'" }
+            return@withLoggingContext
+        }
+
         runCatching {
             client.insert(tableId, schemaDefinition.transform(event.payload))
         }.onFailure { exception ->
