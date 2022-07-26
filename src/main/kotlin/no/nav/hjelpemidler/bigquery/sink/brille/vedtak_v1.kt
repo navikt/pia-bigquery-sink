@@ -79,6 +79,7 @@ val vedtak_v1 = object : SchemaDefinition {
     }
 
     override fun transform(payload: JsonNode): InsertAllRequest.RowToInsert = mapOf(
+        payload.use("opprettet") { asDateTime() },
         payload.use("orgnr") { textValue() },
         payload["orgNavn"] textValueWithName "org_navn",
         payload["barnetsAlder"] intValueWithName "barnets_alder",
@@ -92,8 +93,7 @@ val vedtak_v1 = object : SchemaDefinition {
         payload.use("sats") { textValue() },
         payload["satsBeløp"] intValueWithName "sats_belop",
         payload["satsBeskrivelse"] textValueWithName "sats_beskrivelse",
-        payload.use("belop") { textValue() },
-        payload.use("opprettet") { asDateTime() },
+        payload.use("belop") { decimalValue().toString() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
