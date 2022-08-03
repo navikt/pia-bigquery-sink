@@ -10,5 +10,6 @@ val brilleRegistry = Registry(
     DatasetId.of(Config[Gcp.team_project_id], Config[BigQuery.brille_dataset_id]),
     avtale_v1.entry(),
     vedtak_v1.entry(),
+    avslag_v1.entry()
     // vilkarsvurdering_v1.entry(),
 )
