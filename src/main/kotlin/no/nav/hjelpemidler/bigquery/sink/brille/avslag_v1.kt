@@ -62,24 +62,18 @@ val avslag_v1 = object : SchemaDefinition {
                 description("Tidsstempel for lagring av avtalen")
             }
         }
-        timePartitioning(TimePartitioning.Type.MONTH) {
-            setField("opprettet")
-        }
-        clustering {
-            setFields(listOf("opprettet"))
-        }
     }
 
     override fun transform(payload: JsonNode): InsertAllRequest.RowToInsert = mapOf(
         payload.use("orgnr") { textValue() },
         payload.use("navn") { textValue() },
-        payload.use("opprettet") { LocalDateTime.now() }, // midlertidig for å ta unna feilende meldinger
         payload.use("har_ikke_vedtak_ikalenderaret_oppfylt") { booleanValue() },
         payload.use("under18_ar_pa_bestillingsdato_oppfylt") { booleanValue() },
         payload.use("medlem_av_folketrygden_oppfylt") { booleanValue() },
         payload.use("brillestyrke_oppfylt") { booleanValue() },
         payload.use("bestillingsdato_oppfylt") { booleanValue() },
         payload.use("bestillingsdato_tilbake_itid_oppfylt") { booleanValue() },
+        payload.use("opprettet") { LocalDateTime.now() }, // midlertidig for å ta unna feilende meldinger
         "tidsstempel" to "AUTO"
     ).toRowToInsert()
 
