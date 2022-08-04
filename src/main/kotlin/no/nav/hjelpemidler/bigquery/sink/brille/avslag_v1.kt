@@ -27,11 +27,11 @@ val avslag_v1 = object : SchemaDefinition {
                 required()
                 description("Navn på virksomheten som gjorde oppslaget")
             }
-            boolean("har_ikke_vedtak_i_kalenderaret_oppfylt") {
+            boolean("har_ikke_vedtak_ikalenderaret_oppfylt") {
                 required()
                 description("Om barnet ikke allerede har et vedtak i samme kalenderår som bestillingsdato")
             }
-            boolean("under_18_ar_pa_bestillingsdato_oppfylt") {
+            boolean("under18_ar_pa_bestillingsdato_oppfylt") {
                 required()
                 description("Om barnet er under 18 år på bestillingsdato")
             }
@@ -47,7 +47,7 @@ val avslag_v1 = object : SchemaDefinition {
                 required()
                 description("Om bestillingsdato er etter ordningen startet, men ikke i fremtiden")
             }
-            boolean("bestillingsdato_tilbake_i_tid_oppfylt") {
+            boolean("bestillingsdato_tilbake_itid_oppfylt") {
                 required()
                 description("Om bestillingsdato er max. 6 mnd tilbake i tid")
             }
@@ -72,12 +72,12 @@ val avslag_v1 = object : SchemaDefinition {
         payload.use("orgnr") { textValue() },
         payload.use("navn") { textValue() },
         payload.use("opprettet") { asDateTime() },
-        payload.use("har_ikke_vedtak_i_kalenderaret_oppfylt") { booleanValue() },
-        payload.use("under_18_ar_pa_bestillingsdato_oppfylt") { booleanValue() },
+        payload.use("har_ikke_vedtak_ikalenderaret_oppfylt") { booleanValue() },
+        payload.use("under18_ar_pa_bestillingsdato_oppfylt") { booleanValue() },
         payload.use("medlem_av_folketrygden_oppfylt") { booleanValue() },
         payload.use("brillestyrke_oppfylt") { booleanValue() },
         payload.use("bestillingsdato_oppfylt") { booleanValue() },
-        payload.use("bestillingsdato_tilbake_i_tid_oppfylt") { booleanValue() },
+        payload.use("bestillingsdato_tilbake_itid_oppfylt") { booleanValue() },
         "tidsstempel" to "AUTO"
     ).toRowToInsert()
 
