@@ -63,6 +63,12 @@ val avslag_v1 = object : SchemaDefinition {
                 description("Tidsstempel for lagring av avtalen")
             }
         }
+        timePartitioning(TimePartitioning.Type.MONTH) {
+            setField("opprettet")
+        }
+        clustering {
+            setFields(listOf("opprettet"))
+        }
     }
 
     override fun transform(payload: JsonNode): InsertAllRequest.RowToInsert = mapOf(
@@ -74,9 +80,7 @@ val avslag_v1 = object : SchemaDefinition {
         payload.use("brillestyrke_oppfylt") { booleanValue() },
         payload.use("bestillingsdato_oppfylt") { booleanValue() },
         payload.use("bestillingsdato_tilbake_itid_oppfylt") { booleanValue() },
-        payload.use("opprettet") { LocalDateTime.now().truncatedTo(ChronoUnit.MICROS).toString() }, // midlertidig for å ta unna feilende meldinger
+        payload.use("opprettet") { asDateTime() },
         "tidsstempel" to "AUTO"
     ).toRowToInsert()
-
-    override fun skip(payload: JsonNode): Boolean = payload.contains("brilleseddel") // gammel event fra hm-brille-api
 }
