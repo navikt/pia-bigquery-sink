@@ -1,18 +1,14 @@
 package no.nav.hjelpemidler.bigquery.sink.brille
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.module.kotlin.contains
 import com.google.cloud.bigquery.InsertAllRequest
 import com.google.cloud.bigquery.TableDefinition
 import com.google.cloud.bigquery.TimePartitioning
 import no.nav.hjelpemidler.bigquery.sink.asDateTime
-import no.nav.hjelpemidler.bigquery.sink.asLocalDate
 import no.nav.hjelpemidler.bigquery.sink.registry.toRowToInsert
 import no.nav.hjelpemidler.bigquery.sink.schema.SchemaDefinition
 import no.nav.hjelpemidler.bigquery.sink.schema.standardTableDefinition
 import no.nav.hjelpemidler.bigquery.sink.use
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
 
 val avslag_v1 = object : SchemaDefinition {
     override val schemaId: SchemaDefinition.Id = SchemaDefinition.Id(
@@ -29,6 +25,9 @@ val avslag_v1 = object : SchemaDefinition {
             string("navn") {
                 required()
                 description("Navn på virksomheten som gjorde oppslaget")
+            }
+            string("bestillingsreferanse") {
+                description("Butikkens bestillingsreferanse")
             }
             boolean("har_ikke_vedtak_ikalenderaret_oppfylt") {
                 required()
@@ -74,6 +73,7 @@ val avslag_v1 = object : SchemaDefinition {
     override fun transform(payload: JsonNode): InsertAllRequest.RowToInsert = mapOf(
         payload.use("orgnr") { textValue() },
         payload.use("navn") { textValue() },
+        payload.use("bestillingsreferanse") { textValue() },
         payload.use("har_ikke_vedtak_ikalenderaret_oppfylt") { booleanValue() },
         payload.use("under18_ar_pa_bestillingsdato_oppfylt") { booleanValue() },
         payload.use("medlem_av_folketrygden_oppfylt") { booleanValue() },
