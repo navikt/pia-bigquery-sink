@@ -19,6 +19,14 @@ val avslag_v1 = object : SchemaDefinition {
 
     override fun define(): TableDefinition = standardTableDefinition {
         schema {
+            string("orgnr") {
+                required()
+                description("Orgnr. for virksomheten som gjorde oppslaget")
+            }
+            string("navn") {
+                required()
+                description("Navn på virksomheten som gjorde oppslaget")
+            }
             boolean("har_ikke_vedtak_i_kalenderaret_oppfylt") {
                 required()
                 description("Om barnet ikke allerede har et vedtak i samme kalenderår som bestillingsdato")
@@ -61,6 +69,8 @@ val avslag_v1 = object : SchemaDefinition {
     }
 
     override fun transform(payload: JsonNode): InsertAllRequest.RowToInsert = mapOf(
+        payload.use("orgnr") { textValue() },
+        payload.use("navn") { textValue() },
         payload.use("opprettet") { asDateTime() },
         payload.use("har_ikke_vedtak_i_kalenderaret_oppfylt") { booleanValue() },
         payload.use("under_18_ar_pa_bestillingsdato_oppfylt") { booleanValue() },
