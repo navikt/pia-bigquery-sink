@@ -17,7 +17,7 @@ val medlemskap_folketrygden_v1 = object : SchemaDefinition {
 
     override fun define(): TableDefinition = standardTableDefinition {
         schema {
-            integer("vedtakId") {
+            integer("vedtak_id") {
                 required()
                 description("Vedtak id er alltid -1 når statistikken sendes ved oppslag, men er satt til vedtaks id når vedtaket blir opprettet")
             }
@@ -45,7 +45,7 @@ val medlemskap_folketrygden_v1 = object : SchemaDefinition {
     }
 
     override fun transform(payload: JsonNode): InsertAllRequest.RowToInsert = mapOf(
-        payload.use("vedtakId") { longValue() },
+        payload.use("vedtak_id") { longValue() },
         payload.use("bevist") { booleanValue() },
         payload.use("antatt") { booleanValue() },
         payload.use("avvist") { booleanValue() },
