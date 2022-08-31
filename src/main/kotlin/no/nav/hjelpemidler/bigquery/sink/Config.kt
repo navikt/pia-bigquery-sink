@@ -80,6 +80,9 @@ object Config {
     private val devProperties = ConfigurationMap(
         Environment.DEV.pair(),
 
+        Kafka.rapid_topic to "teamdigihot.hm-soknadsbehandling-v1",
+        Kafka.reset_policy to "latest",
+
         http_port to "8080",
 
         BigQuery.dataset_id to "hm_bigquery_sink_v1_dataset_dev",
