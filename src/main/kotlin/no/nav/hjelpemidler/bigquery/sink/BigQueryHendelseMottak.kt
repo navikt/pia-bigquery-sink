@@ -67,7 +67,6 @@ class BigQueryHendelseMottak(
             when {
                 navn == "hm-bestillingsordning-river.requestFeilet"
                         && opprettet.isBefore(LocalDate.of(2022, Month.MAY, 4).atStartOfDay()) -> true
-                navn == "utbetaling" -> true
                 else -> false
             }
         }
