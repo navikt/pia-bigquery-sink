@@ -26,7 +26,7 @@ val utbetaling_v1 = object : SchemaDefinition {
             string("batchId") {
                 required()
             }
-            integer("totalbeløp") {
+            integer("totalbelop") {
                 nullable()
             }
             integer("antallLinjer") {
