@@ -5,6 +5,7 @@ import com.google.cloud.bigquery.InsertAllRequest.RowToInsert
 import no.nav.hjelpemidler.bigquery.sink.BigQuery
 import no.nav.hjelpemidler.bigquery.sink.Config
 import no.nav.hjelpemidler.bigquery.sink.Gcp
+import no.nav.hjelpemidler.bigquery.sink.brille.utbetaling_v1
 import no.nav.hjelpemidler.bigquery.sink.schema.Registry
 
 fun Map<String, Any?>.toRowToInsert(): RowToInsert = RowToInsert.of(this)
