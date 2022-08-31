@@ -82,6 +82,7 @@ object Config {
 
         Kafka.rapid_topic to "teamdigihot.hm-soknadsbehandling-v1",
         Kafka.reset_policy to "latest",
+        Kafka.consumer_group_id to "hm-bigquery-sink-v2",
 
         http_port to "8080",
 
