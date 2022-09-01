@@ -48,7 +48,8 @@ val utbetaling_v1 = object : SchemaDefinition {
 
     override fun transform(payload: JsonNode): InsertAllRequest.RowToInsert = mapOf(
         payload.use("opprettet") { asDateTime() },
-        payload.use("orgnr") { textValue() },
+        payload.use("orgNr") { textValue() },
+        payload.use("batchId") { textValue() },
         payload.use("totalbelop") { intValue() },
         payload.use("antallLinjer") { intValue() },
         payload.use("kilde") { textValue() }
