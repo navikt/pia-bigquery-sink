@@ -13,5 +13,4 @@ val brilleRegistry = Registry(
     avslag_v1.entry(),
     medlemskap_folketrygden_v1.entry(),
     utbetaling_v1.entry()
-    // vilkarsvurdering_v1.entry(),
 )

@@ -68,6 +68,9 @@ val vedtak_v1 = object : SchemaDefinition {
             timestamp("tidsstempel") {
                 required()
             }
+            string("bestillingsreferanse") {
+                nullable()
+            }
         }
         timePartitioning(TimePartitioning.Type.MONTH) {
             setField("opprettet")
@@ -93,6 +96,7 @@ val vedtak_v1 = object : SchemaDefinition {
         payload.use("sats_belop") { intValue() },
         payload.use("sats_beskrivelse") { textValue() },
         payload.use("belop") { decimalValue() },
+        payload.use("bestillingsreferanse") { textValue() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 

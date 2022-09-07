@@ -49,12 +49,10 @@ class BigQueryHendelseMottak(
             "schemaVersion" to schemaId.version.toString(),
         ) {
             log.debug { "Mottok hendelse for lagring i BigQuery" }
-            val registry = if (schemaRegistry.containsKey(schemaId)) {
-                schemaRegistry
-            } else if (brilleRegistry.containsKey(schemaId)) {
-                brilleRegistry
-            } else {
-                error("Fant ikke register for tabell: $schemaId")
+            val registry = when {
+                schemaRegistry.containsKey(schemaId) -> schemaRegistry
+                brilleRegistry.containsKey(schemaId) -> brilleRegistry
+                else -> error("Fant ikke register for tabell: $schemaId")
             }
             bigQueryService.insert(registry, BigQuerySinkEvent(schemaId, payload))
         }
@@ -67,9 +65,11 @@ class BigQueryHendelseMottak(
             when {
                 navn == "hm-bestillingsordning-river.requestFeilet"
                         && opprettet.isBefore(LocalDate.of(2022, Month.MAY, 4).atStartOfDay()) -> true
+
                 else -> false
             }
         }
+
         else -> false
     }
 }
