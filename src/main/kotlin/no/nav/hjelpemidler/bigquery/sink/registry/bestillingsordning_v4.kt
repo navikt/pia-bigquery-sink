@@ -86,6 +86,9 @@ val bestillingsordning_v4 = object : SchemaDefinition {
                 repeated()
                 description("Kategorier som produkter det søkes om tilhører")
             }
+            boolean("ingen_produkter_er_allerede_utlevert") {
+                description("Ingen produkter er allerede utlevert")
+            }
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring av hendelsen")
@@ -117,6 +120,7 @@ val bestillingsordning_v4 = object : SchemaDefinition {
         "bruker_bor_ikke_i_utlandet" to (payload["bruker_bor_ikke_i_utlandet"]?.asBoolean() ?: false),
         "bruker_er_ikke_skjermet_person" to (payload["bruker_er_ikke_skjermet_person"]?.asBoolean() ?: false),
         "inneholder_ikke_fritekst" to (payload["inneholder_ikke_fritekst"]?.asBoolean() ?: false),
+        "ingen_produkter_er_allerede_utlevert" to (payload["ingen_produkter_er_allerede_utlevert"]?.asBoolean() ?: false),
         payload.use("produkter") { asObject<Set<String>>() },
         payload.use("tilbehor") { asObject<Set<String>>() },
         payload.use("produkter_ikke_pa_bestillingsordning") { asObject<Set<String>>() },
