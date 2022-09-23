@@ -20,6 +20,9 @@ val vedtak_v1 = object : SchemaDefinition {
 
     override fun define(): TableDefinition = standardTableDefinition {
         schema {
+            integer("vedtak_id") {
+                nullable()
+            }
             string("orgnr") {
                 required()
             }
@@ -81,6 +84,7 @@ val vedtak_v1 = object : SchemaDefinition {
     }
 
     override fun transform(payload: JsonNode): InsertAllRequest.RowToInsert = mapOf(
+        payload.use("vedtak_id") { longValue() },
         payload.use("opprettet") { asDateTime() },
         payload.use("orgnr") { textValue() },
         payload.use("org_navn") { textValue() },
