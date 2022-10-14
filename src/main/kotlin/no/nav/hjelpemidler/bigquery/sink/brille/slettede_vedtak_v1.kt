@@ -27,6 +27,9 @@ val slettede_vedtak_v1 = object : SchemaDefinition {
             timestamp("tidsstempel") {
                 required()
             }
+            string("slettet_av_type") {
+                nullable()
+            }
         }
         timePartitioning(TimePartitioning.Type.MONTH) {
             setField("opprettet")
@@ -40,5 +43,6 @@ val slettede_vedtak_v1 = object : SchemaDefinition {
         payload.use("vedtak_id") { longValue() },
         payload.use("opprettet") { asDateTime() },
         "tidsstempel" to "AUTO",
+        payload.use("slettet_av_type") { textValue() },
     ).toRowToInsert()
 }
