@@ -187,41 +187,6 @@ internal class SchemaRegistryTest {
     }
 
     @Test
-    internal fun `payload transformed to hjelpemiddelstatistikk_v1 row`() {
-        val payload = jsonMapper.readTree(
-            """{
-            "vedtaksdato": "${LocalDateTime.now()}",
-            "vedtaksresultat": "Innvilget",
-            "enhetsnummer": "Ukjent",
-            "enhetsnavn": "Ukjent",
-            "kommunenavn": "SULDAL",
-            "brukers_alder": 78,
-            "brukers_kjonn": "Mann",
-            "brukers_funksjonsnedsettelser": ["bevegelse"],
-            "hjelpemidler": [
-              {
-                "hmsnr": "243548",
-                "produkt_id": "30389",
-                "produktnavn": "Topro Skråbrett",
-                "artikkel_id": "108383",
-                "artikkelnavn": "Topro Skråbrett",
-                "isokode": "18301505",
-                "isotittel": "Terskeleliminatorer",
-                "isokortnavn": "Terskeleliminator",
-                "kategori": "Terskeleliminatorer og ramper",
-                "avtalepost_id": "860",
-                "avtaleposttittel": "Post 3: Terskeleliminator - påkjøring fra en side. Velegnet for utendørs bruk",
-                "avtalepostrangering": 1
-              }
-            ]
-          }
-            """.trimIndent()
-        )
-        val content = hjelpemiddelstatistikk_v1.transform(payload).content
-        content shouldContain ("tidsstempel" to "AUTO")
-    }
-
-    @Test
     internal fun `payload transformed to saksstatistikk_v1 row`() {
         val payload = jsonMapper.readTree(
             """{
@@ -236,32 +201,5 @@ internal class SchemaRegistryTest {
         content shouldContain ("sak_id" to "1")
         content shouldContain ("behandling_id" to "1")
         content shouldContain ("tidsstempel" to "AUTO")
-    }
-
-    @Test
-    internal fun `payload transformed to tilbakeforing_gosys_tilbakemelding_v1 row`() {
-        val payload = jsonMapper.readTree(
-            """{
-            "saksnummer": "1",
-            "opprettet": "${LocalDateTime.now()}",
-            "enhetsnummer": "2970",
-            "enhetsnavn": "NAV Test",
-            "dokumentbeskrivelse": "foobar",
-            "valgte_arsaker": [
-                "arsak"
-            ],
-            "begrunnelse": "foobar"
-        }
-            """.trimIndent()
-        )
-        val content = tilbakeforing_gosys_tilbakemelding_v1.transform(payload).content
-        assertSoftly {
-            content shouldContain ("enhetsnummer" to "2970")
-            content shouldContain ("enhetsnavn" to "NAV Test")
-            content shouldContain ("dokumentbeskrivelse" to "foobar")
-            content shouldContain ("valgte_arsaker" to setOf("arsak"))
-            content shouldContain ("begrunnelse" to "foobar")
-            content shouldContain ("tidsstempel" to "AUTO")
-        }
     }
 }

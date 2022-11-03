@@ -14,8 +14,6 @@ val schemaRegistry = Registry(
     DatasetId.of(Config[Gcp.team_project_id], Config[BigQuery.dataset_id]),
     hendelse_v1.entry(),
     hendelse_v2.entry(),
-    hjelpemiddelstatistikk_v1.entry(),
-    tilbakeforing_gosys_tilbakemelding_v1.entry(),
     saksstatistikk_v1.entry(),
     bestillingsordning_v1.entry(),
     bestillingsordning_v2.entry(),
