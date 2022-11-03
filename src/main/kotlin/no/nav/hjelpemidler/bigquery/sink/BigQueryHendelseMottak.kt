@@ -59,6 +59,7 @@ class BigQueryHendelseMottak(
     }
 
     private fun skip(schemaId: SchemaDefinition.Id, payload: JsonNode): Boolean = when (schemaId) {
+        SchemaDefinition.Id("hjelpemiddelstatistikk", 1) -> true
         hendelse_v2.schemaId -> {
             val opprettet = payload["opprettet"].asLocalDateTime()
             val navn = payload["navn"].asText()
