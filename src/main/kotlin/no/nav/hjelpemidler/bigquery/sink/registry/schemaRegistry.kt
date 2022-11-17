@@ -15,5 +15,8 @@ val schemaRegistry = Registry(
     hendelse_v1.entry(),
     hendelse_v2.entry(),
     saksstatistikk_v1.entry(),
+    bestillingsordning_v1.entry(),
+    bestillingsordning_v2.entry(),
+    bestillingsordning_v3.entry(),
     bestillingsordning_v4.entry(),
 )
