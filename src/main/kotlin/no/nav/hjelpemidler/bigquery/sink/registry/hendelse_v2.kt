@@ -74,6 +74,4 @@ val hendelse_v2 = object : SchemaDefinition {
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 
-    override fun skip(payload: JsonNode): Boolean = payload["kilde"].asText() == "hm-bestillingsordning-river"
-
 }
