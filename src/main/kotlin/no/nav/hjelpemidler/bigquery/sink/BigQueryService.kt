@@ -57,7 +57,7 @@ class BigQueryService(
                 "schemaId" to "schemaId",
                 "payload" to event.payload.toString(),
             ) {
-                log.error(exception) { "insert feilet" }
+                log.error(exception) { "insert feilet. schemaId=$schemaId" }
             }
             throw exception
         }
