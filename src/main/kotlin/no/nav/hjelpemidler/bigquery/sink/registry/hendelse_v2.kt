@@ -1,6 +1,7 @@
 package no.nav.hjelpemidler.bigquery.sink.registry
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.contains
 import com.google.cloud.bigquery.InsertAllRequest.RowToInsert
 import com.google.cloud.bigquery.TableDefinition
 import com.google.cloud.bigquery.TimePartitioning
@@ -72,4 +73,7 @@ val hendelse_v2 = object : SchemaDefinition {
         payload["geografiskTilknytning"] textValueWithName "geografisk_tilknytning",
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
+
+    override fun skip(payload: JsonNode): Boolean = payload["kilde"].asText() == "hm-bestillingsordning-river"
+
 }
