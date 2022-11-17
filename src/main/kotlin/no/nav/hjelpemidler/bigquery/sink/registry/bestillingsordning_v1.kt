@@ -1,6 +1,7 @@
 package no.nav.hjelpemidler.bigquery.sink.registry
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.contains
 import com.google.cloud.bigquery.InsertAllRequest.RowToInsert
 import com.google.cloud.bigquery.TableDefinition
 import com.google.cloud.bigquery.TimePartitioning
@@ -73,4 +74,6 @@ val bestillingsordning_v1 = object : SchemaDefinition {
         payload["kommunenavn"] asTextWithName "kommunenavn",
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
+
+    override fun skip(payload: JsonNode): Boolean = true // gamle events som ikke er i bruk lenger (bla.a. fra hm-bestillingsordning-river
 }
