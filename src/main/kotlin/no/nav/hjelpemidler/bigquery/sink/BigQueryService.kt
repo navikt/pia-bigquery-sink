@@ -54,10 +54,10 @@ class BigQueryService(
             client.insert(tableId, schemaDefinition.transform(event.payload))
         }.onFailure { exception ->
             withLoggingContext(
-                "schemaId" to "schemaId",
+                "schemaId" to schemaId.toString(),
                 "payload" to event.payload.toString(),
             ) {
-                log.error(exception) { "insert feilet. schemaId=$schemaId" }
+                log.error(exception) { "insert feilet" }
             }
             throw exception
         }
