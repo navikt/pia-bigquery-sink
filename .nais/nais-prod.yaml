@@ -2,13 +2,13 @@ apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
   labels:
-    app: hm-bigquery-sink
-    team: teamdigihot
-  name: hm-bigquery-sink
-  namespace: teamdigihot
+    app: pia-bigquery-sink
+    team: pia
+  name: pia-bigquery-sink
+  namespace: pia
 spec:
   image: {{ image }}
-  team: teamdigihot
+  team: pia
   strategy:
     type: Recreate
   liveness:

@@ -6,7 +6,6 @@ import mu.withLoggingContext
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
-import no.nav.helse.rapids_rivers.River
 import no.nav.helse.rapids_rivers.River.PacketListener
 import no.nav.hjelpemidler.bigquery.sink.brille.brilleRegistry
 import no.nav.hjelpemidler.bigquery.sink.registry.hendelse_v2
@@ -23,12 +22,6 @@ class BigQueryHendelseMottak(
         private val log = KotlinLogging.logger {}
     }
 
-    init {
-        River(rapidsConnection).apply {
-            validate { it.demandValue("eventName", "hm-bigquery-sink-hendelse") }
-            validate { it.requireKey("schemaId", "payload") }
-        }.register(this)
-    }
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         val schemaId = packet["schemaId"].asSchemaId()

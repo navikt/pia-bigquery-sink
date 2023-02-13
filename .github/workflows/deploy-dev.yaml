@@ -11,7 +11,7 @@ on:
       - main
 
 env:
-  IMAGE: "ghcr.io/navikt/hm-bigquery-sink:${{ github.sha }}"
+a  IMAGE: "ghcr.io/navikt/pia-bigquery-sink:${{ github.sha }}"
 
 jobs:
   build-and-deploy:
@@ -36,7 +36,7 @@ jobs:
       - uses: navikt/digihot-deploy/actions/pre-deploy@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCKER_IMAGE: ghcr.io/navikt/hm-bigquery-sink
+          DOCKER_IMAGE: ghcr.io/navikt/pia-bigquery-sink
       - name: Build and push Docker image
         if: github.ref == 'refs/heads/main'
         env:

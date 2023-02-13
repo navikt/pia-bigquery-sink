@@ -26,7 +26,7 @@ internal class BigQueryHendelseMottakTest {
         """
             {
               "eventId": "${UUID.randomUUID()}",
-              "eventName": "hm-bigquery-sink-hendelse",
+              "eventName": "pia-bigquery-sink-hendelse",
               "schemaId": "test_v1",
               "payload": {},
             }

@@ -1,1 +1,1 @@
-# hm-bigquery-sink
+# pia-bigquery-sink

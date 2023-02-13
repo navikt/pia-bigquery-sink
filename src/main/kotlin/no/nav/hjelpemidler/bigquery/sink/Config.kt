@@ -61,13 +61,13 @@ object Config {
         Environment.LOCAL.pair(),
 
         http_port to "7073",
-        rapid_app_name to "hm-bigquery-sink",
+        rapid_app_name to "pia-bigquery-sink",
 
-        Gcp.team_project_id to "teamdigihot",
+        Gcp.team_project_id to "pia",
 
         Kafka.brokers to "172.31.169.37:9092",
-        Kafka.consumer_group_id to "hm-bigquery-sink-v1",
-        Kafka.rapid_topic to "teamdigihot.hm-soknadsbehandling-v1",
+        Kafka.consumer_group_id to "pia-bigquery-sink-v1",
+        Kafka.rapid_topic to "pia.hm-soknadsbehandling-v1",
         Kafka.keystore_path to "",
         Kafka.truststore_path to "",
         Kafka.credstore_password to "",
@@ -80,9 +80,9 @@ object Config {
     private val devProperties = ConfigurationMap(
         Environment.DEV.pair(),
 
-        Kafka.rapid_topic to "teamdigihot.hm-soknadsbehandling-v1",
+        Kafka.rapid_topic to "pia.hm-soknadsbehandling-v1",
         Kafka.reset_policy to "latest",
-        Kafka.consumer_group_id to "hm-bigquery-sink-v2",
+        Kafka.consumer_group_id to "pia-bigquery-sink-v2",
 
         http_port to "8080",
 

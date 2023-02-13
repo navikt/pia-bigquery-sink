@@ -18,7 +18,7 @@ def main() -> None:
     message = {
         '@id': str(uuid.uuid4()),
         '@opprettet': now,
-        'eventName': 'hm-bigquery-sink-hendelse',
+        'eventName': 'pia-bigquery-sink-hendelse',
         'schemaId': 'hendelse_v1',
         'payload': {
             'opprettet': now,
@@ -34,7 +34,7 @@ def main() -> None:
     subprocess.run(
         ['kafka-console-producer',
          '--broker-list', 'host.docker.internal:9092',
-         '--topic', 'teamdigihot.hm-soknadsbehandling-v1'],
+         '--topic', 'pia.hm-soknadsbehandling-v1'],
         input=json.dumps(message), encoding='utf-8'
     )
 
