@@ -23,14 +23,17 @@ dependencies {
     implementation(ktor("server-cio"))
     implementation(ktor("server-metrics-micrometer"))
 
-    implementation("com.github.navikt:rapids-and-rivers:2022082414021661342533.46a423f6c163") {
-        exclude(group = "ch.qos.logback")
-    }
+    // BigQuery
+    implementation("com.google.cloud:google-cloud-bigquery:2.22.0")
 
+    // Kafka
+    implementation("org.apache.kafka:kafka-clients:3.3.1")
+
+    // Config.kt
     implementation("com.natpryce:konfig:1.6.10.0")
-    implementation("com.google.cloud:google-cloud-bigquery:2.15.0")
+
+    // Målinger
     implementation("io.micrometer:micrometer-registry-prometheus:1.9.3")
-    implementation("org.reflections:reflections:0.10.2")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:2.1.23")
@@ -45,7 +48,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("no.nav.hjelpemidler.bigquery.sink.AppKt")
+    mainClass.set("no.nav.pia.bigquery.sink.AppKt")
 }
 
 tasks.test {
