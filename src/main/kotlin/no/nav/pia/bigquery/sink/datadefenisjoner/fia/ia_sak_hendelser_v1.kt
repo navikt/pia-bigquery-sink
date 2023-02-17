@@ -28,7 +28,7 @@ val ia_sak_hendelser_v1 = object : SchemaDefinition {
                 required()
                 description("Tidsstempel for lagring av avtalen")
             }
-            datetime("status") {
+            string("status") {
                 required()
                 description("Status som er resultatet av oppdateringen")
             }
