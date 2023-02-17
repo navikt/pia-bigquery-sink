@@ -3,7 +3,7 @@ package no.nav.pia.bigquery.sink
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.*
-import no.nav.pia.bigquery.sink.konfigurasjon.KafkaKonfigurasjon
+import no.nav.pia.bigquery.sink.konfigurasjon.Kafka
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.errors.RetriableException
 import org.apache.kafka.common.serialization.StringDeserializer
@@ -15,7 +15,7 @@ import kotlin.coroutines.CoroutineContext
 object PiaKafkaLytter : CoroutineScope {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
     private lateinit var job: Job
-    private lateinit var konfigurasjon: KafkaKonfigurasjon
+    private lateinit var konfigurasjon: Kafka
     private lateinit var bigQueryHendelseMottak: BigQueryHendelseMottak
 
     override val coroutineContext: CoroutineContext
@@ -25,7 +25,7 @@ object PiaKafkaLytter : CoroutineScope {
         Runtime.getRuntime().addShutdownHook(Thread(PiaKafkaLytter::cancel))
     }
 
-    fun create(kafkaKonfigurasjon: KafkaKonfigurasjon, bigQueryHendelseMottak: BigQueryHendelseMottak) {
+    fun create(kafkaKonfigurasjon: Kafka, bigQueryHendelseMottak: BigQueryHendelseMottak) {
         logger.info("Creating kafka consumer job for statistikk")
         this.job = Job()
         this.konfigurasjon = kafkaKonfigurasjon

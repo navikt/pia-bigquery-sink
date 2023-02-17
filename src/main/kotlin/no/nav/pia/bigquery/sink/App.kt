@@ -1,15 +1,17 @@
 package no.nav.pia.bigquery.sink
 
 import no.nav.pia.bigquery.sink.datadefenisjoner.schemaRegistry
-import no.nav.pia.bigquery.sink.konfigurasjon.KafkaKonfigurasjon
+import no.nav.pia.bigquery.sink.konfigurasjon.Clusters
+import no.nav.pia.bigquery.sink.konfigurasjon.Kafka
+import no.nav.pia.bigquery.sink.konfigurasjon.Miljø
 
 fun main() {
-    val bigQueryClient: BigQueryClient = when (Config.environment) {
-        no.nav.pia.bigquery.sink.Environment.LOCAL -> LocalBigQueryClient()
-        else -> DefaultBigQueryClient(Config[Gcp.team_project_id])
+    val bigQueryClient: BigQueryClient = when (Miljø.cluster) {
+        Clusters.LOKAL.clusterId -> LocalBigQueryClient()
+        else -> DefaultBigQueryClient(Miljø.team_project_id)
     }
     val bigQueryService: BigQueryService = BigQueryService(
-        Config[Gcp.team_project_id],
+        Miljø.team_project_id,
         bigQueryClient
     ).apply {
         migrate(schemaRegistry)
@@ -17,7 +19,7 @@ fun main() {
 
     PiaKafkaLytter.apply {
         create(
-            kafkaKonfigurasjon = KafkaKonfigurasjon(),
+            kafkaKonfigurasjon = Kafka(),
             bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService)
         )
         run()

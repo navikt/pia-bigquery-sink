@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import mu.KotlinLogging
 import mu.withLoggingContext
 import no.nav.pia.bigquery.sink.datadefenisjoner.schemaRegistry
+import no.nav.pia.bigquery.sink.konfigurasjon.Clusters
+import no.nav.pia.bigquery.sink.konfigurasjon.Miljø
 import no.nav.pia.bigquery.sink.schema.Registry
 import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 
@@ -41,7 +43,7 @@ class BigQueryService(
         }
         val tableId = schemaId.toTableId(registry.datasetId)
 
-        if (Config.environment == Environment.DEV) log.info {
+        if (Miljø.cluster == Clusters.DEV_GCP.clusterId) log.info {
             "payload: '${event.payload}'"
         }
 

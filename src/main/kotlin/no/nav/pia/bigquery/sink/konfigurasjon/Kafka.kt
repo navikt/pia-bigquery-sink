@@ -5,7 +5,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.config.SaslConfigs
 import org.apache.kafka.common.config.SslConfigs
 
-class KafkaKonfigurasjon(
+class Kafka(
     val brokers: String = getEnvVar("KAFKA_BROKERS"),
     val truststoreLocation: String = getEnvVar("KAFKA_TRUSTSTORE_PATH"),
     val keystoreLocation: String = getEnvVar("KAFKA_KEYSTORE_PATH"),
@@ -56,5 +56,3 @@ class KafkaKonfigurasjon(
 
 }
 
-fun getEnvVar(varName: String, defaultValue: String? = null) =
-    System.getenv(varName) ?: defaultValue ?: throw RuntimeException("Missing required variable $varName")
