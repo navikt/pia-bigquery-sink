@@ -11,7 +11,7 @@ on:
       - main
 
 env:
-a  IMAGE: "ghcr.io/navikt/pia-bigquery-sink:${{ github.sha }}"
+  IMAGE: "ghcr.io/navikt/pia-bigquery-sink:${{ github.sha }}"
 
 jobs:
   build-and-deploy:
