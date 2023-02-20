@@ -36,8 +36,6 @@ spec:
       memory: 512Mi
   secureLogs:
     enabled: true
-  envFrom:
-    - secret: bigquery-hash-suffix
   gcp:
     bigQueryDatasets:
       - name: pia_bigquery_sink_v1_dataset_prod
