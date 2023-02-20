@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") version "1.8.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     application
 }
@@ -27,7 +27,7 @@ dependencies {
     implementation("com.google.cloud:google-cloud-bigquery:2.22.0")
 
     // Kafka
-    implementation("org.apache.kafka:kafka-clients:3.3.1")
+    implementation("org.apache.kafka:kafka-clients:3.4.0")
 
     // Config.kt
     implementation("com.natpryce:konfig:1.6.10.0")
@@ -44,7 +44,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(kotest("runner-junit5"))
     testImplementation(kotest("assertions-core"))
-    testImplementation("io.mockk:mockk:1.12.7")
+    testImplementation("io.mockk:mockk:1.13.4")
 }
 
 application {
