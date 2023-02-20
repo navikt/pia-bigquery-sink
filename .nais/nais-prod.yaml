@@ -42,3 +42,8 @@ spec:
     bigQueryDatasets:
       - name: pia_bigquery_sink_v1_dataset_prod
         permission: READWRITE
+  env:
+    - name: IA_SAK_HENDELSE_TOPIC
+      value: pia.ia-sak-hendelse-v1
+    - name: IA_SAK_TOPIC
+      value: pia.ia-sak-v1
