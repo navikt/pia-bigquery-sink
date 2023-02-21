@@ -41,9 +41,11 @@ spec:
       - name: pia_bigquery_sink_v1_dataset_dev
         permission: READWRITE
   env:
-    - name: DATASET_ID
+    - name: BIGQUERY_DATASET_ID
       value: pia_bigquery_sink_v1_dataset_dev
     - name: IA_SAK_HENDELSE_TOPIC
       value: pia.ia-sak-hendelse-v1
     - name: IA_SAK_TOPIC
       value: pia.ia-sak-v1
+    - name: KAFKA_CONSUMER_LOOP_DELAY
+      value: "1000"

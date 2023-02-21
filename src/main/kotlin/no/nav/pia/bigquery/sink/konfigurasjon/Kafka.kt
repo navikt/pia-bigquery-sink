@@ -12,12 +12,10 @@ class Kafka(
     val credstorePassword: String = getEnvVar("KAFKA_CREDSTORE_PASSWORD"),
     val iaSakHendelseTopic: String = getEnvVar("IA_SAK_HENDELSE_TOPIC"),
     val iaSakTopic: String = getEnvVar("IA_SAK_TOPIC"),
-    val consumerLoopDelay: Long = getEnvVar("CONSUMER_LOOP_DELAY").toLong()
+    val consumerLoopDelay: Long = getEnvVar("KAFKA_CONSUMER_LOOP_DELAY").toLong()
 ) {
     companion object {
         const val statistikkConsumerGroupId = "lydia-api-kafka-group-id"
-        const val statistikkPerKategoriGroupId = "lydia-api-statistikk-per-kategori-consumer"
-        const val brregConsumerGroupId = "lydia-api-brreg-oppdatering-consumer"
         const val clientId: String = "lydia-api"
     }
 
