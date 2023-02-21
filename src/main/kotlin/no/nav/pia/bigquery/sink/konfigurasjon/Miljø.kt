@@ -5,6 +5,6 @@ enum class Clusters(val clusterId: String) {
 }
 
 object Miljø {
-    val cluster = System.getenv("NAIS_CLUSTER_NAME")
-    val team_project_id = getEnvVar("TEAM_PROJECT_ID")
+    val cluster = getEnvVar("NAIS_CLUSTER_NAME")
+    val team_project_id = getEnvVar("GCP_TEAM_PROJECT_ID")
 }

@@ -53,7 +53,7 @@ application {
 
 tasks.test {
     environment("NAIS_CLUSTER_NAME", "local")
-    environment("TEAM_PROJECT_ID", "pia")
+    environment("GCP_TEAM_PROJECT_ID", "pia")
     environment("DATASET_ID", "pia_bigquery_sink_v1_dataset_local")
 
     useJUnitPlatform()

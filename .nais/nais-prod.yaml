@@ -41,8 +41,6 @@ spec:
       - name: pia_bigquery_sink_v1_dataset_prod
         permission: READWRITE
   env:
-    - name: TEAM_PROJECT_ID
-      value: team-pia
     - name: DATASET_ID
       value: pia_bigquery_sink_v1_dataset_prod
     - name: IA_SAK_HENDELSE_TOPIC
