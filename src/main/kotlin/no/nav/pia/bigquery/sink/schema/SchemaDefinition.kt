@@ -36,7 +36,7 @@ interface SchemaDefinition {
 
             fun of(value: String) = Regex(REGEX_PATTERN).find(value)?.let { match ->
                 Id(match.groups[1]!!.value, match.groups[2]!!.value.toInt())
-            } ?: throw RuntimeException("Kunne ikke tolke skjemanavn-format, forventet: <skjema-navn>_v<skjema-versjon>")
+            } ?: throw RuntimeException("Kunne ikke tolke skjemanavn-format, forventet: <skjema-navn>_v<skjema-versjon> og ikke $value")
         }
     }
 }
