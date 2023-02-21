@@ -14,8 +14,7 @@ class BigQueryHendelseMottak(
     }
 
 
-    fun onPacket(schemaName: String, schemaVersion: Int, payload: JsonNode) {
-        val schemaId = SchemaDefinition.Id(schemaName, schemaVersion)
+    fun onPacket(schemaId: SchemaDefinition.Id, payload: JsonNode) {
 
         if (skip(schemaId, payload)) {
             withLoggingContext(

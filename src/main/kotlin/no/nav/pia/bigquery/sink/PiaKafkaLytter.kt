@@ -6,6 +6,7 @@ import kotlinx.coroutines.*
 import no.nav.pia.bigquery.sink.helse.Helse
 import no.nav.pia.bigquery.sink.helse.Helsesjekk
 import no.nav.pia.bigquery.sink.konfigurasjon.Kafka
+import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.errors.RetriableException
 import org.apache.kafka.common.serialization.StringDeserializer
@@ -53,8 +54,7 @@ object PiaKafkaLytter : CoroutineScope, Helsesjekk {
 
                         records.forEach {record ->
                             val payload = ObjectMapper().readValue(record.value(), JsonNode::class.java)
-                            val version = payload.findValue("version")?.intValue() ?: 1
-                            bigQueryHendelseMottak.onPacket(konfigurasjon.iaSakTopic, version, payload)
+                            bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(konfigurasjon.iaSakTopic), payload)
                         }
                         logger.info("Lagret ${records.count()} meldinger")
 

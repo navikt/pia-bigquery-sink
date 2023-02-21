@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mockk.mockk
 import io.mockk.verify
+import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import kotlin.test.assertFailsWith
@@ -15,7 +16,7 @@ internal class BigQueryHendelseMottakTest {
     @Test
     internal fun `event skal lagres i BigQuery`() {
         val payload = ObjectMapper().readValue(iaSakHendelseString, JsonNode::class.java)
-        bigQueryHendelseMottak.onPacket("ia_sak_hendelse", 1, payload)
+        bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of("ia_sak_hendelse_v1"), payload)
         verify { bigQueryServiceMock.insert(any(), any()) }
     }
 
@@ -23,7 +24,7 @@ internal class BigQueryHendelseMottakTest {
     internal fun `event med feil schemaid skal ikke lagres i BigQuery`() {
         val payload = ObjectMapper().readValue(iaSakHendelseString, JsonNode::class.java)
         assertFailsWith<IllegalStateException> {
-            bigQueryHendelseMottak.onPacket("ukjent_schema", 1, payload)
+            bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of("ukjent_schema_v1"), payload)
         }
     }
 
