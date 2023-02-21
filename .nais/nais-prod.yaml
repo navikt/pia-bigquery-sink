@@ -12,13 +12,13 @@ spec:
   strategy:
     type: Recreate
   liveness:
-    path: /isalive
+    path: /internal/isalive
   readiness:
-    path: /isready
+    path: /internal/isready
   port: 8080
   prometheus:
     enabled: true
-    path: /metrics
+    path: /internal/metrics
   replicas:
     max: 1
     min: 1
