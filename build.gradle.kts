@@ -20,7 +20,7 @@ dependencies {
 
     // Ktor Server
     implementation(ktor("server-core"))
-    implementation(ktor("server-cio"))
+    implementation(ktor("server-netty"))
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
@@ -31,6 +31,8 @@ dependencies {
 
     // Config.kt
     implementation("com.natpryce:konfig:1.6.10.0")
+
+    // Webserver
 
     // Målinger
     implementation("io.micrometer:micrometer-registry-prometheus:1.9.3")

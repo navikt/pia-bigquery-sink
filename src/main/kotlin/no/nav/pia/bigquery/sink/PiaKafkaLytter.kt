@@ -3,6 +3,8 @@ package no.nav.pia.bigquery.sink
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.*
+import no.nav.pia.bigquery.sink.helse.Helse
+import no.nav.pia.bigquery.sink.helse.Helsesjekk
 import no.nav.pia.bigquery.sink.konfigurasjon.Kafka
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.errors.RetriableException
@@ -12,7 +14,7 @@ import org.slf4j.LoggerFactory
 import java.time.Duration
 import kotlin.coroutines.CoroutineContext
 
-object PiaKafkaLytter : CoroutineScope {
+object PiaKafkaLytter : CoroutineScope, Helsesjekk {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
     private lateinit var job: Job
     private lateinit var konfigurasjon: Kafka
@@ -78,9 +80,5 @@ object PiaKafkaLytter : CoroutineScope {
         logger.info("Stopped kafka consumer job for ${this.konfigurasjon.iaSakTopic}")
     }
 
-    fun helse() = if (isRunning()) Helse.UP else Helse.DOWN
-}
-
-enum class Helse {
-    UP, DOWN
+    override fun helse() = if (isRunning()) Helse.UP else Helse.DOWN
 }
