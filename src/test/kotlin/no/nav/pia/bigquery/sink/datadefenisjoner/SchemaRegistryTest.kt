@@ -7,6 +7,7 @@ import io.kotest.matchers.shouldBe
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-v1`
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 internal class SchemaRegistryTest {
     @Test
@@ -38,7 +39,7 @@ internal class SchemaRegistryTest {
         content.shouldContain("eierAvSak" to "N123456")
         content.shouldContain("endretAvHendelseId" to "123456789")
         content.shouldContain("status" to "VI_BISTÅR")
-        content.shouldContain("opprettetTidspunkt" to "$now")
-        content.shouldContain("endretTidspunkt" to "$now")
+        content.shouldContain("opprettetTidspunkt" to "${now.truncatedTo(ChronoUnit.MICROS)}")
+        content.shouldContain("endretTidspunkt" to "${now.truncatedTo(ChronoUnit.MICROS)}")
     }
 }
