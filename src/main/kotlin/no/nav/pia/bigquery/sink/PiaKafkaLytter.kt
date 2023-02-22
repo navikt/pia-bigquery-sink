@@ -43,8 +43,8 @@ object PiaKafkaLytter : CoroutineScope, Helsesjekk {
                 StringDeserializer(),
                 StringDeserializer()
             ).use { consumer ->
-                consumer.subscribe(listOf("${konfigurasjon.topicPrefix}.${konfigurasjon.iaSakTopic}"))
-                logger.info("Kafka consumer subscribed to ${konfigurasjon.topicPrefix}.${konfigurasjon.iaSakTopic}")
+                consumer.subscribe(listOf("${konfigurasjon.topicPrefix}.${konfigurasjon.iaSakHendelseTopic}"))
+                logger.info("Kafka consumer subscribed to ${konfigurasjon.topicPrefix}.${konfigurasjon.iaSakHendelseTopic}")
 
                 while (job.isActive) {
                     try {
@@ -54,7 +54,7 @@ object PiaKafkaLytter : CoroutineScope, Helsesjekk {
 
                         records.forEach {record ->
                             val payload = ObjectMapper().readValue(record.value(), JsonNode::class.java)
-                            bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(konfigurasjon.iaSakTopic), payload)
+                            bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(konfigurasjon.iaSakHendelseTopic), payload)
                         }
                         logger.info("Lagret ${records.count()} meldinger")
 
@@ -75,9 +75,9 @@ object PiaKafkaLytter : CoroutineScope, Helsesjekk {
     }
 
     private fun cancel() {
-        logger.info("Stopping kafka consumer job for ${konfigurasjon.topicPrefix}.${this.konfigurasjon.iaSakTopic}")
+        logger.info("Stopping kafka consumer job for ${konfigurasjon.topicPrefix}.${this.konfigurasjon.iaSakHendelseTopic}")
         job.cancel()
-        logger.info("Stopped kafka consumer job for ${konfigurasjon.topicPrefix}.${this.konfigurasjon.iaSakTopic}")
+        logger.info("Stopped kafka consumer job for ${konfigurasjon.topicPrefix}.${this.konfigurasjon.iaSakHendelseTopic}")
     }
 
     override fun helse() = if (isRunning()) Helse.UP else Helse.DOWN
