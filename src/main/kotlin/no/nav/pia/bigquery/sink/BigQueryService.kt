@@ -22,13 +22,6 @@ class BigQueryService(
         val tableInfoById = registry.mapValues {
             it.value.toTableInfo(registry.datasetId)
         }
-        // delete all tables
-        tableInfoById
-            .filterValues { client.tablePresent(it.tableId) }
-            .forEach { (_, tableInfo) ->
-                client.delete(tableInfo)
-            }
-
         // create missing tables
         tableInfoById
             .filterValues { !client.tablePresent(it.tableId) }
