@@ -43,8 +43,8 @@ object PiaKafkaLytter : CoroutineScope, Helsesjekk {
                 StringDeserializer(),
                 StringDeserializer()
             ).use { consumer ->
-                consumer.subscribe(listOf(konfigurasjon.iaSakTopic))
-                logger.info("Kafka consumer subscribed to ${konfigurasjon.iaSakTopic}")
+                consumer.subscribe(listOf("${konfigurasjon.topicPrefix}.${konfigurasjon.iaSakTopic}"))
+                logger.info("Kafka consumer subscribed to ${konfigurasjon.topicPrefix}.${konfigurasjon.iaSakTopic}")
 
                 while (job.isActive) {
                     try {
@@ -75,9 +75,9 @@ object PiaKafkaLytter : CoroutineScope, Helsesjekk {
     }
 
     private fun cancel() {
-        logger.info("Stopping kafka consumer job for ${this.konfigurasjon.iaSakTopic}")
+        logger.info("Stopping kafka consumer job for ${konfigurasjon.topicPrefix}.${this.konfigurasjon.iaSakTopic}")
         job.cancel()
-        logger.info("Stopped kafka consumer job for ${this.konfigurasjon.iaSakTopic}")
+        logger.info("Stopped kafka consumer job for ${konfigurasjon.topicPrefix}.${this.konfigurasjon.iaSakTopic}")
     }
 
     override fun helse() = if (isRunning()) Helse.UP else Helse.DOWN

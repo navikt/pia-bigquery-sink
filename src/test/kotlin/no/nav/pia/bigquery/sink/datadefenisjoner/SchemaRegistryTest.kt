@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.cloud.bigquery.DatasetId
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
-import no.nav.pia.bigquery.sink.datadefenisjoner.fia.ia_sak_hendelser_v1
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-hendelser-v1`
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
@@ -28,7 +28,7 @@ internal class SchemaRegistryTest {
             }""".trimMargin()
         )
 
-        val content = ia_sak_hendelser_v1.transform(payload).content
+        val content = `ia-sak-hendelser-v1`.transform(payload).content
         content.shouldContain("tidsstempel" to "AUTO")
         content.shouldContain("orgnr" to "123456789")
         content.shouldContain("navn" to "Fiktivia")

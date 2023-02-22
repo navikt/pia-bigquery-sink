@@ -31,8 +31,8 @@ interface SchemaDefinition {
         )
 
         companion object {
-            private const val SEPARATOR = "_v"
-            private const val REGEX_PATTERN = "^(.+)_v(\\d+)$"
+            private const val SEPARATOR = "-v"
+            private const val REGEX_PATTERN = "^(.+)-v(\\d+)$"
 
             fun of(value: String) = Regex(REGEX_PATTERN).find(value)?.let { match ->
                 Id(match.groups[1]!!.value, match.groups[2]!!.value.toInt())

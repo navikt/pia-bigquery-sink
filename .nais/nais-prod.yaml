@@ -44,8 +44,10 @@ spec:
     - name: BIGQUERY_DATASET_ID
       value: pia_bigquery_sink_v1_dataset_prod
     - name: IA_SAK_HENDELSE_TOPIC
-      value: pia.ia-sak-hendelse-v1
+      value: ia-sak-hendelse-v1
     - name: IA_SAK_TOPIC
-      value: pia.ia-sak-v1
+      value: ia-sak-v1
     - name: KAFKA_CONSUMER_LOOP_DELAY
       value: "1000"
+    - name: KAFKA_TOPIC_PREFIX
+      value: "pia"

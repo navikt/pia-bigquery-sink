@@ -8,9 +8,9 @@ import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import no.nav.pia.bigquery.sink.schema.standardTableDefinition
 import no.nav.pia.bigquery.sink.use
 
-val ia_sak_hendelser_v1 = object : SchemaDefinition {
+val `ia-sak-hendelser-v1` = object : SchemaDefinition {
     override val schemaId: SchemaDefinition.Id = SchemaDefinition.Id(
-        name = "ia_sak_hendelse",
+        name = "ia-sak-hendelse",
         version = 1,
     )
 

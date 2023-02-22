@@ -16,7 +16,7 @@ internal class BigQueryHendelseMottakTest {
     @Test
     internal fun `event skal lagres i BigQuery`() {
         val payload = ObjectMapper().readValue(iaSakHendelseString, JsonNode::class.java)
-        bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of("ia_sak_hendelse_v1"), payload)
+        bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of("ia-sak-hendelse-v1"), payload)
         verify { bigQueryServiceMock.insert(any(), any()) }
     }
 
@@ -24,7 +24,7 @@ internal class BigQueryHendelseMottakTest {
     internal fun `event med feil schemaid skal ikke lagres i BigQuery`() {
         val payload = ObjectMapper().readValue(iaSakHendelseString, JsonNode::class.java)
         assertFailsWith<IllegalStateException> {
-            bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of("ukjent_schema_v1"), payload)
+            bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of("ukjent_schema-v1"), payload)
         }
     }
 
