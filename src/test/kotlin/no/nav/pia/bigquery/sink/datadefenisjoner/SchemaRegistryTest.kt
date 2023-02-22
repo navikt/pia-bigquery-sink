@@ -41,5 +41,6 @@ internal class SchemaRegistryTest {
         content.shouldContain("status" to "VI_BISTÅR")
         content.shouldContain("opprettetTidspunkt" to "${now.truncatedTo(ChronoUnit.MICROS)}")
         content.shouldContain("endretTidspunkt" to "${now.truncatedTo(ChronoUnit.MICROS)}")
+        content.shouldContain("tidsstempel" to "AUTO")
     }
 }

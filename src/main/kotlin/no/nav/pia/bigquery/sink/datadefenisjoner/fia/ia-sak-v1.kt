@@ -45,6 +45,10 @@ val `ia-sak-v1` = object : SchemaDefinition {
                 required()
                 description("Tidspunkt for siste oppdatering av sak")
             }
+            timestamp("tidsstempel") {
+                required()
+                description("Tidsstempel for lagring i BigQuery")
+            }
         }
     }
 
