@@ -3,7 +3,7 @@ package no.nav.pia.bigquery.sink.datadefenisjoner.fia
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.InsertAllRequest
 import com.google.cloud.bigquery.TableDefinition
-import no.nav.pia.bigquery.sink.asLocalDateTime
+import no.nav.pia.bigquery.sink.asDateTime
 import no.nav.pia.bigquery.sink.datadefenisjoner.toRowToInsert
 import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import no.nav.pia.bigquery.sink.schema.standardTableDefinition
@@ -54,8 +54,8 @@ val `ia-sak-v1` = object : SchemaDefinition {
         payload.use("eierAvSak") { textValue() },
         payload.use("endretAvHendelseId") { textValue() },
         payload.use("status") { textValue() },
-        payload.use("opprettetTidspunkt") { asLocalDateTime() },
-        payload.use("endretTidspunkt") { asLocalDateTime() },
+        payload.use("opprettetTidspunkt") { asDateTime() },
+        payload.use("endretTidspunkt") { asDateTime() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }

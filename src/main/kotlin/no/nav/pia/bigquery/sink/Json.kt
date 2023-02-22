@@ -1,13 +1,12 @@
 package no.nav.pia.bigquery.sink
 
 import com.fasterxml.jackson.databind.JsonNode
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
-fun JsonNode.asLocalDate(): LocalDate = LocalDate.parse(asText())
 fun JsonNode.asLocalDateTime(): LocalDateTime = LocalDateTime.parse(asText())
+fun JsonNode.asDateTime(): String = asLocalDateTime().truncatedTo(ChronoUnit.MICROS).toString()
 fun JsonNode.asZonedDateTime(): ZonedDateTime = ZonedDateTime.parse(asText())
 fun JsonNode.asTimestamp(): String = asZonedDateTime().truncatedTo(ChronoUnit.MICROS).toInstant().toString()
 
