@@ -27,6 +27,11 @@ interface BigQueryClient {
     fun create(tableInfo: TableInfo): TableInfo
 
     /**
+     * Slett tabell i BigQuery
+     */
+    fun delete(tableInfo: TableInfo)
+
+    /**
      * Oppdater tabell i BigQuery
      */
     fun update(tableId: TableId, updatedTableInfo: TableInfo): Boolean
@@ -69,6 +74,11 @@ class DefaultBigQueryClient(private val projectId: String) : BigQueryClient {
         val createdTable = bigQuery.create(tableInfo)
         log.info { "Opprettet tabell: '${createdTable.tableId.table}'" }
         createdTable
+    }
+
+    override fun delete(tableInfo: TableInfo) = withLoggingContext {
+        bigQuery.delete(tableInfo.tableId)
+        log.info { "Slettet tabell: '${tableInfo.tableId.table}'" }
     }
 
     override fun update(
@@ -127,6 +137,9 @@ class LocalBigQueryClient : BigQueryClient {
     override fun create(tableInfo: TableInfo): TableInfo {
         log.info { "create(tableInfo) called with tableInfo: '$tableInfo'" }
         return tableInfo
+    }
+    override fun delete(tableInfo: TableInfo) {
+        log.info { "delete(tableInfo) called with tableInfo: '$tableInfo'" }
     }
 
     override fun update(tableId: TableId, updatedTableInfo: TableInfo): Boolean {
