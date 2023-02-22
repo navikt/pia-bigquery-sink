@@ -8,37 +8,53 @@ import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import no.nav.pia.bigquery.sink.schema.standardTableDefinition
 import no.nav.pia.bigquery.sink.use
 
-val `ia-sak-hendelser-v1` = object : SchemaDefinition {
+val `ia-sak-v1` = object : SchemaDefinition {
     override val schemaId: SchemaDefinition.Id = SchemaDefinition.Id(
-        name = "ia-sak-hendelse",
+        name = "ia-sak",
         version = 1,
     )
 
     override fun define(): TableDefinition = standardTableDefinition {
         schema {
+            string("saksnummer") {
+                required()
+                description("Id for saken")
+            }
             string("orgnr") {
                 required()
                 description("Orgnr. for virksomheten")
             }
-            string("navn") {
+            string("eierAvSak") {
                 required()
-                description("Navn på virksomheten")
+                description("Navidenten til rådgiver som eier saken")
             }
-            timestamp("tidsstempel") {
+            timestamp("endretAvHendelseId") {
                 required()
-                description("Tidsstempel for lagring av avtalen")
+                description("ID til hendelsen som som endret saken sist")
             }
             string("status") {
                 required()
-                description("Status som er resultatet av oppdateringen")
+                description("Status på sak")
+            }
+            string("opprettetTidspunkt") {
+                required()
+                description("Tidspunkt for opprettelse av sak")
+            }
+            string("endretTidspunkt") {
+                required()
+                description("Tidspunkt for siste oppdatering av sak")
             }
         }
     }
 
     override fun transform(payload: JsonNode): InsertAllRequest.RowToInsert = mapOf(
+        payload.use("saksnummer") { textValue() },
         payload.use("orgnr") { textValue() },
-        payload.use("navn") { textValue() },
+        payload.use("eierAvSak") { textValue() },
+        payload.use("endretAvHendelseId") { textValue() },
         payload.use("status") { textValue() },
+        payload.use("opprettetTidspunkt") { textValue() },
+        payload.use("endretTidspunkt") { textValue() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }

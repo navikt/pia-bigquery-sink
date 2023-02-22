@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.cloud.bigquery.DatasetId
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
-import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-hendelser-v1`
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-v1`
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
@@ -19,19 +19,26 @@ internal class SchemaRegistryTest {
 
     @Test
     internal fun `payload transformed to ia_sak_hendelser_v1 row`() {
+        val now = LocalDateTime.now()
         val payload = ObjectMapper().readTree(
             """{
+             "saksnummer": "123456789",
              "orgnr": "123456789",
-             "navn": "Fiktivia",
-             "timestamp": "${LocalDateTime.now()}",
-             "status": "VI_BISTÅR"
+             "eierAvSak": "N123456",
+             "endretAvHendelseId": "123456789",
+             "status": "VI_BISTÅR",
+             "opprettetTidspunkt": "$now",
+             "endretTidspunkt": "$now"
             }""".trimMargin()
         )
 
-        val content = `ia-sak-hendelser-v1`.transform(payload).content
-        content.shouldContain("tidsstempel" to "AUTO")
+        val content = `ia-sak-v1`.transform(payload).content
+        content.shouldContain("saksnummer" to "123456789")
         content.shouldContain("orgnr" to "123456789")
-        content.shouldContain("navn" to "Fiktivia")
+        content.shouldContain("eierAvSak" to "N123456")
+        content.shouldContain("endretAvHendelseId" to "123456789")
         content.shouldContain("status" to "VI_BISTÅR")
+        content.shouldContain("opprettetTidspunkt" to "$now")
+        content.shouldContain("endretTidspunkt" to "$now")
     }
 }
