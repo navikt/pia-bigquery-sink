@@ -38,7 +38,7 @@ internal class SchemaRegistryTest {
         content.shouldContain("eierAvSak" to "N123456")
         content.shouldContain("endretAvHendelseId" to "123456789")
         content.shouldContain("status" to "VI_BISTÅR")
-        content.shouldContain("opprettetTidspunkt" to "$now")
-        content.shouldContain("endretTidspunkt" to "$now")
+        content.shouldContain("opprettetTidspunkt" to now)
+        content.shouldContain("endretTidspunkt" to now)
     }
 }

@@ -3,6 +3,7 @@ package no.nav.pia.bigquery.sink.datadefenisjoner.fia
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.InsertAllRequest
 import com.google.cloud.bigquery.TableDefinition
+import no.nav.pia.bigquery.sink.asLocalDateTime
 import no.nav.pia.bigquery.sink.datadefenisjoner.toRowToInsert
 import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import no.nav.pia.bigquery.sink.schema.standardTableDefinition
@@ -28,7 +29,7 @@ val `ia-sak-v1` = object : SchemaDefinition {
                 required()
                 description("Navidenten til rådgiver som eier saken")
             }
-            timestamp("endretAvHendelseId") {
+            string("endretAvHendelseId") {
                 required()
                 description("ID til hendelsen som som endret saken sist")
             }
@@ -36,11 +37,11 @@ val `ia-sak-v1` = object : SchemaDefinition {
                 required()
                 description("Status på sak")
             }
-            string("opprettetTidspunkt") {
+            timestamp("opprettetTidspunkt") {
                 required()
                 description("Tidspunkt for opprettelse av sak")
             }
-            string("endretTidspunkt") {
+            timestamp("endretTidspunkt") {
                 required()
                 description("Tidspunkt for siste oppdatering av sak")
             }
@@ -53,8 +54,8 @@ val `ia-sak-v1` = object : SchemaDefinition {
         payload.use("eierAvSak") { textValue() },
         payload.use("endretAvHendelseId") { textValue() },
         payload.use("status") { textValue() },
-        payload.use("opprettetTidspunkt") { textValue() },
-        payload.use("endretTidspunkt") { textValue() },
+        payload.use("opprettetTidspunkt") { asLocalDateTime() },
+        payload.use("endretTidspunkt") { asLocalDateTime() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
