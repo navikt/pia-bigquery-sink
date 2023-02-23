@@ -26,7 +26,6 @@ val `ia-sak-v1` = object : SchemaDefinition {
                 description("Orgnr. for virksomheten")
             }
             string("eierAvSak") {
-                required()
                 description("Navidenten til rådgiver som eier saken")
             }
             string("endretAvHendelseId") {
