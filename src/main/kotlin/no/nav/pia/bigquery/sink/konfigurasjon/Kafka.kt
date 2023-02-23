@@ -6,12 +6,11 @@ import org.apache.kafka.common.config.SaslConfigs
 import org.apache.kafka.common.config.SslConfigs
 
 class Kafka(
-    val brokers: String = getEnvVar("KAFKA_BROKERS"),
-    val truststoreLocation: String = getEnvVar("KAFKA_TRUSTSTORE_PATH"),
-    val keystoreLocation: String = getEnvVar("KAFKA_KEYSTORE_PATH"),
-    val credstorePassword: String = getEnvVar("KAFKA_CREDSTORE_PASSWORD"),
+    private val brokers: String = getEnvVar("KAFKA_BROKERS"),
+    private val truststoreLocation: String = getEnvVar("KAFKA_TRUSTSTORE_PATH"),
+    private val keystoreLocation: String = getEnvVar("KAFKA_KEYSTORE_PATH"),
+    private val credstorePassword: String = getEnvVar("KAFKA_CREDSTORE_PASSWORD"),
     val topicPrefix: String = getEnvVar("KAFKA_TOPIC_PREFIX", "pia"),
-    val iaSakHendelseTopic: String = getEnvVar("IA_SAK_HENDELSE_TOPIC"),
     val iaSakTopic: String = getEnvVar("IA_SAK_TOPIC"),
     val consumerLoopDelay: Long = getEnvVar("KAFKA_CONSUMER_LOOP_DELAY").toLong()
 ) {
@@ -20,7 +19,7 @@ class Kafka(
         const val clientId: String = "lydia-api"
     }
 
-    fun securityConfigs() =
+    private fun securityConfigs() =
         mapOf(
             CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to "SSL",
             SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG to "",
@@ -50,7 +49,8 @@ class Kafka(
             ConsumerConfig.GROUP_ID_CONFIG to consumerGroupId,
             ConsumerConfig.CLIENT_ID_CONFIG to clientId,
             ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
-            ConsumerConfig.MAX_POLL_RECORDS_CONFIG to "1000"
+            ConsumerConfig.MAX_POLL_RECORDS_CONFIG to "1000",
+            ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to "false"
         ).toProperties()
 
 }
