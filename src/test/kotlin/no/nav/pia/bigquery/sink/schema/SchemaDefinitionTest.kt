@@ -19,7 +19,7 @@ internal class SchemaDefinitionTest {
     internal fun `should create valid SchemaId from String 2`() {
         val schemaId = SchemaDefinition.Id.of("ia-sak-statistikk-v1")
         assertSoftly {
-            schemaId.name shouldBe "ia-sak"
+            schemaId.name shouldBe "ia-sak-statistikk"
             schemaId.version shouldBe 1
         }
     }
