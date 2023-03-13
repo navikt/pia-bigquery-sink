@@ -29,7 +29,8 @@ internal class SchemaRegistryTest {
              "endretAvHendelseId": "123456789",
              "status": "VI_BISTÅR",
              "opprettetTidspunkt": "$now",
-             "endretTidspunkt": "$now"
+             "endretTidspunkt": "$now",
+             "avsluttetTidspunkt": null
             }""".trimMargin()
         )
 

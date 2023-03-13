@@ -5,10 +5,16 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
-fun JsonNode.asLocalDateTime(): LocalDateTime = LocalDateTime.parse(asText())
-fun JsonNode.asDateTime(): String = asLocalDateTime().truncatedTo(ChronoUnit.MICROS).toString()
-fun JsonNode.asZonedDateTime(): ZonedDateTime = ZonedDateTime.parse(asText())
-fun JsonNode.asTimestamp(): String = asZonedDateTime().truncatedTo(ChronoUnit.MICROS).toInstant().toString()
+fun JsonNode.asLocalDateTime(): LocalDateTime? = asText().let {
+    if(it == "null") return null
+    LocalDateTime.parse(it)
+}
+fun JsonNode.asDateTime(): String? = asLocalDateTime()?.truncatedTo(ChronoUnit.MICROS)?.toString()
+fun JsonNode.asZonedDateTime(): ZonedDateTime? = asText().let {
+    if(it == "null") return null
+    ZonedDateTime.parse(it)
+}
+fun JsonNode.asTimestamp(): String? = asZonedDateTime()?.truncatedTo(ChronoUnit.MICROS)?.toInstant()?.toString()
 
 fun <T> JsonNode.use(key: String, transform: JsonNode.() -> T): Pair<String, T?> = key to get(key)?.let {
     transform(it)
