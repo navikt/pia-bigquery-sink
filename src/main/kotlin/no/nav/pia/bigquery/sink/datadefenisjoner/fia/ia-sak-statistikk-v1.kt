@@ -122,7 +122,7 @@ val `ia-sak-statistikk-v1` = object : SchemaDefinition {
         payload.use("ikkeAktuelBegrunnelse") { textValue() },
         payload.use("opprettetTidspunkt") { asDateTime() },
         payload.use("endretTidspunkt") { asDateTime() },
-        payload.use("avsluttetTidspunkt") { asDateTime() },
+        payload.use("avsluttetTidspunkt") { if(asText() != null) asDateTime() else null },
         payload.use("antallPersoner") { decimalValue() },
         payload.use("tapteDagsverk") { decimalValue() },
         payload.use("muligeDagsverk") { decimalValue() },
