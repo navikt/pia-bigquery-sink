@@ -1,20 +1,24 @@
 package no.nav.pia.bigquery.sink
 
 import com.fasterxml.jackson.databind.JsonNode
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import kotlin.math.roundToInt
 
 fun JsonNode.asLocalDateTime(): LocalDateTime? = asText().let {
-    if(it == "null") return null
+    if (it == "null") return null
     LocalDateTime.parse(it)
 }
 fun JsonNode.asDateTime(): String? = asLocalDateTime()?.truncatedTo(ChronoUnit.MICROS)?.toString()
 fun JsonNode.asZonedDateTime(): ZonedDateTime? = asText().let {
-    if(it == "null") return null
+    if (it == "null") return null
     ZonedDateTime.parse(it)
 }
 fun JsonNode.asTimestamp(): String? = asZonedDateTime()?.truncatedTo(ChronoUnit.MICROS)?.toInstant()?.toString()
+
+fun JsonNode.asBigDecimal(): BigDecimal? = asText()?.let { ((it.toDouble() * 1000000).roundToInt() / 1000000.0).toBigDecimal() }
 
 fun <T> JsonNode.use(key: String, transform: JsonNode.() -> T): Pair<String, T?> = key to get(key)?.let {
     transform(it)

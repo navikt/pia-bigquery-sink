@@ -30,7 +30,8 @@ internal class SchemaRegistryTest {
              "status": "VI_BISTÅR",
              "opprettetTidspunkt": "$now",
              "endretTidspunkt": "$now",
-             "avsluttetTidspunkt": null
+             "avsluttetTidspunkt": null,
+             "sykefraversprosentSiste4Kvartal": 10.4836642887593
             }""".trimMargin()
         )
 
@@ -42,6 +43,7 @@ internal class SchemaRegistryTest {
         content.shouldContain("status" to "VI_BISTÅR")
         content.shouldContain("opprettetTidspunkt" to "${now.truncatedTo(ChronoUnit.MICROS)}")
         content.shouldContain("endretTidspunkt" to "${now.truncatedTo(ChronoUnit.MICROS)}")
+        content.shouldContain("sykefraversprosent" to null)
         content.shouldContain("tidsstempel" to "AUTO")
     }
 }

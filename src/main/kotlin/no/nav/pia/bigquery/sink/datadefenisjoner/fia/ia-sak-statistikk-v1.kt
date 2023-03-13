@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.InsertAllRequest
 import com.google.cloud.bigquery.TableDefinition
 import no.nav.pia.bigquery.sink.asDateTime
+import no.nav.pia.bigquery.sink.asBigDecimal
 import no.nav.pia.bigquery.sink.datadefenisjoner.toRowToInsert
 import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import no.nav.pia.bigquery.sink.schema.standardTableDefinition
@@ -123,15 +124,15 @@ val `ia-sak-statistikk-v1` = object : SchemaDefinition {
         payload.use("opprettetTidspunkt") { asDateTime() },
         payload.use("endretTidspunkt") { asDateTime() },
         payload.use("avsluttetTidspunkt") { asDateTime() },
-        payload.use("antallPersoner") { decimalValue() },
-        payload.use("tapteDagsverk") { decimalValue() },
-        payload.use("muligeDagsverk") { decimalValue() },
-        payload.use("sykefraversprosent") { decimalValue() },
+        payload.use("antallPersoner") { asBigDecimal() },
+        payload.use("tapteDagsverk") { asBigDecimal() },
+        payload.use("muligeDagsverk") { asBigDecimal() },
+        payload.use("sykefraversprosent") { asBigDecimal() },
         payload.use("arstall") { intValue() },
         payload.use("kvartal") { intValue() },
-        payload.use("tapteDagsverkSiste4Kvartal") { decimalValue() },
-        payload.use("muligeDagsverkSiste4Kvartal") { decimalValue() },
-        payload.use("sykefraversprosentSiste4Kvartal") { decimalValue() },
+        payload.use("tapteDagsverkSiste4Kvartal") { asBigDecimal() },
+        payload.use("muligeDagsverkSiste4Kvartal") { asBigDecimal() },
+        payload.use("sykefraversprosentSiste4Kvartal") { asBigDecimal() },
         payload.use("kvartaler") { textValue() },
         payload.use("sektor") { textValue() },
         payload.use("neringer") { textValue() },
