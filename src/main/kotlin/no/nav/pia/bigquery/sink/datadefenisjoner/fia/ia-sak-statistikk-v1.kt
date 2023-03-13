@@ -88,7 +88,7 @@ val `ia-sak-statistikk-v1` = object : SchemaDefinition {
             string("sektor") {
                 description("Sektor som virksomheten tilhører")
             }
-            json("næringer") {
+            json("neringer") {
                 required()
                 description("Næringer som virksomheten tilhører")
             }
@@ -134,7 +134,7 @@ val `ia-sak-statistikk-v1` = object : SchemaDefinition {
         payload.use("sykefraversprosentSiste4Kvartal") { decimalValue() },
         payload.use("kvartaler") { textValue() },
         payload.use("sektor") { textValue() },
-        payload.use("næringer") { textValue() },
+        payload.use("neringer") { textValue() },
         payload.use("bransjeprogram") { textValue() },
         payload.use("postnummer") { textValue() },
         payload.use("kommunenummer") { textValue() },
