@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.cloud.bigquery.DatasetId
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
-import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-v1`
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -33,7 +33,7 @@ internal class SchemaRegistryTest {
             }""".trimMargin()
         )
 
-        val content = `ia-sak-v1`.transform(payload).content
+        val content = `ia-sak-statistikk-v1`.transform(payload).content
         content.shouldContain("saksnummer" to "123456789")
         content.shouldContain("orgnr" to "123456789")
         content.shouldContain("eierAvSak" to "N123456")

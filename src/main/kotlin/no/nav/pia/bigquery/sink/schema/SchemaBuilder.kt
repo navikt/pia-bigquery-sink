@@ -26,16 +26,6 @@ class SchemaBuilder {
         block: FieldBuilder.() -> Unit = {},
     ): Field = field(name, StandardSQLTypeName.BOOL, block)
 
-    fun date(
-        name: String,
-        block: FieldBuilder.() -> Unit = {},
-    ): Field = field(name, StandardSQLTypeName.DATE, block)
-
-    fun datetime(
-        name: String,
-        block: FieldBuilder.() -> Unit = {},
-    ): Field = field(name, StandardSQLTypeName.DATETIME, block)
-
     fun integer(
         name: String,
         block: FieldBuilder.() -> Unit = {},
@@ -46,10 +36,10 @@ class SchemaBuilder {
         block: FieldBuilder.() -> Unit = {},
     ): Field = field(name, StandardSQLTypeName.STRING, block)
 
-    fun struct(
+    fun json(
         name: String,
         block: FieldBuilder.() -> Unit = {},
-    ): Field = field(name, StandardSQLTypeName.STRUCT, block)
+    ): Field = field(name, StandardSQLTypeName.JSON, block)
 
     fun timestamp(
         name: String,

@@ -16,7 +16,7 @@ internal class BigQueryHendelseMottakTest {
     @Test
     internal fun `event skal lagres i BigQuery`() {
         val payload = ObjectMapper().readValue(iaSakHendelseString, JsonNode::class.java)
-        bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of("ia-sak-v1"), payload)
+        bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of("ia-sak-statistikk-v1"), payload)
         verify { bigQueryServiceMock.insert(any(), any()) }
     }
 

@@ -11,8 +11,7 @@ class Kafka(
     private val keystoreLocation: String = getEnvVar("KAFKA_KEYSTORE_PATH"),
     private val credstorePassword: String = getEnvVar("KAFKA_CREDSTORE_PASSWORD"),
     val topicPrefix: String = getEnvVar("KAFKA_TOPIC_PREFIX", "pia"),
-    val iaSakTopic: String = getEnvVar("IA_SAK_TOPIC"),
-    val consumerLoopDelay: Long = getEnvVar("KAFKA_CONSUMER_LOOP_DELAY").toLong()
+    val iaSakStatistikkTopic: String = getEnvVar("IA_SAK_STATISTIKK_TOPIC"),
 ) {
     companion object {
         const val statistikkConsumerGroupId = "lydia-api-kafka-group-id"
