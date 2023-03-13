@@ -53,7 +53,7 @@ object PiaKafkaLytter : CoroutineScope, Helsesjekk {
                         logger.info("Fant ${records.count()} nye meldinger")
 
                         records.forEach {record ->
-                            val payload = ObjectMapper().readValue(record.value(), JsonNode::class.java)
+                            val payload = ObjectMapper().readValue(record.value().replace("\"næringer\"", "\"neringer\""), JsonNode::class.java)
                             bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(konfigurasjon.iaSakStatistikkTopic), payload)
                         }
                         logger.info("Lagret ${records.count()} meldinger")
