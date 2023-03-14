@@ -106,15 +106,12 @@ class DefaultBigQueryClient(private val projectId: String) : BigQueryClient {
     override fun insert(tableId: TableId, row: RowToInsert) = withLoggingContext {
         val table = getTable(tableId)
         val rows = listOf(row)
-        log.debug {
-            "Setter inn rader i tabell: '${tableId.table}', rader: '$rows'"
-        }
         val response = table.insert(rows)
         when {
             response.hasErrors() -> throw BigQueryClientException(
                 "Lagring i BigQuery feilet: '${response.insertErrors}'"
             )
-            else -> log.debug { "Rader ble lagret i tabell: '${tableId.table}'" }
+            else -> log.debug { "${rows.size} rader ble lagret i tabell: '${tableId.table}'" }
         }
     }
 

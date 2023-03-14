@@ -50,13 +50,13 @@ object PiaKafkaLytter : CoroutineScope, Helsesjekk {
                     try {
                         val records = consumer.poll(Duration.ofSeconds(1))
                         if (records.count() < 1) continue
-                        logger.info("Fant ${records.count()} nye meldinger")
+                        logger.info("Fant ${records.count()} nye meldinger i topic: ${konfigurasjon.iaSakStatistikkTopic}")
 
                         records.forEach {record ->
                             val payload = ObjectMapper().readValue(record.value().replace("\"næringer\"", "\"neringer\""), JsonNode::class.java)
                             bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(konfigurasjon.iaSakStatistikkTopic), payload)
                         }
-                        logger.info("Lagret ${records.count()} meldinger")
+                        logger.info("Lagret ${records.count()} meldinger i topic: ${konfigurasjon.iaSakStatistikkTopic}")
 
                         consumer.commitSync()
                     } catch (e: RetriableException) {

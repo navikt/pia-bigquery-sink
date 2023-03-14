@@ -19,7 +19,6 @@ class BigQueryHendelseMottak(
         if (skip(schemaId, payload)) {
             withLoggingContext(
                 "schemaId" to schemaId.toString(),
-                "payload" to payload.toString()
             ) {
                 log.info { "Hopper over melding for skjemaId: $schemaId" }
             }

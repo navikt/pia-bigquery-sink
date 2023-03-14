@@ -49,7 +49,9 @@ class BigQueryService(
         }
 
         if (schemaDefinition.skip(event.payload)) {
-            log.info { "skip: true, payload: '${event.payload}'" }
+            if (Miljø.cluster == Clusters.DEV_GCP.clusterId) log.info {
+                "skip: true, payload: '${event.payload}'"
+            }
             return@withLoggingContext
         }
 
@@ -58,7 +60,6 @@ class BigQueryService(
         }.onFailure { exception ->
             withLoggingContext(
                 "schemaId" to schemaId.toString(),
-                "payload" to event.payload.toString(),
             ) {
                 log.error(exception) { "insert feilet" }
             }
