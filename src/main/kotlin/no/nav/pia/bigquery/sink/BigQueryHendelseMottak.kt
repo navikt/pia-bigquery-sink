@@ -21,7 +21,7 @@ class BigQueryHendelseMottak(
                 "schemaId" to schemaId.toString(),
                 "payload" to payload.toString()
             ) {
-                log.info { "Hopper over melding" }
+                log.info { "Hopper over melding for skjemaId: $schemaId" }
             }
             return
         }
