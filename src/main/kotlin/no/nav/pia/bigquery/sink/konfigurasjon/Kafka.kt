@@ -12,6 +12,7 @@ class Kafka(
     private val credstorePassword: String = getEnvVar("KAFKA_CREDSTORE_PASSWORD"),
     val topicPrefix: String = getEnvVar("KAFKA_TOPIC_PREFIX", "pia"),
     val iaSakStatistikkTopic: String = getEnvVar("IA_SAK_STATISTIKK_TOPIC"),
+    val iaSakLeveranseTopic: String = getEnvVar("IA_SAK_LEVERANSE_TOPIC"),
 ) {
     companion object {
         const val statistikkConsumerGroupId = "lydia-api-kafka-group-id"

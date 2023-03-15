@@ -27,9 +27,20 @@ fun main() {
         migrate(schemaRegistry)
     }
 
-    PiaKafkaLytter.apply {
+    val kafkaKonfig = Kafka()
+    PiaKafkaLytter().apply {
         create(
-            kafkaKonfigurasjon = Kafka(),
+            topic = kafkaKonfig.iaSakStatistikkTopic,
+            kafkaKonfigurasjon = kafkaKonfig,
+            bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService)
+        )
+        run()
+    }.also { HelseMonitor.leggTilHelsesjekk(it) }
+
+    PiaKafkaLytter().apply {
+        create(
+            topic = kafkaKonfig.iaSakLeveranseTopic,
+            kafkaKonfigurasjon = kafkaKonfig,
             bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService)
         )
         run()

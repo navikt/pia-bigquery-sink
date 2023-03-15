@@ -45,5 +45,7 @@ spec:
       value: pia_bigquery_sink_v1_dataset_prod
     - name: IA_SAK_STATISTIKK_TOPIC
       value: ia-sak-statistikk-v1
+    - name: IA_SAK_LEVERANSE_TOPIC
+      value: ia-sak-leveranse-v1
     - name: KAFKA_TOPIC_PREFIX
       value: "pia"

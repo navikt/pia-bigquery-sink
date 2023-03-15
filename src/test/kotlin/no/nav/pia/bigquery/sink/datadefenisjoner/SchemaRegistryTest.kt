@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.cloud.bigquery.DatasetId
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
@@ -90,4 +92,46 @@ internal class SchemaRegistryTest {
         content.shouldContain("endretTidspunkt" to "2023-03-13T13:34:21.128356")
         content.shouldContain("tidsstempel" to "AUTO")
     }
+
+
+
+    @Test
+    internal fun `kan transformere ia-sak-leveranse melding` () {
+        val json = ObjectMapper().readTree("""
+            {
+                "id":1,
+                "saksnummer":"01GVJFE0REVM09011RS6B11X46",
+                "modul":{
+                    "id":2,
+                    "navn":"Videreutvikle sykefraværsrutiner",
+                    "iaTjeneste":{
+                        "id":3,
+                        "navn":"Redusere sykefravær"
+                    }
+                },
+                "frist":"2023-03-15",
+                "status":"UNDER_ARBEID",
+                "opprettetAv":"X12345",
+                "sistEndret":"2023-03-15T12:10:39.369468",
+                "sistEndretAv":"X12345",
+                "fullført":null
+            }
+        """.trimIndent())
+
+        val content = `ia-sak-leveranse-v1`.transform(json).content
+        content.shouldContain("id" to 1)
+        content.shouldContain("saksnummer" to "01GVJFE0REVM09011RS6B11X46")
+        content.shouldContain("iaModulId" to 2)
+        content.shouldContain("iaModulNavn" to "Videreutvikle sykefraværsrutiner")
+        content.shouldContain("iaTjenesteId" to 3)
+        content.shouldContain("iaTjenesteNavn" to "Redusere sykefravær")
+        content.shouldContain("frist" to LocalDate.parse("2023-03-15"))
+        content.shouldContain("status" to "UNDER_ARBEID")
+        content.shouldContain("opprettetAv" to "X12345")
+        content.shouldContain("sistEndret" to "2023-03-15T12:10:39.369468")
+        content.shouldContain("sistEndretAv" to "X12345")
+        content.shouldContain("fullført" to null)
+
+    }
+
 }

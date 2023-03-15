@@ -15,22 +15,24 @@ import org.slf4j.LoggerFactory
 import java.time.Duration
 import kotlin.coroutines.CoroutineContext
 
-object PiaKafkaLytter : CoroutineScope, Helsesjekk {
+class PiaKafkaLytter : CoroutineScope, Helsesjekk {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
     private lateinit var job: Job
     private lateinit var konfigurasjon: Kafka
+    private lateinit var topic: String
     private lateinit var bigQueryHendelseMottak: BigQueryHendelseMottak
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + job
 
     init {
-        Runtime.getRuntime().addShutdownHook(Thread(PiaKafkaLytter::cancel))
+        Runtime.getRuntime().addShutdownHook(Thread(this::cancel))
     }
 
-    fun create(kafkaKonfigurasjon: Kafka, bigQueryHendelseMottak: BigQueryHendelseMottak) {
+    fun create(topic: String, kafkaKonfigurasjon: Kafka, bigQueryHendelseMottak: BigQueryHendelseMottak) {
         logger.info("Creating kafka consumer job for statistikk")
         this.job = Job()
+        this.topic = topic
         this.konfigurasjon = kafkaKonfigurasjon
         this.bigQueryHendelseMottak = bigQueryHendelseMottak
         logger.info("Created kafka consumer job for statistikk")
@@ -43,20 +45,20 @@ object PiaKafkaLytter : CoroutineScope, Helsesjekk {
                 StringDeserializer(),
                 StringDeserializer()
             ).use { consumer ->
-                consumer.subscribe(listOf("${konfigurasjon.topicPrefix}.${konfigurasjon.iaSakStatistikkTopic}"))
-                logger.info("Kafka consumer subscribed to ${konfigurasjon.topicPrefix}.${konfigurasjon.iaSakStatistikkTopic}")
+                consumer.subscribe(listOf("${konfigurasjon.topicPrefix}.$topic"))
+                logger.info("Kafka consumer subscribed to ${konfigurasjon.topicPrefix}.$topic")
 
                 while (job.isActive) {
                     try {
                         val records = consumer.poll(Duration.ofSeconds(1))
                         if (records.count() < 1) continue
-                        logger.info("Fant ${records.count()} nye meldinger i topic: ${konfigurasjon.iaSakStatistikkTopic}")
+                        logger.info("Fant ${records.count()} nye meldinger i topic: $topic")
 
                         records.forEach {record ->
                             val payload = ObjectMapper().readValue(record.value().replace("\"næringer\"", "\"neringer\""), JsonNode::class.java)
                             bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(konfigurasjon.iaSakStatistikkTopic), payload)
                         }
-                        logger.info("Lagret ${records.count()} meldinger i topic: ${konfigurasjon.iaSakStatistikkTopic}")
+                        logger.info("Lagret ${records.count()} meldinger i topic: $topic")
 
                         consumer.commitSync()
                     } catch (e: RetriableException) {
@@ -73,9 +75,9 @@ object PiaKafkaLytter : CoroutineScope, Helsesjekk {
     }
 
     private fun cancel() {
-        logger.info("Stopping kafka consumer job for ${konfigurasjon.topicPrefix}.${this.konfigurasjon.iaSakStatistikkTopic}")
+        logger.info("Stopping kafka consumer job for ${konfigurasjon.topicPrefix}.$topic")
         job.cancel()
-        logger.info("Stopped kafka consumer job for ${konfigurasjon.topicPrefix}.${this.konfigurasjon.iaSakStatistikkTopic}")
+        logger.info("Stopped kafka consumer job for ${konfigurasjon.topicPrefix}.$topic")
     }
 
     override fun helse() = if (isRunning()) Helse.UP else Helse.DOWN

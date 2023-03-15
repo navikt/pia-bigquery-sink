@@ -2,30 +2,23 @@ package no.nav.pia.bigquery.sink
 
 import com.fasterxml.jackson.databind.JsonNode
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.math.roundToInt
 
-fun JsonNode.asLocalDateTime(): LocalDateTime? = asText().let {
+private fun JsonNode.asLocalDateTime(): LocalDateTime? = asText().let {
     if (it == "null") return null
     LocalDateTime.parse(it)
 }
-fun JsonNode.asDateTime(): String? = asLocalDateTime()?.truncatedTo(ChronoUnit.MICROS)?.toString()
-fun JsonNode.asZonedDateTime(): ZonedDateTime? = asText().let {
+fun JsonNode.asLocalDate(): LocalDate? = asText().let {
     if (it == "null") return null
-    ZonedDateTime.parse(it)
+    LocalDate.parse(it)
 }
-fun JsonNode.asTimestamp(): String? = asZonedDateTime()?.truncatedTo(ChronoUnit.MICROS)?.toInstant()?.toString()
+fun JsonNode.asDateTime(): String? = asLocalDateTime()?.truncatedTo(ChronoUnit.MICROS)?.toString()
 
 fun JsonNode.asBigDecimal(): BigDecimal? = asText()?.let { ((it.toDouble() * 1000000).roundToInt() / 1000000.0).toBigDecimal() }
 
 fun <T> JsonNode.use(key: String, transform: JsonNode.() -> T): Pair<String, T?> = key to get(key)?.let {
     transform(it)
 }
-
-infix fun JsonNode?.asTextWithName(key: String): Pair<String, String?> = key to this?.asText()
-infix fun JsonNode?.textValueWithName(key: String): Pair<String, String?> = key to this?.textValue()
-infix fun JsonNode?.intValueWithName(key: String): Pair<String, Int?> = key to this?.intValue()
-infix fun JsonNode?.asBooleanWithName(key: String): Pair<String, Boolean?> = key to this?.asBoolean()
-infix fun JsonNode?.asTimestampWithName(key: String): Pair<String, String?> = key to this?.asTimestamp()
