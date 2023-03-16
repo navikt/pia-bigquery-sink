@@ -6,9 +6,10 @@ import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
-import no.nav.pia.bigquery.sink.tilUTC
+import no.nav.pia.bigquery.sink.oversettFraCetTilUtc
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 internal class SchemaRegistryTest {
@@ -22,7 +23,7 @@ internal class SchemaRegistryTest {
 
     @Test
     internal fun `payload transformed to ia_sak_hendelser_v1 row`() {
-        val now = LocalDateTime.now()
+        val now = ZonedDateTime.now(ZoneId.of("Europe/Oslo")).toLocalDateTime()
         val payload = ObjectMapper().readTree(
             """{
              "saksnummer": "123456789",
@@ -44,8 +45,8 @@ internal class SchemaRegistryTest {
         content.shouldContain("eierAvSak" to "N123456")
         content.shouldContain("endretAvHendelseId" to "123456789")
         content.shouldContain("status" to "VI_BISTÅR")
-        content.shouldContain("opprettetTidspunkt" to "${now.tilUTC().truncatedTo(ChronoUnit.MICROS)}")
-        content.shouldContain("endretTidspunkt" to "${now.tilUTC().truncatedTo(ChronoUnit.MICROS)}")
+        content.shouldContain("opprettetTidspunkt" to "${now.oversettFraCetTilUtc().truncatedTo(ChronoUnit.MICROS)}")
+        content.shouldContain("endretTidspunkt" to "${now.oversettFraCetTilUtc().truncatedTo(ChronoUnit.MICROS)}")
         content.shouldContain("sykefraversprosent" to null)
         content.shouldContain("tidsstempel" to "AUTO")
     }
@@ -88,8 +89,8 @@ internal class SchemaRegistryTest {
         content.shouldContain("eierAvSak" to null)
         content.shouldContain("endretAvHendelseId" to "01GVDFDVA8DKN811GBQT0W065J")
         content.shouldContain("status" to "NY")
-        content.shouldContain("opprettetTidspunkt" to "2023-03-13T12:34:21.128356Z[UTC]")
-        content.shouldContain("endretTidspunkt" to "2023-03-13T12:34:21.128356Z[UTC]")
+        content.shouldContain("opprettetTidspunkt" to "2023-03-13T12:34:21.128356")
+        content.shouldContain("endretTidspunkt" to "2023-03-13T12:34:21.128356")
         content.shouldContain("tidsstempel" to "AUTO")
     }
 
@@ -128,9 +129,8 @@ internal class SchemaRegistryTest {
         content.shouldContain("frist" to "2023-03-15")
         content.shouldContain("status" to "UNDER_ARBEID")
         content.shouldContain("opprettetAv" to "X12345")
-        content.shouldContain("sistEndret" to "2023-03-15T11:10:39.369468Z[UTC]")
+        content.shouldContain("sistEndret" to "2023-03-15T11:10:39.369468")
         content.shouldContain("sistEndretAv" to "X12345")
         content.shouldContain("fullført" to null)
-
     }
 }
