@@ -3,8 +3,8 @@ package no.nav.pia.bigquery.sink.datadefenisjoner.fia
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.InsertAllRequest
 import com.google.cloud.bigquery.TableDefinition
-import no.nav.pia.bigquery.sink.asDateTime
 import no.nav.pia.bigquery.sink.asBigDecimal
+import no.nav.pia.bigquery.sink.asUtcDateTime
 import no.nav.pia.bigquery.sink.datadefenisjoner.toRowToInsert
 import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import no.nav.pia.bigquery.sink.schema.standardTableDefinition
@@ -121,9 +121,9 @@ val `ia-sak-statistikk-v1` = object : SchemaDefinition {
         payload.use("endretAvHendelseId") { textValue() },
         payload.use("hendelse") { textValue() },
         payload.use("ikkeAktuelBegrunnelse") { textValue() },
-        payload.use("opprettetTidspunkt") { asDateTime() },
-        payload.use("endretTidspunkt") { asDateTime() },
-        payload.use("avsluttetTidspunkt") { asDateTime() },
+        payload.use("opprettetTidspunkt") { asUtcDateTime() },
+        payload.use("endretTidspunkt") { asUtcDateTime() },
+        payload.use("avsluttetTidspunkt") { asUtcDateTime() },
         payload.use("antallPersoner") { asBigDecimal() },
         payload.use("tapteDagsverk") { asBigDecimal() },
         payload.use("muligeDagsverk") { asBigDecimal() },

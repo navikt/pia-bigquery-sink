@@ -3,8 +3,8 @@ package no.nav.pia.bigquery.sink.datadefenisjoner.fia
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.InsertAllRequest
 import com.google.cloud.bigquery.TableDefinition
-import no.nav.pia.bigquery.sink.asDateTime
 import no.nav.pia.bigquery.sink.asLocalDate
+import no.nav.pia.bigquery.sink.asUtcDateTime
 import no.nav.pia.bigquery.sink.datadefenisjoner.toRowToInsert
 import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import no.nav.pia.bigquery.sink.schema.standardTableDefinition
@@ -84,9 +84,9 @@ val `ia-sak-leveranse-v1` = object : SchemaDefinition {
         payload.use("frist") { asLocalDate() },
         payload.use("status") { textValue() },
         payload.use("opprettetAv") { textValue() },
-        payload.use("sistEndret") { asDateTime() },
+        payload.use("sistEndret") { asUtcDateTime() },
         payload.use("sistEndretAv") { textValue() },
-        payload.use(jsonPropery = "fullført", databaseColumn = "fullfort") { asDateTime() },
+        payload.use(jsonPropery = "fullført", databaseColumn = "fullfort") { asUtcDateTime() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
