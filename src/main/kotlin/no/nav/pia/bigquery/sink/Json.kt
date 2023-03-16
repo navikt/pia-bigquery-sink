@@ -11,10 +11,11 @@ private fun JsonNode.asLocalDateTime(): LocalDateTime? = asText().let {
     if (it == "null") return null
     LocalDateTime.parse(it)
 }
-fun JsonNode.asLocalDate(): LocalDate? = asText().let {
+fun JsonNode.asLocalDate(): String? = asText().let {
     if (it == "null") return null
-    LocalDate.parse(it)
+    LocalDate.parse(it).toString()
 }
+
 fun JsonNode.asDateTime(): String? = asLocalDateTime()?.truncatedTo(ChronoUnit.MICROS)?.toString()
 
 fun JsonNode.asBigDecimal(): BigDecimal? = asText()?.let { ((it.toDouble() * 1000000).roundToInt() / 1000000.0).toBigDecimal() }

@@ -7,7 +7,6 @@ import io.kotest.matchers.shouldBe
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
@@ -125,7 +124,7 @@ internal class SchemaRegistryTest {
         content.shouldContain("iaModulNavn" to "Videreutvikle sykefraværsrutiner")
         content.shouldContain("iaTjenesteId" to 3)
         content.shouldContain("iaTjenesteNavn" to "Redusere sykefravær")
-        content.shouldContain("frist" to LocalDate.parse("2023-03-15"))
+        content.shouldContain("frist" to "2023-03-15")
         content.shouldContain("status" to "UNDER_ARBEID")
         content.shouldContain("opprettetAv" to "X12345")
         content.shouldContain("sistEndret" to "2023-03-15T12:10:39.369468")
