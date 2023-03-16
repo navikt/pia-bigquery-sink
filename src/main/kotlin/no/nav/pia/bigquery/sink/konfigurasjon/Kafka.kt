@@ -15,9 +15,17 @@ class Kafka(
     val iaSakLeveranseTopic: String = getEnvVar("IA_SAK_LEVERANSE_TOPIC"),
 ) {
     companion object {
-        const val statistikkConsumerGroupId = "lydia-api-kafka-group-id"
+        const val iaSakStatistikkConsumerGroupId = "lydia-api-kafka-group-id"
+        const val iaSakLeveranseConsumerGroupId = "ia-sak-leveranse_pia-bigquery-sink"
         const val clientId: String = "lydia-api"
     }
+
+    fun consumerGroup(topic: String) =
+        when(topic) {
+            iaSakStatistikkTopic -> iaSakStatistikkConsumerGroupId
+            iaSakLeveranseTopic -> iaSakLeveranseConsumerGroupId
+            else -> throw IllegalStateException("Ukjent topic. Aner ikke hvilken consumergroup som skal benyttes")
+        }
 
     private fun securityConfigs() =
         mapOf(
@@ -32,7 +40,7 @@ class Kafka(
             SslConfigs.SSL_KEY_PASSWORD_CONFIG to credstorePassword
         )
 
-    fun consumerProperties(consumerGroupId: String = statistikkConsumerGroupId) =
+    fun consumerProperties(consumerGroupId: String) =
         baseConsumerProperties(consumerGroupId).apply {
             // TODO: Finn smidigere måte å få tester til å kjøre
             if (truststoreLocation.isBlank()) {

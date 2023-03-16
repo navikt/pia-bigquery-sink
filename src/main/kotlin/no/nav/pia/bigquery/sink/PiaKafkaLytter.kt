@@ -41,7 +41,7 @@ class PiaKafkaLytter : CoroutineScope, Helsesjekk {
     fun run() {
         launch {
             KafkaConsumer(
-                konfigurasjon.consumerProperties(),
+                konfigurasjon.consumerProperties(konfigurasjon.consumerGroup(topic)),
                 StringDeserializer(),
                 StringDeserializer()
             ).use { consumer ->
