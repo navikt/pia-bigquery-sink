@@ -56,7 +56,7 @@ class PiaKafkaLytter : CoroutineScope, Helsesjekk {
 
                         records.forEach {record ->
                             val payload = ObjectMapper().readValue(record.value(), JsonNode::class.java)
-                            bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(konfigurasjon.iaSakStatistikkTopic), payload)
+                            bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(topic), payload)
                         }
                         logger.info("Lagret ${records.count()} meldinger i topic: $topic")
 

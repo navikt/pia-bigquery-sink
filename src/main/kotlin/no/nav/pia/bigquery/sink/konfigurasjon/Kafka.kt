@@ -15,9 +15,9 @@ class Kafka(
     val iaSakLeveranseTopic: String = getEnvVar("IA_SAK_LEVERANSE_TOPIC"),
 ) {
     companion object {
-        const val iaSakStatistikkConsumerGroupId = "lydia-api-kafka-group-id"
-        const val iaSakLeveranseConsumerGroupId = "ia-sak-leveranse_pia-bigquery-sink"
-        const val clientId: String = "lydia-api"
+        const val clientId: String = "pia-bigquery-sink"
+        const val iaSakStatistikkConsumerGroupId = "ia-sak-statistikk_$clientId"
+        const val iaSakLeveranseConsumerGroupId = "ia-sak-leveranse_$clientId"
     }
 
     fun consumerGroup(topic: String) =
