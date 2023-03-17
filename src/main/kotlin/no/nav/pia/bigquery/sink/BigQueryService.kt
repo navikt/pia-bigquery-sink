@@ -44,7 +44,7 @@ class BigQueryService(
         }
         val tableId = schemaId.toTableId(registry.datasetId)
 
-        log.info {
+        if (Miljø.cluster == Clusters.DEV_GCP.clusterId) log.info {
             "payload: '${event.payload}'"
         }
 
