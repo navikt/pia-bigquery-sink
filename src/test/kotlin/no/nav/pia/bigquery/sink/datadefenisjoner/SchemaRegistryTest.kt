@@ -61,6 +61,8 @@ internal class SchemaRegistryTest {
             "status":"NY",
             "endretAvHendelseId":"01GVDFDVA8DKN811GBQT0W065J",
             "hendelse":"OPPRETT_SAK_FOR_VIRKSOMHET",
+            "endretAv":"Z12345",
+            "endretAvRolle":"SUPERBRUKER",
             "ikkeAktuelBegrunnelse":null,
             "opprettetTidspunkt":"2023-03-13T13:34:21.128356",
             "endretTidspunkt":"2023-03-13T13:34:21.128356",
@@ -88,6 +90,8 @@ internal class SchemaRegistryTest {
         content.shouldContain("orgnr" to "972385778")
         content.shouldContain("eierAvSak" to null)
         content.shouldContain("endretAvHendelseId" to "01GVDFDVA8DKN811GBQT0W065J")
+        content.shouldContain("endretAv" to "Z12345")
+        content.shouldContain("endretAvRolle" to "SUPERBRUKER")
         content.shouldContain("status" to "NY")
         content.shouldContain("opprettetTidspunkt" to "2023-03-13T12:34:21.128356")
         content.shouldContain("endretTidspunkt" to "2023-03-13T12:34:21.128356")
@@ -115,6 +119,7 @@ internal class SchemaRegistryTest {
                 "opprettetAv":"X12345",
                 "sistEndret":"2023-03-15T12:10:39.369468",
                 "sistEndretAv":"X12345",
+                "sistEndretAvRolle":"SAKSBEHANDLER",
                 "fullført":null
             }
         """.trimIndent())
@@ -131,6 +136,7 @@ internal class SchemaRegistryTest {
         content.shouldContain("opprettetAv" to "X12345")
         content.shouldContain("sistEndret" to "2023-03-15T11:10:39.369468")
         content.shouldContain("sistEndretAv" to "X12345")
+        content.shouldContain("sistEndretAvRolle" to "SAKSBEHANDLER")
         content.shouldContain("fullført" to null)
     }
 }

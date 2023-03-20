@@ -40,6 +40,12 @@ val `ia-sak-statistikk-v1` = object : SchemaDefinition {
             string("hendelse") {
                 description("Hendelsen som som endret saken")
             }
+            string("endretAv") {
+                description("Navident til rådgiver som endret saken")
+            }
+            string("endretAvRolle") {
+                description("Rollen til rådgiver som endret saken")
+            }
             string("ikkeAktuelBegrunnelse") {
                 description("Begrunnelse for at man ikke går videre med denne virksomheten")
             }
@@ -120,6 +126,8 @@ val `ia-sak-statistikk-v1` = object : SchemaDefinition {
         payload.use("status") { textValue() },
         payload.use("endretAvHendelseId") { textValue() },
         payload.use("hendelse") { textValue() },
+        payload.use("endretAv") { textValue() },
+        payload.use("endretAvRolle") { textValue() },
         payload.use("ikkeAktuelBegrunnelse") { textValue() },
         payload.use("opprettetTidspunkt") { asUtcDateTime() },
         payload.use("endretTidspunkt") { asUtcDateTime() },

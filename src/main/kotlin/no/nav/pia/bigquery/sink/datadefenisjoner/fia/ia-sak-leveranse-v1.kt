@@ -62,6 +62,9 @@ val `ia-sak-leveranse-v1` = object : SchemaDefinition {
                 required()
                 description("Navidenten til rådgiver som sist oppdaterte leveransen")
             }
+            string("sistEndretAvRolle") {
+                description("Rollen til rådgiver som sist oppdaterte leveransen")
+            }
             timestamp("fullfort") {
                 description("Tidspunkt for fullføring av leveranse")
             }
@@ -86,6 +89,7 @@ val `ia-sak-leveranse-v1` = object : SchemaDefinition {
         payload.use("opprettetAv") { textValue() },
         payload.use("sistEndret") { asUtcDateTime() },
         payload.use("sistEndretAv") { textValue() },
+        payload.use("sistEndretAvRolle") { textValue() },
         payload.use(jsonPropery = "fullført", databaseColumn = "fullfort") { asUtcDateTime() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
