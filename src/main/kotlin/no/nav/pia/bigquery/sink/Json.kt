@@ -25,7 +25,10 @@ fun JsonNode.asLocalDate(): String? = asText().let {
 
 fun JsonNode.asUtcDateTime(): String? = asLocalDateTime()?.oversettFraCetTilUtc()?.truncatedTo(ChronoUnit.MICROS)?.toString()
 
-fun JsonNode.asBigDecimal(): BigDecimal? = asText()?.let { ((it.toDouble() * 1000000).roundToInt() / 1000000.0).toBigDecimal() }
+fun JsonNode.asBigDecimal(): BigDecimal? =
+    asText()
+    ?.let { if (it == "null") null else it }
+    ?.let { ((it.toDouble() * 1000000).roundToInt() / 1000000.0).toBigDecimal() }
 
 fun <T> JsonNode.use(key: String, transform: JsonNode.() -> T): Pair<String, T?> = key to get(key)?.let {
     transform(it)
