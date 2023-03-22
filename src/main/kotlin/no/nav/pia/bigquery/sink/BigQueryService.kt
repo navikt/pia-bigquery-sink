@@ -61,7 +61,7 @@ class BigQueryService(
             withLoggingContext(
                 "schemaId" to schemaId.toString(),
             ) {
-                log.error(exception) { "insert feilet" }
+                log.error(exception) { "insert feilet: ${exception.message}" }
             }
             throw exception
         }
