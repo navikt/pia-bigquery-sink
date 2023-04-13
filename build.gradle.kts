@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.10"
+    kotlin("jvm") version "1.8.20"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     application
 }
@@ -11,8 +11,8 @@ repositories {
     maven("https://jitpack.io")
 }
 
-fun ktor(name: String) = "io.ktor:ktor-$name:2.1.0"
-fun kotest(name: String) = "io.kotest:kotest-$name:5.3.2"
+fun ktor(name: String) = "io.ktor:ktor-$name:2.2.4"
+fun kotest(name: String) = "io.kotest:kotest-$name:5.5.5"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -35,18 +35,18 @@ dependencies {
     // Webserver
 
     // Målinger
-    implementation("io.micrometer:micrometer-registry-prometheus:1.9.3")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.10.6")
 
     // Logging
-    implementation("io.github.microutils:kotlin-logging:2.1.23")
-    runtimeOnly("ch.qos.logback:logback-classic:1.4.0")
-    runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.2")
+    implementation("io.github.microutils:kotlin-logging:3.0.5")
+    runtimeOnly("ch.qos.logback:logback-classic:1.4.6")
+    runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.3")
 
     // Testing
     testImplementation(kotlin("test"))
     testImplementation(kotest("runner-junit5"))
     testImplementation(kotest("assertions-core"))
-    testImplementation("io.mockk:mockk:1.13.4")
+    testImplementation("io.mockk:mockk:1.13.5")
 }
 
 application {
