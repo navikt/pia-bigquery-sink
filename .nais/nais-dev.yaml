@@ -29,7 +29,6 @@ spec:
     pool: nav-dev
   resources:
     limits:
-      cpu: 500m
       memory: 1024Mi
     requests:
       cpu: 200m
