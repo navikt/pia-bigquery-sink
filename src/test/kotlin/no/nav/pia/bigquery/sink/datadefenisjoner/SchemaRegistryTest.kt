@@ -56,7 +56,7 @@ internal class SchemaRegistryTest {
         val payload = ObjectMapper().readTree(
             """{
             "saksnummer":"01GVDFDVA8DKN811GBQT0W065J",
-            "orgnr":"972385778",
+            "orgnr":"91234569",
             "eierAvSak":null,
             "status":"NY",
             "endretAvHendelseId":"01GVDFDVA8DKN811GBQT0W065J",
@@ -87,7 +87,7 @@ internal class SchemaRegistryTest {
         )
         val content = `ia-sak-statistikk-v1`.transform(payload).content
         content.shouldContain("saksnummer" to "01GVDFDVA8DKN811GBQT0W065J")
-        content.shouldContain("orgnr" to "972385778")
+        content.shouldContain("orgnr" to "91234569")
         content.shouldContain("eierAvSak" to null)
         content.shouldContain("endretAvHendelseId" to "01GVDFDVA8DKN811GBQT0W065J")
         content.shouldContain("endretAv" to "Z12345")
@@ -98,7 +98,49 @@ internal class SchemaRegistryTest {
         content.shouldContain("tidsstempel" to "AUTO")
     }
 
-
+    @Test
+    internal fun `real payload with null values transformed to ia_sak_hendelser_v1 row`() {
+        val payload = ObjectMapper().readTree(
+            """{
+                "saksnummer":"01G29XHZ7JDC1511RXC6WN1WRV",
+                "orgnr":"91234568",
+                "eierAvSak":null,
+                "status":"NY",
+                "endretAvHendelseId":"01G29XHZ7JDC1511RXC6WN1WRV",
+                "hendelse":"OPPRETT_SAK_FOR_VIRKSOMHET",
+                "endretAv":"Z994537",
+                "endretAvRolle":null,
+                "ikkeAktuelBegrunnelse":null,
+                "opprettetTidspunkt":"2022-05-05T12:51:52.946658",
+                "endretTidspunkt":"2022-05-05T12:51:52.946658",
+                "avsluttetTidspunkt":null,
+                "antallPersoner":null,
+                "tapteDagsverk":null,
+                "muligeDagsverk":null,
+                "sykefraversprosent":null,
+                "arstall":null,
+                "kvartal":null,
+                "tapteDagsverkSiste4Kvartal":null,
+                "muligeDagsverkSiste4Kvartal":null,
+                "sykefraversprosentSiste4Kvartal":null,
+                "kvartaler":[],
+                "sektor":"STATLIG",
+                "neringer":[{"navn":"Alminnelige somatiske sykehus","kode":"86.101"}],
+                "bransjeprogram":"SYKEHUS",
+                "postnummer":"5021",
+                "kommunenummer":"4601",
+                "fylkesnummer":"46"}""".trimIndent()
+        )
+        val content = `ia-sak-statistikk-v1`.transform(payload).content
+        content.shouldContain("saksnummer" to "01G29XHZ7JDC1511RXC6WN1WRV")
+        content.shouldContain("orgnr" to "91234568")
+        content.shouldContain("eierAvSak" to null)
+        content.shouldContain("endretAvHendelseId" to "01G29XHZ7JDC1511RXC6WN1WRV")
+        content.shouldContain("endretAv" to "Z994537")
+        content.shouldContain("endretAvRolle" to null)
+        content.shouldContain("status" to "NY")
+        content.shouldContain("tidsstempel" to "AUTO")
+    }
 
     @Test
     internal fun `kan transformere ia-sak-leveranse melding` () {

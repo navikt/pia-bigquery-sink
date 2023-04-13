@@ -63,6 +63,10 @@ class PiaKafkaLytter : CoroutineScope, Helsesjekk {
                         consumer.commitSync()
                     } catch (e: RetriableException) {
                         logger.warn("Had a retriable exception, retrying", e)
+                    } catch (e: Exception) {
+                        logger.error("Exception is shutting down kafka listner for $topic", e)
+                        job.cancel(CancellationException(e.message))
+                        throw e
                     }
                 }
             }
