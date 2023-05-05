@@ -111,7 +111,12 @@ val `ia-sak-statistikk-v1` = object : SchemaDefinition {
             string("fylkesnummer") {
                 description("Fylkesnummer til virksomheten")
             }
-
+            string("enhetsnummer") {
+                description("NAV enhetsnummer til rådgiver som gjorde endringen")
+            }
+            string("enhetsnavn") {
+                description("NAV enhetsnavn til rådgiver som gjorde endringen")
+            }
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring i BigQuery")
@@ -148,6 +153,9 @@ val `ia-sak-statistikk-v1` = object : SchemaDefinition {
         payload.use("postnummer") { textValue() },
         payload.use("kommunenummer") { textValue() },
         payload.use("fylkesnummer") { textValue() },
+        payload.use("enhetsnummer") { textValue() },
+        payload.use("enhetsnavn") { textValue() },
+
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
