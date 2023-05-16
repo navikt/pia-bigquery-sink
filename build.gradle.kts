@@ -35,7 +35,7 @@ dependencies {
     // Webserver
 
     // Målinger
-    implementation("io.micrometer:micrometer-registry-prometheus:1.10.6")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.11.0")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
