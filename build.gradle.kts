@@ -24,7 +24,7 @@ dependencies {
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
-    implementation("com.google.cloud:google-cloud-bigquery:2.22.0")
+    implementation("com.google.cloud:google-cloud-bigquery:2.26.0")
 
     // Kafka
     implementation("org.apache.kafka:kafka-clients:3.4.0")
