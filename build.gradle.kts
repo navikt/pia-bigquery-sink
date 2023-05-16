@@ -39,7 +39,7 @@ dependencies {
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
-    runtimeOnly("ch.qos.logback:logback-classic:1.4.6")
+    runtimeOnly("ch.qos.logback:logback-classic:1.4.7")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.3")
 
     // Testing
