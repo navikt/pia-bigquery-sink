@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("jvm") version "1.8.21"
     id("com.github.johnrengelman.shadow") version "8.1.1"
@@ -53,6 +51,10 @@ application {
     mainClass.set("no.nav.pia.bigquery.sink.AppKt")
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 tasks.test {
     environment("NAIS_CLUSTER_NAME", "local")
     environment("GCP_TEAM_PROJECT_ID", "pia")
@@ -60,8 +62,4 @@ tasks.test {
     environment("KAFKA_CONSUMER_LOOP_DELAY", "1000")
 
     useJUnitPlatform()
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
 }
