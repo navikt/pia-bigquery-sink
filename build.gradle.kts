@@ -9,7 +9,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-fun ktor(name: String) = "io.ktor:ktor-$name:2.3.0"
+fun ktor(name: String) = "io.ktor:ktor-$name:2.3.1"
 fun kotest(name: String) = "io.kotest:kotest-$name:5.6.2"
 
 dependencies {
@@ -22,10 +22,10 @@ dependencies {
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
-    implementation("com.google.cloud:google-cloud-bigquery:2.26.0")
+    implementation("com.google.cloud:google-cloud-bigquery:2.27.0")
 
     // Kafka
-    implementation("org.apache.kafka:kafka-clients:3.4.0")
+    implementation("org.apache.kafka:kafka-clients:3.4.1")
 
     // Config.kt
     implementation("com.natpryce:konfig:1.6.10.0")
