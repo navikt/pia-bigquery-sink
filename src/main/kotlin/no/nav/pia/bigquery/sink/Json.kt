@@ -2,11 +2,11 @@ package no.nav.pia.bigquery.sink
 
 import com.fasterxml.jackson.databind.JsonNode
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
-import kotlin.math.roundToInt
 
 private fun JsonNode.asLocalDateTime(): LocalDateTime? = asText().let {
     if (it == "null") return null
@@ -28,7 +28,7 @@ fun JsonNode.asUtcDateTime(): String? = asLocalDateTime()?.oversettFraCetTilUtc(
 fun JsonNode.asBigDecimal(): BigDecimal? =
     asText()
     ?.let { if (it == "null") null else it }
-    ?.let { ((it.toDouble() * 1000000).roundToInt() / 1000000.0).toBigDecimal() }
+    ?.let { it.toDouble().toBigDecimal().setScale(1, RoundingMode.HALF_UP) }
 
 fun <T> JsonNode.use(key: String, transform: JsonNode.() -> T): Pair<String, T?> = key to get(key)?.let {
     transform(it)
