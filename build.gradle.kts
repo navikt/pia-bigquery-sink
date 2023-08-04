@@ -9,7 +9,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-fun ktor(name: String) = "io.ktor:ktor-$name:2.3.1"
+fun ktor(name: String) = "io.ktor:ktor-$name:2.3.3"
 fun kotest(name: String) = "io.kotest:kotest-$name:5.6.2"
 
 dependencies {
