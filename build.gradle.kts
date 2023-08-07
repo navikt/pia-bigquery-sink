@@ -22,7 +22,7 @@ dependencies {
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
-    implementation("com.google.cloud:google-cloud-bigquery:2.27.0")
+    implementation("com.google.cloud:google-cloud-bigquery:2.31.0")
 
     // Kafka
     implementation("org.apache.kafka:kafka-clients:3.4.1")
@@ -46,6 +46,21 @@ dependencies {
     testImplementation(kotest("assertions-core"))
     testImplementation("io.mockk:mockk:1.13.5")
 }
+
+/*
+    Guava ødela en release som blir brukt av google-cloud-bigquery.
+    Workaround under kan fjernes når de har oppdatert
+
+    For info: https://github.com/google/guava/releases/tag/v32.1.0
+
+    - Start workaround -
+*/
+configurations.all {
+    resolutionStrategy.capabilitiesResolution.withCapability("com.google.guava:listenablefuture") {
+        select("com.google.guava:guava:0")
+    }
+}
+/* - Slutt workaround - */
 
 application {
     mainClass.set("no.nav.pia.bigquery.sink.AppKt")
