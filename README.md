@@ -12,3 +12,7 @@ men den kan ikke endre kollonner eller legge til nye som "required".
 
 ## Kontakt
 Team Pia
+
+## Kode generert av GitHub Copilot
+
+Dette repoet tar i bruk GitHub Copilot for kodeforslag.
