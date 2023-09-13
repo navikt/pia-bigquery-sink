@@ -55,7 +55,8 @@ jobs:
           tags: "ghcr.io/${{ github.repository }}:latest,${{ env.IMAGE }}"
 
   deploy:
-    permissions: {}
+    permissions:
+      contents: "read"
     strategy:
       matrix:
         cluster: [ dev, prod ]
