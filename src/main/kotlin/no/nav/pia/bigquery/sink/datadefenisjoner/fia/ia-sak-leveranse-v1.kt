@@ -74,6 +74,9 @@ val `ia-sak-leveranse-v1` = object : SchemaDefinition {
             string("enhetsnavn") {
                 description("NAV enhetsnavn til rådgiver som gjorde endringen")
             }
+            timestamp("opprettetTidspunkt") {
+                description("Tidspunkt for opprettelse av leveranse")
+            }
             timestamp("tidsstempel") {
                 required()
                 description("Tidsstempel for lagring i BigQuery")
@@ -99,6 +102,7 @@ val `ia-sak-leveranse-v1` = object : SchemaDefinition {
         payload.use(jsonPropery = "fullført", databaseColumn = "fullfort") { asUtcDateTime() },
         payload.use("enhetsnummer") { textValue() },
         payload.use("enhetsnavn") { textValue() },
+        payload.use("opprettetTidspunkt") { asUtcDateTime() },
         "tidsstempel" to "AUTO",
     ).toRowToInsert()
 }
