@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     application
 }
@@ -9,8 +9,8 @@ repositories {
     maven("https://jitpack.io")
 }
 
-fun ktor(name: String) = "io.ktor:ktor-$name:2.3.3"
-fun kotest(name: String) = "io.kotest:kotest-$name:5.6.2"
+fun ktor(name: String) = "io.ktor:ktor-$name:2.3.4"
+fun kotest(name: String) = "io.kotest:kotest-$name:5.7.2"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -22,10 +22,10 @@ dependencies {
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
-    implementation("com.google.cloud:google-cloud-bigquery:2.31.0")
+    implementation("com.google.cloud:google-cloud-bigquery:2.31.2")
 
     // Kafka
-    implementation("org.apache.kafka:kafka-clients:3.4.1")
+    implementation("org.apache.kafka:kafka-clients:3.5.1")
 
     // Config.kt
     implementation("com.natpryce:konfig:1.6.10.0")
@@ -33,34 +33,19 @@ dependencies {
     // Webserver
 
     // Målinger
-    implementation("io.micrometer:micrometer-registry-prometheus:1.11.0")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.11.4")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
-    runtimeOnly("ch.qos.logback:logback-classic:1.4.8")
+    runtimeOnly("ch.qos.logback:logback-classic:1.4.11")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.4")
 
     // Testing
     testImplementation(kotlin("test"))
     testImplementation(kotest("runner-junit5"))
     testImplementation(kotest("assertions-core"))
-    testImplementation("io.mockk:mockk:1.13.5")
+    testImplementation("io.mockk:mockk:1.13.7")
 }
-
-/*
-    Guava ødela en release som blir brukt av google-cloud-bigquery.
-    Workaround under kan fjernes når de har oppdatert
-
-    For info: https://github.com/google/guava/releases/tag/v32.1.0
-
-    - Start workaround -
-*/
-configurations.all {
-    resolutionStrategy.capabilitiesResolution.withCapability("com.google.guava:listenablefuture") {
-        select("com.google.guava:guava:0")
-    }
-}
-/* - Slutt workaround - */
 
 application {
     mainClass.set("no.nav.pia.bigquery.sink.AppKt")
