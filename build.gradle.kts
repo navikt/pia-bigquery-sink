@@ -8,7 +8,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-fun ktor(name: String) = "io.ktor:ktor-$name:2.3.4"
+fun ktor(name: String) = "io.ktor:ktor-$name:2.3.5"
 fun kotest(name: String) = "io.kotest:kotest-$name:5.7.2"
 
 dependencies {
@@ -21,10 +21,10 @@ dependencies {
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
-    implementation("com.google.cloud:google-cloud-bigquery:2.31.2")
+    implementation("com.google.cloud:google-cloud-bigquery:2.33.1")
 
     // Kafka
-    implementation("org.apache.kafka:kafka-clients:3.5.1")
+    implementation("org.apache.kafka:kafka-clients:3.6.0")
 
     // Config.kt
     implementation("com.natpryce:konfig:1.6.10.0")
@@ -32,7 +32,7 @@ dependencies {
     // Webserver
 
     // Målinger
-    implementation("io.micrometer:micrometer-registry-prometheus:1.11.4")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.11.5")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
@@ -43,7 +43,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(kotest("runner-junit5"))
     testImplementation(kotest("assertions-core"))
-    testImplementation("io.mockk:mockk:1.13.7")
+    testImplementation("io.mockk:mockk:1.13.8")
 }
 
 tasks {
