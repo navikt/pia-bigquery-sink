@@ -1,7 +1,6 @@
 plugins {
     kotlin("jvm") version "1.9.10"
-    id("io.ktor.plugin") version "2.3.4"
-    application
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 repositories {
@@ -47,26 +46,23 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.7")
 }
 
-application {
-    mainClass.set("no.nav.pia.bigquery.sink.AppKt")
-}
-
-kotlin {
-    jvmToolchain(17)
-}
-
 tasks {
     shadowJar {
         manifest {
-            attributes["Main-Class"] = "no.nav.pia.bigquery.sink.AppKt"
+            attributes("Main-Class" to "no.nav.pia.bigquery.sink.AppKt")
         }
     }
 
     test {
+        dependsOn(shadowJar)
         environment("NAIS_CLUSTER_NAME", "local")
         environment("GCP_TEAM_PROJECT_ID", "pia")
         environment("BIGQUERY_DATASET_ID", "pia_bigquery_sink_v1_dataset_local")
         environment("KAFKA_CONSUMER_LOOP_DELAY", "1000")
         useJUnitPlatform()
     }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
