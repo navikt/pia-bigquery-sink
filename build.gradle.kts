@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.10"
+    kotlin("jvm") version "1.9.20"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -21,7 +21,7 @@ dependencies {
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
-    implementation("com.google.cloud:google-cloud-bigquery:2.33.1")
+    implementation("com.google.cloud:google-cloud-bigquery:2.34.0")
 
     // Kafka
     implementation("org.apache.kafka:kafka-clients:3.6.0")
