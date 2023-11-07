@@ -156,6 +156,8 @@ internal class SchemaRegistryTest {
                         "navn":"Redusere sykefravær"
                     }
                 },
+                "iaTjenesteId":3,
+                "iaTjenesteNavn":"Redusere sykefravær",
                 "frist":"2023-03-15",
                 "status":"UNDER_ARBEID",
                 "opprettetAv":"X12345",
@@ -170,8 +172,6 @@ internal class SchemaRegistryTest {
         val content = `ia-sak-leveranse-v1`.transform(json).content
         content.shouldContain("id" to 1)
         content.shouldContain("saksnummer" to "01GVJFE0REVM09011RS6B11X46")
-        content.shouldContain("iaModulId" to 2)
-        content.shouldContain("iaModulNavn" to "Videreutvikle sykefraværsrutiner")
         content.shouldContain("iaTjenesteId" to 3)
         content.shouldContain("iaTjenesteNavn" to "Redusere sykefravær")
         content.shouldContain("frist" to "2023-03-15")
