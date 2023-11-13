@@ -44,6 +44,15 @@ dependencies {
     testImplementation(kotest("runner-junit5"))
     testImplementation(kotest("assertions-core"))
     testImplementation("io.mockk:mockk:1.13.8")
+
+    constraints {
+        implementation("io.netty:netty-codec-http2") {
+            version {
+                require("4.1.100.Final")
+            }
+            because("Affected versions < 4.1.100.Final are vulnerable to HTTP/2 Rapid Reset Attack")
+        }
+    }
 }
 
 tasks {
