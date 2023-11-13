@@ -67,11 +67,17 @@ val `ia-sak-statistikk-v1` = object : SchemaDefinition {
             decimal("tapteDagsverk") {
                 description("Antall tapte dagsverk i virksomheten for siste kvartal")
             }
+            decimal("tapteDagsverkGradert") {
+                description("Antall tapte dagsverk i virksomheten for siste kvartal som er gradert")
+            }
             decimal("muligeDagsverk") {
                 description("Antall mulige dagsverk i virksomheten for siste kvartal")
             }
             decimal("sykefraversprosent") {
                 description("Sykefraværsprosenten i virksomheten for siste kvartal")
+            }
+            decimal("graderingsprosent") {
+                description("Graderingsprosenten i virksomheten for siste kvartal")
             }
             integer("arstall") {
                 description("Siste kvartals årstall - hører sammen med kvartal")
@@ -82,11 +88,17 @@ val `ia-sak-statistikk-v1` = object : SchemaDefinition {
             decimal("tapteDagsverkSiste4Kvartal") {
                 description("Antall tapte dagsverk i virksomheten for siste 4 kvartal")
             }
+            decimal("tapteDagsverkGradertSiste4Kvartal") {
+                description("Antall tapte dagsverk i virksomheten for siste 4 kvartal som er gradert")
+            }
             decimal("muligeDagsverkSiste4Kvartal") {
                 description("Antall mulige dagsverk i virksomheten for siste 4 kvartal")
             }
             decimal("sykefraversprosentSiste4Kvartal") {
                 description("Sykefraværsprosenten i virksomheten for siste 4 kvartal")
+            }
+            decimal("graderingsprosentSiste4Kvartal") {
+                description("Graderingsprosenten i virksomheten for siste 4 kvartal")
             }
             json("kvartaler") {
                 required()
@@ -139,13 +151,17 @@ val `ia-sak-statistikk-v1` = object : SchemaDefinition {
         payload.use("avsluttetTidspunkt") { asUtcDateTime() },
         payload.use("antallPersoner") { asBigDecimal() },
         payload.use("tapteDagsverk") { asBigDecimal() },
+        payload.use("tapteDagsverkGradert") { asBigDecimal() },
         payload.use("muligeDagsverk") { asBigDecimal() },
         payload.use("sykefraversprosent") { asBigDecimal() },
+        payload.use("graderingsprosent") { asBigDecimal() },
         payload.use("arstall") { intValue() },
         payload.use("kvartal") { intValue() },
         payload.use("tapteDagsverkSiste4Kvartal") { asBigDecimal() },
+        payload.use("tapteDagsverkGradertSiste4Kvartal") { asBigDecimal() },
         payload.use("muligeDagsverkSiste4Kvartal") { asBigDecimal() },
         payload.use("sykefraversprosentSiste4Kvartal") { asBigDecimal() },
+        payload.use("graderingsprosentSiste4Kvartal") { asBigDecimal() },
         payload.use("kvartaler") { asIterable().toString() },
         payload.use("sektor") { textValue() },
         payload.use("neringer") { asIterable().toString() },

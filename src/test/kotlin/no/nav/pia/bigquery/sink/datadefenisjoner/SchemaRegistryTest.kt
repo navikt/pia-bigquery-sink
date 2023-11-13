@@ -8,6 +8,7 @@ import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
 import no.nav.pia.bigquery.sink.oversettFraCetTilUtc
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -69,13 +70,17 @@ internal class SchemaRegistryTest {
             "avsluttetTidspunkt":null,
             "antallPersoner":234.0,
             "tapteDagsverk":216.735876472921,
+            "tapteDagsverkGradert":108.36793823646,
             "muligeDagsverk":6314.79015997463,
             "sykefraversprosent":14.6662125361897,
+            "graderingsprosent":50.0,
             "arstall":2022,
             "kvartal":4,
             "tapteDagsverkSiste4Kvartal":1000.0,
+            "tapteDagsverkGradertSiste4Kvartal":600.0,
             "muligeDagsverkSiste4Kvartal":9434.0,
             "sykefraversprosentSiste4Kvartal":10.4836642887593,
+            "graderingsprosentSiste4Kvartal":60.0,
             "kvartaler":[{"årstall":2021,"kvartal":2},{"årstall":2021,"kvartal":3},{"årstall":2021,"kvartal":4},{"årstall":2022,"kvartal":1}],
             "sektor":"PRIVAT",
             "neringer":[{"navn":"Utleie av egen eller leid fast eiendom ellers","kode":"68.209"}],
@@ -95,6 +100,14 @@ internal class SchemaRegistryTest {
         content.shouldContain("status" to "NY")
         content.shouldContain("opprettetTidspunkt" to "2023-03-13T12:34:21.128356")
         content.shouldContain("endretTidspunkt" to "2023-03-13T12:34:21.128356")
+        content.shouldContain("tapteDagsverk" to BigDecimal("216.7"))
+        content.shouldContain("tapteDagsverkGradert" to BigDecimal("108.4"))
+        content.shouldContain("sykefraversprosent" to BigDecimal("14.7"))
+        content.shouldContain("graderingsprosent" to BigDecimal("50.0"))
+        content.shouldContain("tapteDagsverkSiste4Kvartal" to BigDecimal("1000.0"))
+        content.shouldContain("tapteDagsverkGradertSiste4Kvartal" to BigDecimal("600.0"))
+        content.shouldContain("sykefraversprosentSiste4Kvartal" to BigDecimal("10.5"))
+        content.shouldContain("graderingsprosentSiste4Kvartal" to BigDecimal("60.0"))
         content.shouldContain("tidsstempel" to "AUTO")
     }
 
@@ -116,13 +129,17 @@ internal class SchemaRegistryTest {
                 "avsluttetTidspunkt":null,
                 "antallPersoner":null,
                 "tapteDagsverk":null,
+                "tapteDagsverkGradert":null,
                 "muligeDagsverk":null,
                 "sykefraversprosent":null,
+                "graderingsprosent":null,
                 "arstall":null,
                 "kvartal":null,
                 "tapteDagsverkSiste4Kvartal":null,
+                "tapteDagsverkGradertSiste4Kvartal":null,
                 "muligeDagsverkSiste4Kvartal":null,
                 "sykefraversprosentSiste4Kvartal":null,
+                "graderingsprosentSiste4Kvartal":null,
                 "kvartaler":[],
                 "sektor":"STATLIG",
                 "neringer":[{"navn":"Alminnelige somatiske sykehus","kode":"86.101"}],
