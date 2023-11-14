@@ -175,6 +175,8 @@ internal class SchemaRegistryTest {
                 },
                 "iaTjenesteId":3,
                 "iaTjenesteNavn":"Redusere sykefravær",
+                "iaModulId":2,
+                "iaModulNavn":"Videreutvikle sykefraværsrutiner",
                 "frist":"2023-03-15",
                 "status":"UNDER_ARBEID",
                 "opprettetAv":"X12345",
