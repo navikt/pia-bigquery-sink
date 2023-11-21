@@ -166,11 +166,11 @@ internal class SchemaRegistryTest {
                 "id":1,
                 "saksnummer":"01GVJFE0REVM09011RS6B11X46",
                 "modul":{
-                    "id":2,
-                    "navn":"Videreutvikle sykefraværsrutiner",
+                    "id":4,
+                    "navn":"Videreutvikle sykefraværsrutiner 2",
                     "iaTjeneste":{
-                        "id":3,
-                        "navn":"Redusere sykefravær"
+                        "id":6,
+                        "navn":"Redusere sykefravær 2"
                     }
                 },
                 "iaTjenesteId":3,
@@ -193,6 +193,8 @@ internal class SchemaRegistryTest {
         content.shouldContain("saksnummer" to "01GVJFE0REVM09011RS6B11X46")
         content.shouldContain("iaTjenesteId" to 3)
         content.shouldContain("iaTjenesteNavn" to "Redusere sykefravær")
+        content.shouldContain("iaModulId" to 2)
+        content.shouldContain("iaModulNavn" to "Videreutvikle sykefraværsrutiner")
         content.shouldContain("frist" to "2023-03-15")
         content.shouldContain("status" to "UNDER_ARBEID")
         content.shouldContain("opprettetAv" to "X12345")

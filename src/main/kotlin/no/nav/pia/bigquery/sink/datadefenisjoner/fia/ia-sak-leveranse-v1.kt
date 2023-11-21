@@ -88,10 +88,10 @@ val `ia-sak-leveranse-v1` = object : SchemaDefinition {
         payload.use("id") { asInt() },
         payload.use("saksnummer") { textValue() },
 
-        payload.use(jsonPropery = "modul", databaseColumn = "iaModulId") { get("id").asInt() },
-        payload.use(jsonPropery = "modul", databaseColumn = "iaModulNavn") { get("navn").textValue() },
-        payload.use(jsonPropery = "modul", databaseColumn = "iaTjenesteId") { get("iaTjeneste").get("id").asInt() },
-        payload.use(jsonPropery = "modul", databaseColumn = "iaTjenesteNavn") { get("iaTjeneste").get("navn").textValue() },
+        payload.use("iaModulId") { asInt() },
+        payload.use("iaModulNavn") { textValue() },
+        payload.use("iaTjenesteId") { asInt() },
+        payload.use("iaTjenesteNavn") { textValue() },
 
         payload.use("frist") { asLocalDate() },
         payload.use("status") { textValue() },
