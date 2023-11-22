@@ -165,14 +165,6 @@ internal class SchemaRegistryTest {
             {
                 "id":1,
                 "saksnummer":"01GVJFE0REVM09011RS6B11X46",
-                "modul":{
-                    "id":4,
-                    "navn":"Videreutvikle sykefraværsrutiner 2",
-                    "iaTjeneste":{
-                        "id":6,
-                        "navn":"Redusere sykefravær 2"
-                    }
-                },
                 "iaTjenesteId":3,
                 "iaTjenesteNavn":"Redusere sykefravær",
                 "iaModulId":2,
