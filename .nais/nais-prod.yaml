@@ -31,8 +31,7 @@ spec:
     limits:
       memory: 1024Mi
     requests:
-      cpu: 200m
-      memory: 512Mi
+      cpu: 50m
   secureLogs:
     enabled: true
   gcp:
