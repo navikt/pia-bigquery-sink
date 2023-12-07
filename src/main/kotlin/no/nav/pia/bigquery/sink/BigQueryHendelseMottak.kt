@@ -16,7 +16,7 @@ class BigQueryHendelseMottak(
 
     fun onPacket(schemaId: SchemaDefinition.Id, payload: JsonNode) {
 
-        if (skip(schemaId, payload)) {
+        if (skip(schemaId)) {
             withLoggingContext(
                 "schemaId" to schemaId.toString(),
             ) {
@@ -38,7 +38,7 @@ class BigQueryHendelseMottak(
         }
     }
 
-    private fun skip(schemaId: SchemaDefinition.Id, payload: JsonNode): Boolean = when (schemaId) {
+    private fun skip(schemaId: SchemaDefinition.Id): Boolean = when (schemaId) {
         SchemaDefinition.Id("skipskjemaid", 1) -> true
         else -> false
     }

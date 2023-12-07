@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.20"
+    kotlin("jvm") version "1.9.21"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -8,8 +8,8 @@ repositories {
     maven("https://jitpack.io")
 }
 
-fun ktor(name: String) = "io.ktor:ktor-$name:2.3.5"
-fun kotest(name: String) = "io.kotest:kotest-$name:5.7.2"
+fun ktor(name: String) = "io.ktor:ktor-$name:2.3.6"
+fun kotest(name: String) = "io.kotest:kotest-$name:5.8.0"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -21,10 +21,10 @@ dependencies {
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
-    implementation("com.google.cloud:google-cloud-bigquery:2.34.0")
+    implementation("com.google.cloud:google-cloud-bigquery:2.35.0")
 
     // Kafka
-    implementation("org.apache.kafka:kafka-clients:3.6.0")
+    implementation("org.apache.kafka:kafka-clients:3.6.1")
 
     // Config.kt
     implementation("com.natpryce:konfig:1.6.10.0")
@@ -32,11 +32,11 @@ dependencies {
     // Webserver
 
     // Målinger
-    implementation("io.micrometer:micrometer-registry-prometheus:1.11.5")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.12.0")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
-    runtimeOnly("ch.qos.logback:logback-classic:1.4.12")
+    runtimeOnly("ch.qos.logback:logback-classic:1.4.14")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.4")
 
     // Testing
