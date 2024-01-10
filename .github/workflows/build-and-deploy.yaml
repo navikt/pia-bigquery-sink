@@ -60,7 +60,7 @@ jobs:
 
   deploy:
     permissions:
-      contents: read
+      id-token: write
     strategy:
       matrix:
         cluster: [ dev, prod ]
@@ -70,10 +70,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy to ${{ matrix.cluster }}
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           IMAGE: ${{ needs.build.outputs.image }}
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: ${{ matrix.cluster }}-gcp
           RESOURCE: .nais/nais-${{ matrix.cluster }}.yaml
 
