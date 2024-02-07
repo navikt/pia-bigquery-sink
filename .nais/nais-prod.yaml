@@ -8,7 +8,6 @@ metadata:
   namespace: pia
 spec:
   image: {{ image }}
-  team: pia
   strategy:
     type: Recreate
   liveness:
