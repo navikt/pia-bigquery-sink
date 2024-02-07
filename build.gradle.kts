@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.21"
+    kotlin("jvm") version "1.9.22"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -8,7 +8,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-fun ktor(name: String) = "io.ktor:ktor-$name:2.3.6"
+fun ktor(name: String) = "io.ktor:ktor-$name:2.3.8"
 fun kotest(name: String) = "io.kotest:kotest-$name:5.8.0"
 
 dependencies {
@@ -21,7 +21,7 @@ dependencies {
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
-    implementation("com.google.cloud:google-cloud-bigquery:2.35.0")
+    implementation("com.google.cloud:google-cloud-bigquery:2.37.0")
 
     // Kafka
     implementation("org.apache.kafka:kafka-clients:3.6.1")
@@ -32,7 +32,7 @@ dependencies {
     // Webserver
 
     // Målinger
-    implementation("io.micrometer:micrometer-registry-prometheus:1.12.0")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.12.2")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
@@ -43,12 +43,12 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(kotest("runner-junit5"))
     testImplementation(kotest("assertions-core"))
-    testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("io.mockk:mockk:1.13.9")
 
     constraints {
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.1.101.Final")
+                require("4.1.106.Final")
             }
             because("Affected versions < 4.1.101.Final are vulnerable to HTTP/2 Rapid Reset Attack")
         }
