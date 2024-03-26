@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.22"
+    kotlin("jvm") version "1.9.23"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -8,8 +8,8 @@ repositories {
     maven("https://jitpack.io")
 }
 
-fun ktor(name: String) = "io.ktor:ktor-$name:2.3.8"
-fun kotest(name: String) = "io.kotest:kotest-$name:5.8.0"
+fun ktor(name: String) = "io.ktor:ktor-$name:2.3.9"
+fun kotest(name: String) = "io.kotest:kotest-$name:5.8.1"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -21,10 +21,10 @@ dependencies {
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
-    implementation("com.google.cloud:google-cloud-bigquery:2.37.0")
+    implementation("com.google.cloud:google-cloud-bigquery:2.38.2")
 
     // Kafka
-    implementation("org.apache.kafka:kafka-clients:3.6.1")
+    implementation("org.apache.kafka:kafka-clients:3.7.0")
 
     // Config.kt
     implementation("com.natpryce:konfig:1.6.10.0")
@@ -32,23 +32,23 @@ dependencies {
     // Webserver
 
     // Målinger
-    implementation("io.micrometer:micrometer-registry-prometheus:1.12.2")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.12.4")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
-    runtimeOnly("ch.qos.logback:logback-classic:1.4.14")
+    runtimeOnly("ch.qos.logback:logback-classic:1.5.3")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.4")
 
     // Testing
     testImplementation(kotlin("test"))
     testImplementation(kotest("runner-junit5"))
     testImplementation(kotest("assertions-core"))
-    testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation("io.mockk:mockk:1.13.10")
 
     constraints {
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.1.106.Final")
+                require("4.1.108.Final")
             }
             because("Affected versions < 4.1.101.Final are vulnerable to HTTP/2 Rapid Reset Attack")
         }
