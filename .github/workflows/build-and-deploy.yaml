@@ -37,11 +37,11 @@ jobs:
       - name: Compile, run tests and build
         run: ./gradlew build --info
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
+        uses: docker/setup-qemu-action@v3
         with:
           platforms: linux/amd64,linux/arm64
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
+        uses: docker/setup-buildx-action@v3
       - name: Build and push the Docker image
         uses: nais/docker-build-push@v0
         id: docker-push
