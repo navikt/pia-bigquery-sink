@@ -9,7 +9,7 @@ repositories {
 }
 
 fun ktor(name: String) = "io.ktor:ktor-$name:2.3.11"
-fun kotest(name: String) = "io.kotest:kotest-$name:5.9.0"
+fun kotest(name: String) = "io.kotest:kotest-$name:5.9.1"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -21,7 +21,7 @@ dependencies {
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
-    implementation("com.google.cloud:google-cloud-bigquery:2.40.1")
+    implementation("com.google.cloud:google-cloud-bigquery:2.40.3")
 
     // Kafka
     implementation("org.apache.kafka:kafka-clients:3.7.0")
@@ -48,7 +48,7 @@ dependencies {
     constraints {
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.1.110.Final")
+                require("4.1.111.Final")
             }
             because("Affected versions < 4.1.101.Final are vulnerable to HTTP/2 Rapid Reset Attack")
         }
