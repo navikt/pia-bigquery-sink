@@ -1,5 +1,10 @@
+val bigQueryVersion = "2.43.0"
+val prometheusVersion = "1.13.5"
+val kotestVersion = "6.0.0.M1"
+val logbackVersion = "1.5.8"
+
 plugins {
-    kotlin("jvm") version "2.0.10"
+    kotlin("jvm") version "2.0.20"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -10,7 +15,7 @@ repositories {
 
 fun ktor(name: String) = "io.ktor:ktor-$name:2.3.12"
 
-fun kotest(name: String) = "io.kotest:kotest-$name:5.9.1"
+fun kotest(name: String) = "io.kotest:kotest-$name:$kotestVersion"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -22,7 +27,7 @@ dependencies {
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
-    implementation("com.google.cloud:google-cloud-bigquery:2.42.0")
+    implementation("com.google.cloud:google-cloud-bigquery:$bigQueryVersion")
 
     // Kafka
     implementation("org.apache.kafka:kafka-clients:3.8.0")
@@ -33,11 +38,11 @@ dependencies {
     // Webserver
 
     // Målinger
-    implementation("io.micrometer:micrometer-registry-prometheus:1.13.3")
+    implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
-    runtimeOnly("ch.qos.logback:logback-classic:1.5.6")
+    runtimeOnly("ch.qos.logback:logback-classic:$logbackVersion")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:8.0")
 
     // Testing
@@ -49,7 +54,7 @@ dependencies {
     constraints {
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.1.112.Final")
+                require("4.1.114.Final")
             }
             because("Affected versions < 4.1.101.Final are vulnerable to HTTP/2 Rapid Reset Attack")
         }
