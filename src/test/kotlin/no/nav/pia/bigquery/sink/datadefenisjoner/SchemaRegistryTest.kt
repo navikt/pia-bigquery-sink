@@ -200,7 +200,7 @@ internal class SchemaRegistryTest {
         content.shouldContain("sistEndret" to "2023-03-15T11:10:39.369468")
         content.shouldContain("sistEndretAv" to "X12345")
         content.shouldContain("sistEndretAvRolle" to "SAKSBEHANDLER")
-        content.shouldContain("fullført" to null)
+        content.shouldContain("fullfort" to null)
         content.shouldContain("opprettetTidspunkt" to "2023-03-15T11:10:39.369468")
     }
 }
