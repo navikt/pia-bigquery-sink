@@ -13,44 +13,53 @@ class BigQueryService(
     private val projectId: String,
     private val client: BigQueryClient,
 ) {
-    private fun <T> withLoggingContext(block: () -> T) = withLoggingContext(
-        "projectId" to projectId,
-    ) { block() }
+    private fun <T> withLoggingContext(block: () -> T) =
+        withLoggingContext(
+            "projectId" to projectId,
+        ) { block() }
 
-    fun migrate(registry: Registry) = withLoggingContext {
-        log.info { "Kjører migrering" }
-        val tableInfoById = registry.mapValues {
-            it.value.toTableInfo(registry.datasetId)
+    fun migrate(registry: Registry) =
+        withLoggingContext {
+            log.info { "Kjører migrering" }
+            val tableInfoById = registry.mapValues {
+                it.value.toTableInfo(registry.datasetId)
+            }
+
+            // create missing tables
+            tableInfoById
+                .filterValues { !client.tablePresent(it.tableId) }
+                .forEach { (_, tableInfo) ->
+                    client.create(tableInfo)
+                }
+            // add missing columns
+            tableInfoById
+                .filterValues { client.tablePresent(it.tableId) }
+                .forEach { (_, tableInfo) ->
+                    client.update(tableInfo.tableId, tableInfo)
+                }
         }
 
-        // create missing tables
-        tableInfoById
-            .filterValues { !client.tablePresent(it.tableId) }
-            .forEach { (_, tableInfo) ->
-                client.create(tableInfo)
-            }
-        // add missing columns
-        tableInfoById
-            .filterValues { client.tablePresent(it.tableId) }
-            .forEach { (_, tableInfo) ->
-                client.update(tableInfo.tableId, tableInfo)
-            }
-    }
-
-    fun insert(registry: Registry, event: BigQuerySinkEvent) = withLoggingContext {
+    fun insert(
+        registry: Registry,
+        event: BigQuerySinkEvent,
+    ) = withLoggingContext {
         val schemaId = event.schemaId
         val schemaDefinition = requireNotNull(registry[schemaId]) {
             "Mangler skjema: '$schemaId' i schemaRegistry, følgende skjema finnes: ${schemaRegistry.keys}"
         }
         val tableId = schemaId.toTableId(registry.datasetId)
 
-        if (Miljø.cluster == Clusters.DEV_GCP.clusterId) log.info {
-            "payload: '${event.payload}'"
+        if (Miljø.cluster == Clusters.DEV_GCP.clusterId) {
+            log.info {
+                "payload: '${event.payload}'"
+            }
         }
 
         if (schemaDefinition.skip(event.payload)) {
-            if (Miljø.cluster == Clusters.DEV_GCP.clusterId) log.info {
-                "skip: true, payload: '${event.payload}'"
+            if (Miljø.cluster == Clusters.DEV_GCP.clusterId) {
+                log.info {
+                    "skip: true, payload: '${event.payload}'"
+                }
             }
             return@withLoggingContext
         }

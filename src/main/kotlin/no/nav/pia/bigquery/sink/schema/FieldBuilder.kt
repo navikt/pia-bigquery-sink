@@ -4,7 +4,10 @@ import com.google.cloud.bigquery.Field
 import com.google.cloud.bigquery.FieldList
 import com.google.cloud.bigquery.StandardSQLTypeName
 
-class FieldBuilder(private val name: String, private val type: StandardSQLTypeName) {
+class FieldBuilder(
+    private val name: String,
+    private val type: StandardSQLTypeName,
+) {
     private var mode: Field.Mode = Field.Mode.NULLABLE
     private var description: String? = null
     private var subFields: FieldList? = null
@@ -29,8 +32,9 @@ class FieldBuilder(private val name: String, private val type: StandardSQLTypeNa
         this.subFields = SchemaBuilder().apply(block).fieldList()
     }
 
-    fun build(): Field = Field.newBuilder(name, type, subFields)
-        .setMode(mode)
-        .setDescription(description)
-        .build()
+    fun build(): Field =
+        Field.newBuilder(name, type, subFields)
+            .setMode(mode)
+            .setDescription(description)
+            .build()
 }

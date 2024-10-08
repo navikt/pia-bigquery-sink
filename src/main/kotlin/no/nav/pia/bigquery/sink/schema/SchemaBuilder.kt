@@ -16,10 +16,11 @@ class SchemaBuilder {
         name: String,
         type: StandardSQLTypeName,
         block: FieldBuilder.() -> Unit = {},
-    ): Field = FieldBuilder(name, type)
-        .apply(block)
-        .build()
-        .also { fields.add(it) }
+    ): Field =
+        FieldBuilder(name, type)
+            .apply(block)
+            .build()
+            .also { fields.add(it) }
 
     fun boolean(
         name: String,

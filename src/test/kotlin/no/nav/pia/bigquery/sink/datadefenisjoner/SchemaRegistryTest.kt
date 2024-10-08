@@ -37,7 +37,8 @@ internal class SchemaRegistryTest {
              "avsluttetTidspunkt": null,
              "sykefraversprosentSiste4Kvartal": 10.4836642887593
              
-            }""".trimMargin()
+            }
+            """.trimMargin(),
         )
 
         val content = `ia-sak-statistikk-v1`.transform(payload).content
@@ -55,7 +56,8 @@ internal class SchemaRegistryTest {
     @Test
     internal fun `real payload transformed to ia_sak_hendelser_v1 row`() {
         val payload = ObjectMapper().readTree(
-            """{
+            """
+            {
             "saksnummer":"01GVDFDVA8DKN811GBQT0W065J",
             "orgnr":"91234569",
             "eierAvSak":null,
@@ -88,7 +90,8 @@ internal class SchemaRegistryTest {
             "postnummer":"6240",
             "kommunenummer":"1507",
             "fylkesnummer":"15"
-            }""".trimIndent()
+            }
+            """.trimIndent(),
         )
         val content = `ia-sak-statistikk-v1`.transform(payload).content
         content.shouldContain("saksnummer" to "01GVDFDVA8DKN811GBQT0W065J")
@@ -114,39 +117,41 @@ internal class SchemaRegistryTest {
     @Test
     internal fun `real payload with null values transformed to ia_sak_hendelser_v1 row`() {
         val payload = ObjectMapper().readTree(
-            """{
-                "saksnummer":"01G29XHZ7JDC1511RXC6WN1WRV",
-                "orgnr":"91234568",
-                "eierAvSak":null,
-                "status":"NY",
-                "endretAvHendelseId":"01G29XHZ7JDC1511RXC6WN1WRV",
-                "hendelse":"OPPRETT_SAK_FOR_VIRKSOMHET",
-                "endretAv":"Z994537",
-                "endretAvRolle":null,
-                "ikkeAktuelBegrunnelse":null,
-                "opprettetTidspunkt":"2022-05-05T12:51:52.946658",
-                "endretTidspunkt":"2022-05-05T12:51:52.946658",
-                "avsluttetTidspunkt":null,
-                "antallPersoner":null,
-                "tapteDagsverk":null,
-                "tapteDagsverkGradert":null,
-                "muligeDagsverk":null,
-                "sykefraversprosent":null,
-                "graderingsprosent":null,
-                "arstall":null,
-                "kvartal":null,
-                "tapteDagsverkSiste4Kvartal":null,
-                "tapteDagsverkGradertSiste4Kvartal":null,
-                "muligeDagsverkSiste4Kvartal":null,
-                "sykefraversprosentSiste4Kvartal":null,
-                "graderingsprosentSiste4Kvartal":null,
-                "kvartaler":[],
-                "sektor":"STATLIG",
-                "neringer":[{"navn":"Alminnelige somatiske sykehus","kode":"86.101"}],
-                "bransjeprogram":"SYKEHUS",
-                "postnummer":"5021",
-                "kommunenummer":"4601",
-                "fylkesnummer":"46"}""".trimIndent()
+            """
+            {
+            "saksnummer":"01G29XHZ7JDC1511RXC6WN1WRV",
+            "orgnr":"91234568",
+            "eierAvSak":null,
+            "status":"NY",
+            "endretAvHendelseId":"01G29XHZ7JDC1511RXC6WN1WRV",
+            "hendelse":"OPPRETT_SAK_FOR_VIRKSOMHET",
+            "endretAv":"Z994537",
+            "endretAvRolle":null,
+            "ikkeAktuelBegrunnelse":null,
+            "opprettetTidspunkt":"2022-05-05T12:51:52.946658",
+            "endretTidspunkt":"2022-05-05T12:51:52.946658",
+            "avsluttetTidspunkt":null,
+            "antallPersoner":null,
+            "tapteDagsverk":null,
+            "tapteDagsverkGradert":null,
+            "muligeDagsverk":null,
+            "sykefraversprosent":null,
+            "graderingsprosent":null,
+            "arstall":null,
+            "kvartal":null,
+            "tapteDagsverkSiste4Kvartal":null,
+            "tapteDagsverkGradertSiste4Kvartal":null,
+            "muligeDagsverkSiste4Kvartal":null,
+            "sykefraversprosentSiste4Kvartal":null,
+            "graderingsprosentSiste4Kvartal":null,
+            "kvartaler":[],
+            "sektor":"STATLIG",
+            "neringer":[{"navn":"Alminnelige somatiske sykehus","kode":"86.101"}],
+            "bransjeprogram":"SYKEHUS",
+            "postnummer":"5021",
+            "kommunenummer":"4601",
+            "fylkesnummer":"46"}
+            """.trimIndent(),
         )
         val content = `ia-sak-statistikk-v1`.transform(payload).content
         content.shouldContain("saksnummer" to "01G29XHZ7JDC1511RXC6WN1WRV")
@@ -160,8 +165,9 @@ internal class SchemaRegistryTest {
     }
 
     @Test
-    internal fun `kan transformere ia-sak-leveranse melding` () {
-        val json = ObjectMapper().readTree("""
+    internal fun `kan transformere ia-sak-leveranse melding`() {
+        val json = ObjectMapper().readTree(
+            """
             {
                 "id":1,
                 "saksnummer":"01GVJFE0REVM09011RS6B11X46",
@@ -178,7 +184,8 @@ internal class SchemaRegistryTest {
                 "fullført":null,
                 "opprettetTidspunkt":"2023-03-15T12:10:39.369468"
             }
-        """.trimIndent())
+            """.trimIndent(),
+        )
 
         val content = `ia-sak-leveranse-v1`.transform(json).content
         content.shouldContain("id" to 1)

@@ -22,7 +22,7 @@ fun main() {
     }
     val bigQueryService: BigQueryService = BigQueryService(
         Miljø.team_project_id,
-        bigQueryClient
+        bigQueryClient,
     ).apply {
         migrate(schemaRegistry)
     }
@@ -32,7 +32,7 @@ fun main() {
         create(
             topic = kafkaKonfig.iaSakStatistikkTopic,
             kafkaKonfigurasjon = kafkaKonfig,
-            bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService)
+            bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService),
         )
         run()
     }.also { HelseMonitor.leggTilHelsesjekk(it) }
@@ -41,7 +41,7 @@ fun main() {
         create(
             topic = kafkaKonfig.iaSakLeveranseTopic,
             kafkaKonfigurasjon = kafkaKonfig,
-            bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService)
+            bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService),
         )
         run()
     }.also { HelseMonitor.leggTilHelsesjekk(it) }

@@ -15,15 +15,15 @@ class Kafka(
     val iaSakLeveranseTopic: String = getEnvVar("IA_SAK_LEVERANSE_TOPIC"),
 ) {
     companion object {
-        const val clientId: String = "pia-bigquery-sink"
-        const val iaSakStatistikkConsumerGroupId = "ia-sak-statistikk_$clientId"
-        const val iaSakLeveranseConsumerGroupId = "ia-sak-leveranse_$clientId"
+        const val CLIENT_ID: String = "pia-bigquery-sink"
+        const val IA_SAK_STATISTIKK_CONSUMER_GROUP_ID = "ia-sak-statistikk_$CLIENT_ID"
+        const val IA_SAK_LEVERANSE_CONSUMER_GROUP_ID = "ia-sak-leveranse_$CLIENT_ID"
     }
 
     fun consumerGroup(topic: String) =
-        when(topic) {
-            iaSakStatistikkTopic -> iaSakStatistikkConsumerGroupId
-            iaSakLeveranseTopic -> iaSakLeveranseConsumerGroupId
+        when (topic) {
+            iaSakStatistikkTopic -> IA_SAK_STATISTIKK_CONSUMER_GROUP_ID
+            iaSakLeveranseTopic -> IA_SAK_LEVERANSE_CONSUMER_GROUP_ID
             else -> throw IllegalStateException("Ukjent topic. Aner ikke hvilken consumergroup som skal benyttes")
         }
 
@@ -37,7 +37,7 @@ class Kafka(
             SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG to credstorePassword,
             SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG to keystoreLocation,
             SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG to credstorePassword,
-            SslConfigs.SSL_KEY_PASSWORD_CONFIG to credstorePassword
+            SslConfigs.SSL_KEY_PASSWORD_CONFIG to credstorePassword,
         )
 
     fun consumerProperties(consumerGroupId: String) =
@@ -55,11 +55,9 @@ class Kafka(
         mapOf(
             CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG to brokers,
             ConsumerConfig.GROUP_ID_CONFIG to consumerGroupId,
-            ConsumerConfig.CLIENT_ID_CONFIG to clientId,
+            ConsumerConfig.CLIENT_ID_CONFIG to CLIENT_ID,
             ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
             ConsumerConfig.MAX_POLL_RECORDS_CONFIG to "1000",
-            ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to "false"
+            ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to "false",
         ).toProperties()
-
 }
-

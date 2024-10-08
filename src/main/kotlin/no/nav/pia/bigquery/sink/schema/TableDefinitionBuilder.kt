@@ -6,11 +6,14 @@ import com.google.cloud.bigquery.StandardTableDefinition
 import com.google.cloud.bigquery.TableDefinition
 import com.google.cloud.bigquery.TimePartitioning
 
-abstract class TableDefinitionBuilder<T : TableDefinition, B : TableDefinition.Builder<T, B>>(protected val builder: B) {
-    fun schema(block: SchemaBuilder.() -> Unit): Unit = SchemaBuilder()
-        .apply(block)
-        .build()
-        .let { builder.setSchema(it) }
+abstract class TableDefinitionBuilder<T : TableDefinition, B : TableDefinition.Builder<T, B>>(
+    protected val builder: B,
+) {
+    fun schema(block: SchemaBuilder.() -> Unit): Unit =
+        SchemaBuilder()
+            .apply(block)
+            .build()
+            .let { builder.setSchema(it) }
 
     fun build(): T = builder.build()
 }

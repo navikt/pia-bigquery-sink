@@ -1,7 +1,11 @@
 package no.nav.pia.bigquery.sink.konfigurasjon
 
-enum class Clusters(val clusterId: String) {
-    PROD_GCP("prod-gcp"), DEV_GCP("dev-gcp"), LOKAL("local")
+enum class Clusters(
+    val clusterId: String,
+) {
+    PROD_GCP("prod-gcp"),
+    DEV_GCP("dev-gcp"),
+    LOKAL("local"),
 }
 
 object Miljø {

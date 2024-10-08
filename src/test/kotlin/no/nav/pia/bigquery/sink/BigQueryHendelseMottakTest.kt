@@ -28,15 +28,16 @@ internal class BigQueryHendelseMottakTest {
         }
     }
 
-    private val iaSakHendelseString = """
-            {
-             "saksnummer": "123456789",
-             "orgnr": "123456789",
-             "eierAvSak": "N123456",
-             "endretAvHendelseId": "123456789",
-             "status": "VI_BISTÅR",
-             "opprettetTidspunkt": "${LocalDateTime.now()}",
-             "endretTidspunkt": "${LocalDateTime.now()}"
-            }
+    private val iaSakHendelseString =
+        """
+        {
+         "saksnummer": "123456789",
+         "orgnr": "123456789",
+         "eierAvSak": "N123456",
+         "endretAvHendelseId": "123456789",
+         "status": "VI_BISTÅR",
+         "opprettetTidspunkt": "${LocalDateTime.now()}",
+         "endretTidspunkt": "${LocalDateTime.now()}"
+        }
         """.trimIndent()
 }

@@ -9,6 +9,7 @@ repositories {
 }
 
 fun ktor(name: String) = "io.ktor:ktor-$name:2.3.12"
+
 fun kotest(name: String) = "io.kotest:kotest-$name:5.9.1"
 
 dependencies {
