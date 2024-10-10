@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.cloud.bigquery.DatasetId
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`behovsvurdering-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
 import no.nav.pia.bigquery.sink.oversettFraCetTilUtc
@@ -202,5 +203,31 @@ internal class SchemaRegistryTest {
         content.shouldContain("sistEndretAvRolle" to "SAKSBEHANDLER")
         content.shouldContain("fullfort" to null)
         content.shouldContain("opprettetTidspunkt" to "2023-03-15T11:10:39.369468")
+    }
+
+    @Test
+    internal fun `kan transformere behovsvurdering melding`() {
+        val json = ObjectMapper().readTree(
+            """
+            {
+              "id": "822ce02f-e5d5-430d-b0f5-b14669ef2701",
+              "orgnr": "912345678",
+              "status": "AVSLUTTET",
+              "opprettetAv": "Z990233",
+              "opprettet": "2024-07-30T13:13:36.851040",
+              "endret": "2024-07-30T13:16:06.021655",
+              "samarbeidId": 5
+            }
+            """.trimIndent(),
+        )
+
+        val content = `behovsvurdering-v1`.transform(json).content
+        content.shouldContain("id" to "822ce02f-e5d5-430d-b0f5-b14669ef2701")
+        content.shouldContain("orgnr" to "912345678")
+        content.shouldContain("status" to "AVSLUTTET")
+        content.shouldContain("opprettetAv" to "Z990233")
+        content.shouldContain("opprettet" to "2024-07-30T11:13:36.851040")
+        content.shouldContain("endret" to "2024-07-30T11:16:06.021655")
+        content.shouldContain("samarbeidId" to 5)
     }
 }
