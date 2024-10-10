@@ -46,6 +46,15 @@ fun main() {
         run()
     }.also { HelseMonitor.leggTilHelsesjekk(it) }
 
+    PiaKafkaLytter().apply {
+        create(
+            topic = kafkaKonfig.behovsvurderingTopic,
+            kafkaKonfigurasjon = kafkaKonfig,
+            bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService),
+        )
+        run()
+    }.also { HelseMonitor.leggTilHelsesjekk(it) }
+
     embeddedServer(Netty, port = 8080, module = Application::myApplicationModule).also {
         // https://doc.nais.io/nais-application/good-practices/#handles-termination-gracefully
         it.addShutdownHook {

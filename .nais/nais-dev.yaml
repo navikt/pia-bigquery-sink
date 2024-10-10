@@ -44,5 +44,7 @@ spec:
       value: ia-sak-statistikk-v1
     - name: IA_SAK_LEVERANSE_TOPIC
       value: ia-sak-leveranse-v1
+    - name: BEHOVSVURDERING_TOPIC
+      value: behovsvurdering-bigquery-v1
     - name: KAFKA_TOPIC_PREFIX
       value: "pia"

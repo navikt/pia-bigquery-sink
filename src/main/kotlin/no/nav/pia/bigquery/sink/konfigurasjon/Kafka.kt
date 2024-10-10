@@ -13,17 +13,20 @@ class Kafka(
     val topicPrefix: String = getEnvVar("KAFKA_TOPIC_PREFIX", "pia"),
     val iaSakStatistikkTopic: String = getEnvVar("IA_SAK_STATISTIKK_TOPIC"),
     val iaSakLeveranseTopic: String = getEnvVar("IA_SAK_LEVERANSE_TOPIC"),
+    val behovsvurderingTopic: String = getEnvVar("BEHOVSVURDERING_TOPIC"),
 ) {
     companion object {
         const val CLIENT_ID: String = "pia-bigquery-sink"
         const val IA_SAK_STATISTIKK_CONSUMER_GROUP_ID = "ia-sak-statistikk_$CLIENT_ID"
         const val IA_SAK_LEVERANSE_CONSUMER_GROUP_ID = "ia-sak-leveranse_$CLIENT_ID"
+        const val BEHOVSVURDERING_CONSUMER_GROUP_ID = "behovsvurdering-bigquery_$CLIENT_ID"
     }
 
     fun consumerGroup(topic: String) =
         when (topic) {
             iaSakStatistikkTopic -> IA_SAK_STATISTIKK_CONSUMER_GROUP_ID
             iaSakLeveranseTopic -> IA_SAK_LEVERANSE_CONSUMER_GROUP_ID
+            behovsvurderingTopic -> BEHOVSVURDERING_CONSUMER_GROUP_ID
             else -> throw IllegalStateException("Ukjent topic. Aner ikke hvilken consumergroup som skal benyttes")
         }
 
