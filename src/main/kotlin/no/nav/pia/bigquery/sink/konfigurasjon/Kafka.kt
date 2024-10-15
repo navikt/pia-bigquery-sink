@@ -22,6 +22,12 @@ class Kafka(
         const val BEHOVSVURDERING_CONSUMER_GROUP_ID = "behovsvurdering-bigquery_$CLIENT_ID"
     }
 
+    val topics = listOf(
+        iaSakStatistikkTopic,
+        iaSakLeveranseTopic,
+        behovsvurderingTopic,
+    )
+
     fun consumerGroup(topic: String) =
         when (topic) {
             iaSakStatistikkTopic -> IA_SAK_STATISTIKK_CONSUMER_GROUP_ID

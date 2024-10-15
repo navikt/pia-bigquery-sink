@@ -28,32 +28,17 @@ fun main() {
     }
 
     val kafkaKonfig = Kafka()
-    PiaKafkaLytter().apply {
-        create(
-            topic = kafkaKonfig.iaSakStatistikkTopic,
-            kafkaKonfigurasjon = kafkaKonfig,
-            bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService),
-        )
-        run()
-    }.also { HelseMonitor.leggTilHelsesjekk(it) }
 
-    PiaKafkaLytter().apply {
-        create(
-            topic = kafkaKonfig.iaSakLeveranseTopic,
-            kafkaKonfigurasjon = kafkaKonfig,
-            bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService),
-        )
-        run()
-    }.also { HelseMonitor.leggTilHelsesjekk(it) }
-
-    PiaKafkaLytter().apply {
-        create(
-            topic = kafkaKonfig.behovsvurderingTopic,
-            kafkaKonfigurasjon = kafkaKonfig,
-            bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService),
-        )
-        run()
-    }.also { HelseMonitor.leggTilHelsesjekk(it) }
+    kafkaKonfig.topics.forEach { topic ->
+        PiaKafkaLytter().apply {
+            create(
+                topic = topic,
+                kafkaKonfigurasjon = kafkaKonfig,
+                bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService),
+            )
+            run()
+        }.also { HelseMonitor.leggTilHelsesjekk(it) }
+    }
 
     embeddedServer(Netty, port = 8080, module = Application::myApplicationModule).also {
         // https://doc.nais.io/nais-application/good-practices/#handles-termination-gracefully
