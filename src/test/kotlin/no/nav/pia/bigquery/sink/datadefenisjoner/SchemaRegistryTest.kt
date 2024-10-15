@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.cloud.bigquery.DatasetId
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
-import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`behovsvurdering-v1`
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`behovsvurdering-bigquery-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
 import no.nav.pia.bigquery.sink.oversettFraCetTilUtc
@@ -221,7 +221,7 @@ internal class SchemaRegistryTest {
             """.trimIndent(),
         )
 
-        val content = `behovsvurdering-v1`.transform(json).content
+        val content = `behovsvurdering-bigquery-v1`.transform(json).content
         content.shouldContain("id" to "822ce02f-e5d5-430d-b0f5-b14669ef2701")
         content.shouldContain("orgnr" to "912345678")
         content.shouldContain("status" to "AVSLUTTET")

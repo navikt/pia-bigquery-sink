@@ -9,9 +9,9 @@ import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import no.nav.pia.bigquery.sink.schema.standardTableDefinition
 import no.nav.pia.bigquery.sink.use
 
-val `behovsvurdering-v1` = object : SchemaDefinition {
+val `behovsvurdering-bigquery-v1` = object : SchemaDefinition {
     override val schemaId: SchemaDefinition.Id = SchemaDefinition.Id(
-        name = "behovsvurdering",
+        name = "behovsvurdering-bigquery",
         version = 1,
     )
 
@@ -40,7 +40,9 @@ val `behovsvurdering-v1` = object : SchemaDefinition {
                 }
                 timestamp("endret") {
                     required()
-                    description("Tidspunkt for sist endring av behovsvurdering")
+                    description(
+                        "Tidspunkt for sist endring av behovsvurdering, settes til opprettetTidspunkt ved sending til Bigquery om ikke eksiterende",
+                    )
                 }
                 integer("samarbeidId") {
                     required()
