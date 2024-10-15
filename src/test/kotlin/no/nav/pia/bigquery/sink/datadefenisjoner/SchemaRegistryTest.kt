@@ -7,6 +7,7 @@ import io.kotest.matchers.shouldBe
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`behovsvurdering-bigquery-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeid-bigquery-v1`
 import no.nav.pia.bigquery.sink.oversettFraCetTilUtc
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
@@ -229,5 +230,21 @@ internal class SchemaRegistryTest {
         content.shouldContain("opprettet" to "2024-07-30T11:13:36.851040")
         content.shouldContain("endret" to "2024-07-30T11:16:06.021655")
         content.shouldContain("samarbeidId" to 5)
+    }
+
+    @Test
+    internal fun `kan transformere samarbeid melding`() {
+        val json = ObjectMapper().readTree(
+            """
+            {
+            "id": 5,
+            "saksnummer":"01GVJFE0REVM09011RS6B11X46"
+            }
+            """.trimIndent(),
+        )
+
+        val content = `samarbeid-bigquery-v1`.transform(json).content
+        content.shouldContain("id" to 5)
+        content.shouldContain("saksnummer" to "01GVJFE0REVM09011RS6B11X46")
     }
 }

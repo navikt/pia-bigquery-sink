@@ -18,8 +18,11 @@ men den kan ikke endre kollonner eller legge til nye som "required".
    - anbefales å teste transformasjon fra jsonstring til dataklasse
 2. Opprett nytt topic i f.eks. lydia-api
    - navn på topic må stemme med schemaId
-   - skriv navn på topic i nais-dev.yaml og nais-prod.yaml
-3. Legg til topic i kafkaKonfig i App.kt i `pia-bigquery-sink`
+   - lag ny topic yaml i `.nais/topics/<nyfil>.yaml` og gi lese-tilgang til `pia-bigquery-sink` og `pia-devops`
+   - legg til resource i `.github/workflows/topics.yaml`
+3. Les fra topic i `pia-bigquery-sink`
+   - legg til topic navn i environmentvariabler i `nais-dev.yaml` og `nais-prod.yaml`
+   - Legg til topic i `konfigurasjon/Kafka`
 
 ## Kontakt
 Team Pia

@@ -5,6 +5,7 @@ import com.google.cloud.bigquery.InsertAllRequest.RowToInsert
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`behovsvurdering-bigquery-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeid-bigquery-v1`
 import no.nav.pia.bigquery.sink.konfigurasjon.BigQuery
 import no.nav.pia.bigquery.sink.konfigurasjon.Miljø
 import no.nav.pia.bigquery.sink.schema.Registry
@@ -16,4 +17,5 @@ val schemaRegistry = Registry(
     `ia-sak-statistikk-v1`.entry(),
     `ia-sak-leveranse-v1`.entry(),
     `behovsvurdering-bigquery-v1`.entry(),
+    `samarbeid-bigquery-v1`.entry(),
 )

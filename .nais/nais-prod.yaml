@@ -46,5 +46,7 @@ spec:
       value: ia-sak-leveranse-v1
     - name: BEHOVSVURDERING_TOPIC
       value: behovsvurdering-bigquery-v1
+    - name: SAMARBEID_TOPIC
+      value: samarbeid-bigquery-v1
     - name: KAFKA_TOPIC_PREFIX
       value: "pia"
