@@ -237,8 +237,10 @@ internal class SchemaRegistryTest {
         val json = ObjectMapper().readTree(
             """
             {
-            "id": 5,
-            "saksnummer":"01GVJFE0REVM09011RS6B11X46"
+                "id": 5,
+                "saksnummer":"01GVJFE0REVM09011RS6B11X46",
+                "navn": "Samarbeid Med Navn",
+                "status": "SLETTET"
             }
             """.trimIndent(),
         )
@@ -246,5 +248,7 @@ internal class SchemaRegistryTest {
         val content = `samarbeid-bigquery-v1`.transform(json).content
         content.shouldContain("id" to 5)
         content.shouldContain("saksnummer" to "01GVJFE0REVM09011RS6B11X46")
+        content.shouldContain("navn" to "Samarbeid Med Navn")
+        content.shouldContain("status" to "SLETTET")
     }
 }

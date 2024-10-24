@@ -25,6 +25,12 @@ val `samarbeid-bigquery-v1` = object : SchemaDefinition {
                     required()
                     description("Saksnummer")
                 }
+                string("navn") {
+                    description("Navn på samarbeid")
+                }
+                string("status") {
+                    description("Status om et samarbeid er aktivt eller har blitt slettet")
+                }
                 timestamp("tidsstempel") {
                     required()
                     description("Tidsstempel for lagring i BigQuery")
@@ -36,6 +42,8 @@ val `samarbeid-bigquery-v1` = object : SchemaDefinition {
         mapOf(
             payload.use("id") { intValue() },
             payload.use("saksnummer") { textValue() },
+            payload.use("navn") { textValue() },
+            payload.use("status") { textValue() },
             "tidsstempel" to "AUTO",
         ).toRowToInsert()
 }
