@@ -1,10 +1,6 @@
-val bigQueryVersion = "2.43.0"
-val prometheusVersion = "1.13.5"
-val kotestVersion = "6.0.0.M1"
-val logbackVersion = "1.5.8"
 
 plugins {
-    kotlin("jvm") version "2.0.20"
+    kotlin("jvm") version "2.0.21"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -15,7 +11,7 @@ repositories {
 
 fun ktor(name: String) = "io.ktor:ktor-$name:3.0.1"
 
-fun kotest(name: String) = "io.kotest:kotest-$name:$kotestVersion"
+fun kotest(name: String) = "io.kotest:kotest-$name:6.0.0.M1"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -27,10 +23,10 @@ dependencies {
     implementation(ktor("server-metrics-micrometer"))
 
     // BigQuery
-    implementation("com.google.cloud:google-cloud-bigquery:$bigQueryVersion")
+    implementation("com.google.cloud:google-cloud-bigquery:2.43.3")
 
     // Kafka
-    implementation("org.apache.kafka:kafka-clients:3.8.0")
+    implementation("org.apache.kafka:kafka-clients:3.8.1")
 
     // Config.kt
     implementation("com.natpryce:konfig:1.6.10.0")
@@ -38,18 +34,18 @@ dependencies {
     // Webserver
 
     // Målinger
-    implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.13.6")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
-    runtimeOnly("ch.qos.logback:logback-classic:$logbackVersion")
+    runtimeOnly("ch.qos.logback:logback-classic:1.5.12")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:8.0")
 
     // Testing
     testImplementation(kotlin("test"))
     testImplementation(kotest("runner-junit5"))
     testImplementation(kotest("assertions-core"))
-    testImplementation("io.mockk:mockk:1.13.12")
+    testImplementation("io.mockk:mockk:1.13.13")
 
     constraints {
         implementation("io.netty:netty-codec-http2") {
