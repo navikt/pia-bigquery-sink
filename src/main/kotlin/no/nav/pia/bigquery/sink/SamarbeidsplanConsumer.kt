@@ -56,37 +56,27 @@ class SamarbeidsplanConsumer(
                 while (job.isActive) {
                     try {
                         val records = consumer.poll(Duration.ofSeconds(1))
-                        if (!records.isEmpty) {
-                            records.forEach { record ->
-                                try {
-                                    if (!records.isEmpty) {
-                                        records.forEach { melding ->
-                                            try {
-                                                val plan = json.decodeFromString<PlanValue>(record.value())
-                                                log.info("Mottok PlanValue med id: ${plan.id}, gjør ingenting")
-                                                // bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(topic.navn), payload)
-                                            } catch (e: IllegalArgumentException) {
-                                                log.error(
-                                                    "Mottok feil formatert kafkamelding i topic: ${topic.navnMedNamespace}, melding: '${record.value()}'",
-                                                    e,
-                                                )
-                                            }
-                                        }
+                        if (records.count() < 1) continue
+                        log.info("Fant ${records.count()} nye meldinger i topic: ${topic.navn}")
 
-                                        log.info("Behandlet ${records.count()} meldinger i $consumer (topic '${topic.navnMedNamespace}') ")
-                                        consumer.commitSync()
-                                    }
-                                } catch (e: RetriableException) {
-                                    log.warn("Had a retriable exception in $consumer (topic '${topic.navnMedNamespace}'), retrying", e)
-                                }
+                        records.forEach { melding ->
+                            try {
+                                val plan = json.decodeFromString<PlanValue>(melding.value())
+                                log.info("Mottok PlanValue med id: ${plan.id}, gjør ingenting")
+//                                    val payload: JsonNode = "TODO"
+//                                    bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(topic.navn), payload)
+                            } catch (e: IllegalArgumentException) {
+                                log.error(
+                                    "Mottok feil formatert kafkamelding i topic: ${topic.navnMedNamespace}, melding: '${melding.value()}'",
+                                    e,
+                                )
                             }
                         }
 
-                        log.info("Lagret ${records.count()} meldinger i topic: ${topic.navnMedNamespace}")
-
+                        log.info("Behandlet ${records.count()} meldinger i $consumer (topic '${topic.navnMedNamespace}') ")
                         consumer.commitSync()
                     } catch (e: RetriableException) {
-                        log.warn("Had a retriable exception, retrying", e)
+                        log.warn("Had a retriable exception in $consumer (topic '${topic.navnMedNamespace}'), retrying", e)
                     } catch (e: Exception) {
                         log.error("Exception is shutting down kafka listner for ${topic.navnMedNamespace}", e)
                         job.cancel(CancellationException(e.message))
