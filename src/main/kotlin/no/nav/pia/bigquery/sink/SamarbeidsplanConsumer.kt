@@ -1,0 +1,138 @@
+package no.nav.pia.bigquery.sink
+
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import no.nav.pia.bigquery.sink.helse.Helse
+import no.nav.pia.bigquery.sink.helse.Helsesjekk
+import no.nav.pia.bigquery.sink.konfigurasjon.KafkaConfig
+import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic
+import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.common.errors.RetriableException
+import org.apache.kafka.common.serialization.StringDeserializer
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.time.Duration
+import kotlin.coroutines.CoroutineContext
+
+class SamarbeidsplanConsumer(
+    kafkaConfig: KafkaConfig,
+    private val bigQueryHendelseMottak: BigQueryHendelseMottak,
+) : CoroutineScope,
+    Helsesjekk {
+    private val log: Logger = LoggerFactory.getLogger(this::class.java)
+    private val job: Job = Job()
+    private val topic = KafkaTopic.SAMARBEIDSPLAN_TOPIC
+    private val kafkaConsumer = KafkaConsumer(
+        kafkaConfig.consumerProperties(consumerGroupId = topic.konsumentGruppe),
+        StringDeserializer(),
+        StringDeserializer(),
+    )
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.IO + job
+
+    init {
+        Runtime.getRuntime().addShutdownHook(Thread(this::cancel))
+    }
+
+    private val json = Json {
+        ignoreUnknownKeys = true
+    }
+
+    fun run() {
+        launch {
+            kafkaConsumer.use { consumer ->
+                consumer.subscribe(listOf(topic.navnMedNamespace))
+                log.info(
+                    "Kafka consumer subscribed to topic '${topic.navnMedNamespace}' of groupId '${topic.konsumentGruppe}' )' in $consumer",
+                )
+
+                while (job.isActive) {
+                    try {
+                        val records = consumer.poll(Duration.ofSeconds(1))
+                        if (!records.isEmpty) {
+                            records.forEach { record ->
+                                try {
+                                    if (!records.isEmpty) {
+                                        records.forEach { melding ->
+                                            try {
+                                                val plan = json.decodeFromString<PlanValue>(record.value())
+                                                log.info("Mottok PlanValue med id: ${plan.id}, gjør ingenting")
+                                                // bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(topic.navn), payload)
+                                            } catch (e: IllegalArgumentException) {
+                                                log.error(
+                                                    "Mottok feil formatert kafkamelding i topic: ${topic.navnMedNamespace}, melding: '${record.value()}'",
+                                                    e,
+                                                )
+                                            }
+                                        }
+
+                                        log.info("Behandlet ${records.count()} meldinger i $consumer (topic '${topic.navnMedNamespace}') ")
+                                        consumer.commitSync()
+                                    }
+                                } catch (e: RetriableException) {
+                                    log.warn("Had a retriable exception in $consumer (topic '${topic.navnMedNamespace}'), retrying", e)
+                                }
+                            }
+                        }
+
+                        log.info("Lagret ${records.count()} meldinger i topic: ${topic.navnMedNamespace}")
+
+                        consumer.commitSync()
+                    } catch (e: RetriableException) {
+                        log.warn("Had a retriable exception, retrying", e)
+                    } catch (e: Exception) {
+                        log.error("Exception is shutting down kafka listner for ${topic.navnMedNamespace}", e)
+                        job.cancel(CancellationException(e.message))
+                        throw e
+                    }
+                }
+            }
+        }
+    }
+
+    private fun isRunning(): Boolean {
+        log.trace("Asked if running")
+        return job.isActive
+    }
+
+    private fun cancel() {
+        log.info("Stopping kafka consumer job for ${topic.navnMedNamespace}")
+        job.cancel()
+        log.info("Stopped kafka consumer job for ${topic.navnMedNamespace}")
+    }
+
+    override fun helse() = if (isRunning()) Helse.UP else Helse.DOWN
+
+    @Serializable
+    data class PlanValue(
+        val id: String,
+        val samarbeidId: Int,
+        val sistEndret: LocalDateTime,
+        val temaer: List<TemaValue>,
+    )
+
+    @Serializable
+    data class TemaValue(
+        val id: Int,
+        val navn: String,
+        val inkludert: Boolean,
+        val innhold: List<InnholdValue>,
+    )
+
+    @Serializable
+    data class InnholdValue(
+        val id: Int,
+        val navn: String,
+        val inkludert: Boolean,
+//        val status: PlanUndertema.Status?,
+//        val startDato: LocalDate?,
+//        val sluttDato: LocalDate?,
+    )
+}

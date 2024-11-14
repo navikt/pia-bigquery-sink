@@ -1,44 +1,31 @@
 package no.nav.pia.bigquery.sink.konfigurasjon
 
+import no.nav.pia.bigquery.sink.konfigurasjon.KafkaConfig.Companion.CLIENT_ID
+import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.BEHOVSVURDERING_TOPIC
+import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.IA_SAK_LEVERANSE_TOPIC
+import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.IA_SAK_STATISTIKK_TOPIC
+import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.SAMARBEID_TOPIC
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.config.SaslConfigs
 import org.apache.kafka.common.config.SslConfigs
 
-class Kafka(
+class KafkaConfig(
     private val brokers: String = getEnvVar("KAFKA_BROKERS"),
     private val truststoreLocation: String = getEnvVar("KAFKA_TRUSTSTORE_PATH"),
     private val keystoreLocation: String = getEnvVar("KAFKA_KEYSTORE_PATH"),
     private val credstorePassword: String = getEnvVar("KAFKA_CREDSTORE_PASSWORD"),
-    val topicPrefix: String = getEnvVar("KAFKA_TOPIC_PREFIX", "pia"),
-    val iaSakStatistikkTopic: String = getEnvVar("IA_SAK_STATISTIKK_TOPIC"),
-    val iaSakLeveranseTopic: String = getEnvVar("IA_SAK_LEVERANSE_TOPIC"),
-    val behovsvurderingTopic: String = getEnvVar("BEHOVSVURDERING_TOPIC"),
-    val samarbeidTopic: String = getEnvVar("SAMARBEID_TOPIC"),
 ) {
     companion object {
         const val CLIENT_ID: String = "pia-bigquery-sink"
-        const val IA_SAK_STATISTIKK_CONSUMER_GROUP_ID = "ia-sak-statistikk_$CLIENT_ID"
-        const val IA_SAK_LEVERANSE_CONSUMER_GROUP_ID = "ia-sak-leveranse_$CLIENT_ID"
-        const val BEHOVSVURDERING_CONSUMER_GROUP_ID = "behovsvurdering-bigquery_$CLIENT_ID"
-        const val SAMARBEID_CONSUMER_GROUP_ID = "samarbeid-bigquery_$CLIENT_ID"
     }
 
-    val topics = listOf(
-        iaSakStatistikkTopic,
-        iaSakLeveranseTopic,
-        behovsvurderingTopic,
-        samarbeidTopic,
+    val generelleTopics = listOf(
+        IA_SAK_STATISTIKK_TOPIC,
+        IA_SAK_LEVERANSE_TOPIC,
+        BEHOVSVURDERING_TOPIC,
+        SAMARBEID_TOPIC,
     )
-
-    fun consumerGroup(topic: String) =
-        when (topic) {
-            iaSakStatistikkTopic -> IA_SAK_STATISTIKK_CONSUMER_GROUP_ID
-            iaSakLeveranseTopic -> IA_SAK_LEVERANSE_CONSUMER_GROUP_ID
-            behovsvurderingTopic -> BEHOVSVURDERING_CONSUMER_GROUP_ID
-            samarbeidTopic -> SAMARBEID_CONSUMER_GROUP_ID
-            else -> throw IllegalStateException("Ukjent topic. Aner ikke hvilken consumergroup som skal benyttes")
-        }
 
     private fun securityConfigs() =
         mapOf(
@@ -55,7 +42,6 @@ class Kafka(
 
     fun consumerProperties(consumerGroupId: String) =
         baseConsumerProperties(consumerGroupId).apply {
-            // TODO: Finn smidigere måte å få tester til å kjøre
             if (truststoreLocation.isBlank()) {
                 put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "PLAINTEXT")
                 put(SaslConfigs.SASL_MECHANISM, "PLAIN")
@@ -73,4 +59,21 @@ class Kafka(
             ConsumerConfig.MAX_POLL_RECORDS_CONFIG to "1000",
             ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to "false",
         ).toProperties()
+}
+
+enum class KafkaTopic(
+    val navn: String,
+    private val prefix: String = "pia",
+) {
+    IA_SAK_STATISTIKK_TOPIC("ia-sak-statistikk-v1"),
+    IA_SAK_LEVERANSE_TOPIC("ia-sak-leveranse-v1"),
+    BEHOVSVURDERING_TOPIC("behovsvurdering-bigquery-v1"),
+    SAMARBEID_TOPIC("samarbeid-bigquery-v1"),
+    SAMARBEIDSPLAN_TOPIC("samarbeidsplan-bigquery-v1"), ;
+
+    val konsumentGruppe
+        get() = "${navn}_$CLIENT_ID"
+
+    val navnMedNamespace
+        get() = "$prefix.$navn"
 }

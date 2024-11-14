@@ -9,7 +9,7 @@ import no.nav.pia.bigquery.sink.datadefenisjoner.schemaRegistry
 import no.nav.pia.bigquery.sink.helse.HelseMonitor
 import no.nav.pia.bigquery.sink.helse.healthChecks
 import no.nav.pia.bigquery.sink.konfigurasjon.Clusters
-import no.nav.pia.bigquery.sink.konfigurasjon.Kafka
+import no.nav.pia.bigquery.sink.konfigurasjon.KafkaConfig
 import no.nav.pia.bigquery.sink.konfigurasjon.NaisEnvironment
 import no.nav.pia.bigquery.sink.mertics.metrics
 import java.util.concurrent.TimeUnit
@@ -25,18 +25,19 @@ fun main() {
         migrate(schemaRegistry)
     }
 
-    val kafkaKonfig = Kafka()
+    val kafkaConfig = KafkaConfig()
 
-    kafkaKonfig.topics.forEach { topic ->
-        PiaKafkaLytter().apply {
-            create(
-                topic = topic,
-                kafkaKonfigurasjon = kafkaKonfig,
-                bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService),
-            )
+    val bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService)
+
+    kafkaConfig.generelleTopics.forEach { topic ->
+        PiaKafkaLytter(kafkaConfig = kafkaConfig, bigQueryHendelseMottak = bigQueryHendelseMottak, topic = topic).apply {
             run()
         }.also { HelseMonitor.leggTilHelsesjekk(it) }
     }
+
+    SamarbeidsplanConsumer(kafkaConfig = kafkaConfig, bigQueryHendelseMottak = bigQueryHendelseMottak).apply {
+        run()
+    }.also { HelseMonitor.leggTilHelsesjekk(it) }
 
     embeddedServer(Netty, port = 8080, module = Application::myApplicationModule).also {
         // https://doc.nais.io/nais-application/good-practices/#handles-termination-gracefully
