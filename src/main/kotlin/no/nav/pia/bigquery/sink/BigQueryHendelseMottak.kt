@@ -2,7 +2,6 @@ package no.nav.pia.bigquery.sink
 
 import com.fasterxml.jackson.databind.JsonNode
 import mu.KotlinLogging
-import mu.withLoggingContext
 import no.nav.pia.bigquery.sink.datadefenisjoner.schemaRegistry
 import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 
@@ -18,25 +17,22 @@ class BigQueryHendelseMottak(
         payload: JsonNode,
     ) {
         if (skip(schemaId)) {
-            withLoggingContext(
-                "schemaId" to schemaId.toString(),
-            ) {
-                log.info { "Hopper over melding for skjemaId: $schemaId" }
-            }
+            log.info { "Hopper over melding for skjemaId: $schemaId" }
             return
         }
 
-        withLoggingContext(
-            "schemaName" to schemaId.name,
-            "schemaVersion" to schemaId.version.toString(),
-        ) {
-            log.debug { "Mottok hendelse for lagring i BigQuery" }
-            val registry = when {
-                schemaRegistry.containsKey(schemaId) -> schemaRegistry
-                else -> error("Fant ikke register for tabell: $schemaId")
-            }
-            bigQueryService.insert(registry, BigQuerySinkEvent(schemaId, payload))
+        log.info { "Mottok hendelse for lagring i BigQuery" }
+
+        val registry = when {
+            schemaRegistry.containsKey(schemaId) -> schemaRegistry
+            else -> error("Fant ikke register for tabell: $schemaId")
         }
+
+        bigQueryService.insert(
+            registry = registry,
+            schemaId = schemaId,
+            payload = payload,
+        )
     }
 
     private fun skip(schemaId: SchemaDefinition.Id): Boolean =

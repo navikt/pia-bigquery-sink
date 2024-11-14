@@ -8,7 +8,7 @@ enum class Clusters(
     LOKAL("local"),
 }
 
-object Miljø {
+object NaisEnvironment {
     val cluster = getEnvVar("NAIS_CLUSTER_NAME")
     val team_project_id = getEnvVar("GCP_TEAM_PROJECT_ID")
 }

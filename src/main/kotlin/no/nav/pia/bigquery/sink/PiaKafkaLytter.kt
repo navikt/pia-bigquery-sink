@@ -22,7 +22,7 @@ import kotlin.coroutines.CoroutineContext
 class PiaKafkaLytter :
     CoroutineScope,
     Helsesjekk {
-    private val logger: Logger = LoggerFactory.getLogger(this::class.java)
+    private val log: Logger = LoggerFactory.getLogger(this::class.java)
     private lateinit var job: Job
     private lateinit var konfigurasjon: Kafka
     private lateinit var topic: String
@@ -40,12 +40,12 @@ class PiaKafkaLytter :
         kafkaKonfigurasjon: Kafka,
         bigQueryHendelseMottak: BigQueryHendelseMottak,
     ) {
-        logger.info("Creating kafka consumer job for statistikk")
+        log.info("Creating kafka consumer job for statistikk")
         this.job = Job()
         this.topic = topic
         this.konfigurasjon = kafkaKonfigurasjon
         this.bigQueryHendelseMottak = bigQueryHendelseMottak
-        logger.info("Created kafka consumer job for statistikk")
+        log.info("Created kafka consumer job for statistikk")
     }
 
     fun run() {
@@ -56,13 +56,13 @@ class PiaKafkaLytter :
                 StringDeserializer(),
             ).use { consumer ->
                 consumer.subscribe(listOf("${konfigurasjon.topicPrefix}.$topic"))
-                logger.info("Kafka consumer subscribed to ${konfigurasjon.topicPrefix}.$topic")
+                log.info("Kafka consumer subscribed to ${konfigurasjon.topicPrefix}.$topic")
 
                 while (job.isActive) {
                     try {
                         val records = consumer.poll(Duration.ofSeconds(1))
                         if (records.count() < 1) continue
-                        logger.info("Fant ${records.count()} nye meldinger i topic: $topic")
+                        log.info("Fant ${records.count()} nye meldinger i topic: $topic")
 
                         records.forEach { record ->
                             val payload = ObjectMapper().readValue(
@@ -71,13 +71,13 @@ class PiaKafkaLytter :
                             )
                             bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(topic), payload)
                         }
-                        logger.info("Lagret ${records.count()} meldinger i topic: $topic")
+                        log.info("Lagret ${records.count()} meldinger i topic: $topic")
 
                         consumer.commitSync()
                     } catch (e: RetriableException) {
-                        logger.warn("Had a retriable exception, retrying", e)
+                        log.warn("Had a retriable exception, retrying", e)
                     } catch (e: Exception) {
-                        logger.error("Exception is shutting down kafka listner for $topic", e)
+                        log.error("Exception is shutting down kafka listner for $topic", e)
                         job.cancel(CancellationException(e.message))
                         throw e
                     }
@@ -87,14 +87,14 @@ class PiaKafkaLytter :
     }
 
     private fun isRunning(): Boolean {
-        logger.trace("Asked if running")
+        log.trace("Asked if running")
         return job.isActive
     }
 
     private fun cancel() {
-        logger.info("Stopping kafka consumer job for ${konfigurasjon.topicPrefix}.$topic")
+        log.info("Stopping kafka consumer job for ${konfigurasjon.topicPrefix}.$topic")
         job.cancel()
-        logger.info("Stopped kafka consumer job for ${konfigurasjon.topicPrefix}.$topic")
+        log.info("Stopped kafka consumer job for ${konfigurasjon.topicPrefix}.$topic")
     }
 
     override fun helse() = if (isRunning()) Helse.UP else Helse.DOWN
