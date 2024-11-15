@@ -76,7 +76,7 @@ class BigQueryService(
                 }
             }
         }.onFailure { exception ->
-            log.error("insert feilet: ${exception.message}")
+            log.error("insert feilet: ${exception.message}. Melding: $plan")
             throw exception
         }
     }
