@@ -112,7 +112,7 @@ class SamarbeidsplanConsumer(
             mapOf(
                 "id" to id,
                 "samarbeidId" to samarbeidId,
-                "endret" to sistEndret,
+                "endret" to sistEndret.toString(),
             ).toRowToInsert()
     }
 
