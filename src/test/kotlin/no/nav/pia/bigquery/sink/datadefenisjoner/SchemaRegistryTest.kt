@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.cloud.bigquery.DatasetId
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
+import kotlinx.serialization.json.Json
+import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanValue
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`behovsvurdering-bigquery-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
@@ -250,5 +252,103 @@ internal class SchemaRegistryTest {
         content.shouldContain("saksnummer" to "01GVJFE0REVM09011RS6B11X46")
         content.shouldContain("navn" to "Samarbeid Med Navn")
         content.shouldContain("status" to "SLETTET")
+    }
+
+    @Test
+    internal fun `kan transformere samarbeidsplan melding`() {
+        val melding =
+            """
+            {
+              "id": "09c9248f-76d1-40e9-9399-975a452b6e9a",
+              "samarbeidId": 381,
+              "sistEndret": "2024-11-14T16:34:09.494447",
+              "temaer": [
+                {
+                  "id": 496,
+                  "navn": "Partssamarbeid",
+                  "inkludert": true,
+                  "innhold": [
+                    {
+                      "id": 1805,
+                      "navn": "Utvikle partssamarbeidet",
+                      "inkludert": true
+                    }
+                  ]
+                },
+                {
+                  "id": 497,
+                  "navn": "Sykefraværsarbeid",
+                  "inkludert": true,
+                  "innhold": [
+                    {
+                      "id": 1806,
+                      "navn": "Sykefraværsrutiner",
+                      "inkludert": true
+                    },
+                    {
+                      "id": 1808,
+                      "navn": "Tilretteleggings- og medvirkningsplikt",
+                      "inkludert": false
+                    },
+                    {
+                      "id": 1809,
+                      "navn": "Sykefravær - enkeltsaker",
+                      "inkludert": true
+                    },
+                    {
+                      "id": 1807,
+                      "navn": "Oppfølgingssamtaler",
+                      "inkludert": true
+                    }
+                  ]
+                },
+                {
+                  "id": 498,
+                  "navn": "Arbeidsmiljø",
+                  "inkludert": true,
+                  "innhold": [
+                    {
+                      "id": 1812,
+                      "navn": "Oppfølging av arbeidsmiljøundersøkelser",
+                      "inkludert": true
+                    },
+                    {
+                      "id": 1811,
+                      "navn": "Endring og omstilling",
+                      "inkludert": false
+                    },
+                    {
+                      "id": 1813,
+                      "navn": "Livsfaseorientert personalpolitikk",
+                      "inkludert": false
+                    },
+                    {
+                      "id": 1814,
+                      "navn": "Psykisk helse",
+                      "inkludert": false
+                    },
+                    {
+                      "id": 1815,
+                      "navn": "HelseIArbeid",
+                      "inkludert": false
+                    },
+                    {
+                      "id": 1810,
+                      "navn": "Utvikle arbeidsmiljøet",
+                      "inkludert": true
+                    }
+                  ]
+                }
+              ]
+            }
+            """.trimIndent()
+
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
+
+        val plan = json.decodeFromString<PlanValue>(melding)
+
+        plan.id shouldBe "09c9248f-76d1-40e9-9399-975a452b6e9a"
     }
 }

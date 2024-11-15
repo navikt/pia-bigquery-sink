@@ -1,6 +1,8 @@
 package no.nav.pia.bigquery.sink
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.google.cloud.bigquery.TableId
+import no.nav.pia.bigquery.sink.datadefenisjoner.DATASET_ID
 import no.nav.pia.bigquery.sink.datadefenisjoner.schemaRegistry
 import no.nav.pia.bigquery.sink.konfigurasjon.Clusters
 import no.nav.pia.bigquery.sink.konfigurasjon.NaisEnvironment
@@ -12,6 +14,10 @@ import org.slf4j.LoggerFactory
 class BigQueryService(
     private val client: BigQueryClient,
 ) {
+    companion object {
+        val log: Logger = LoggerFactory.getLogger(BigQueryService::class.java)
+    }
+
     fun migrate(registry: Registry) {
         log.info("Kjører migrering")
         val tableInfoById = registry.mapValues { it.value.toTableInfo(registry.datasetId) }
@@ -56,7 +62,22 @@ class BigQueryService(
         }
     }
 
-    companion object {
-        val log: Logger = LoggerFactory.getLogger(BigQueryService::class.java)
+    fun insertPlan(plan: SamarbeidsplanConsumer.PlanValue) {
+        val planTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-bigquery-v1")
+        val temaTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-tema-bigquery-v1")
+        val innholdTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-innhold-bigquery-v1")
+
+        runCatching {
+            client.insert(planTableId, plan.tilRad())
+            plan.temaer.forEach { tema ->
+                client.insert(temaTableId, tema.tilRad())
+                tema.innhold.forEach { innhold ->
+                    client.insert(innholdTableId, innhold.tilRad())
+                }
+            }
+        }.onFailure { exception ->
+            log.error("insert feilet: ${exception.message}")
+            throw exception
+        }
     }
 }

@@ -27,15 +27,13 @@ fun main() {
 
     val kafkaConfig = KafkaConfig()
 
-    val bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService)
-
     kafkaConfig.generelleTopics.forEach { topic ->
-        PiaKafkaLytter(kafkaConfig = kafkaConfig, bigQueryHendelseMottak = bigQueryHendelseMottak, topic = topic).apply {
+        PiaKafkaLytter(kafkaConfig = kafkaConfig, bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService), topic = topic).apply {
             run()
         }.also { HelseMonitor.leggTilHelsesjekk(it) }
     }
 
-    SamarbeidsplanConsumer(kafkaConfig = kafkaConfig, bigQueryHendelseMottak = bigQueryHendelseMottak).apply {
+    SamarbeidsplanConsumer(kafkaConfig = kafkaConfig, bigQueryService = bigQueryService).apply {
         run()
     }.also { HelseMonitor.leggTilHelsesjekk(it) }
 

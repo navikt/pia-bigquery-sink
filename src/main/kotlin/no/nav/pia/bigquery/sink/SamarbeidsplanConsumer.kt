@@ -1,5 +1,6 @@
 package no.nav.pia.bigquery.sink
 
+import com.google.cloud.bigquery.InsertAllRequest
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -8,6 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import no.nav.pia.bigquery.sink.datadefenisjoner.toRowToInsert
 import no.nav.pia.bigquery.sink.helse.Helse
 import no.nav.pia.bigquery.sink.helse.Helsesjekk
 import no.nav.pia.bigquery.sink.konfigurasjon.KafkaConfig
@@ -22,7 +24,7 @@ import kotlin.coroutines.CoroutineContext
 
 class SamarbeidsplanConsumer(
     kafkaConfig: KafkaConfig,
-    private val bigQueryHendelseMottak: BigQueryHendelseMottak,
+    private val bigQueryService: BigQueryService,
 ) : CoroutineScope,
     Helsesjekk {
     private val log: Logger = LoggerFactory.getLogger(this::class.java)
@@ -62,9 +64,8 @@ class SamarbeidsplanConsumer(
                         records.forEach { melding ->
                             try {
                                 val plan = json.decodeFromString<PlanValue>(melding.value())
-                                log.info("Mottok PlanValue med id: ${plan.id}, gjør ingenting")
-//                                    val payload: JsonNode = "TODO"
-//                                    bigQueryHendelseMottak.onPacket(SchemaDefinition.Id.of(topic.navn), payload)
+                                log.info("Mottok plan med id: ${plan.id}")
+                                bigQueryService.insertPlan(plan = plan)
                             } catch (e: IllegalArgumentException) {
                                 log.error(
                                     "Mottok feil formatert kafkamelding i topic: ${topic.navnMedNamespace}, melding: '${melding.value()}'",
@@ -106,7 +107,14 @@ class SamarbeidsplanConsumer(
         val samarbeidId: Int,
         val sistEndret: LocalDateTime,
         val temaer: List<TemaValue>,
-    )
+    ) {
+        fun tilRad(): InsertAllRequest.RowToInsert =
+            mapOf(
+                "id" to id,
+                "samarbeidId" to samarbeidId,
+                "endret" to sistEndret,
+            ).toRowToInsert()
+    }
 
     @Serializable
     data class TemaValue(
@@ -114,15 +122,26 @@ class SamarbeidsplanConsumer(
         val navn: String,
         val inkludert: Boolean,
         val innhold: List<InnholdValue>,
-    )
+    ) {
+        fun tilRad(): InsertAllRequest.RowToInsert =
+            mapOf(
+                "id" to id,
+                "navn" to navn,
+                "inkludert" to inkludert,
+            ).toRowToInsert()
+    }
 
     @Serializable
     data class InnholdValue(
         val id: Int,
         val navn: String,
         val inkludert: Boolean,
-//        val status: PlanUndertema.Status?,
-//        val startDato: LocalDate?,
-//        val sluttDato: LocalDate?,
-    )
+    ) {
+        fun tilRad(): InsertAllRequest.RowToInsert =
+            mapOf(
+                "id" to id,
+                "navn" to navn,
+                "inkludert" to inkludert,
+            ).toRowToInsert()
+    }
 }
