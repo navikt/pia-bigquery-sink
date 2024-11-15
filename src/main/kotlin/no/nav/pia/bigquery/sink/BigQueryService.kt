@@ -62,7 +62,7 @@ class BigQueryService(
         }
     }
 
-    fun insertPlan(plan: SamarbeidsplanConsumer.PlanValue) {
+    fun insertPlan(plan: SamarbeidsplanConsumer.PlanKafkamelding) {
         val planTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-bigquery-v1")
         val temaTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-tema-bigquery-v1")
         val innholdTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-innhold-bigquery-v1")

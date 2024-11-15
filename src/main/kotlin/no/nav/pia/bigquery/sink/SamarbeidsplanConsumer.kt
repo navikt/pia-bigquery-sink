@@ -64,7 +64,7 @@ class SamarbeidsplanConsumer(
 
                         records.forEach { melding ->
                             try {
-                                val plan = json.decodeFromString<PlanValue>(melding.value())
+                                val plan = json.decodeFromString<PlanKafkamelding>(melding.value())
                                 log.info("Mottok plan med id: ${plan.id}")
                                 bigQueryService.insertPlan(plan = plan)
                             } catch (e: IllegalArgumentException) {
@@ -103,11 +103,11 @@ class SamarbeidsplanConsumer(
     override fun helse() = if (isRunning()) Helse.UP else Helse.DOWN
 
     @Serializable
-    data class PlanValue(
+    data class PlanKafkamelding(
         val id: String,
         val samarbeidId: Int,
         val sistEndret: LocalDateTime,
-        val temaer: List<TemaValue>,
+        val temaer: List<TemaKafkamelding>,
     ) {
         fun tilRad(): InsertAllRequest.RowToInsert =
             mapOf(
@@ -119,11 +119,11 @@ class SamarbeidsplanConsumer(
     }
 
     @Serializable
-    data class TemaValue(
+    data class TemaKafkamelding(
         val id: Int,
         val navn: String,
         val inkludert: Boolean,
-        val innhold: List<InnholdValue>,
+        val innhold: List<InnholdKafkamelding>,
     ) {
         fun tilRad(planId: String): InsertAllRequest.RowToInsert =
             mapOf(
@@ -135,13 +135,13 @@ class SamarbeidsplanConsumer(
     }
 
     @Serializable
-    data class InnholdValue(
+    data class InnholdKafkamelding(
         val id: Int,
         val navn: String,
         val inkludert: Boolean,
-        val status: Status?,
-        val startDato: LocalDate?,
-        val sluttDato: LocalDate?,
+        val status: Status? = null,
+        val startDato: LocalDate? = null,
+        val sluttDato: LocalDate? = null,
     ) {
         enum class Status {
             PLANLAGT,

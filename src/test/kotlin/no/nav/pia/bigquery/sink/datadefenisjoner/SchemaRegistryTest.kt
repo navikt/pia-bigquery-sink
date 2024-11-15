@@ -5,7 +5,7 @@ import com.google.cloud.bigquery.DatasetId
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
 import kotlinx.serialization.json.Json
-import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanValue
+import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanKafkamelding
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`behovsvurdering-bigquery-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
@@ -347,7 +347,7 @@ internal class SchemaRegistryTest {
             ignoreUnknownKeys = true
         }
 
-        val plan = json.decodeFromString<PlanValue>(melding)
+        val plan = json.decodeFromString<PlanKafkamelding>(melding)
 
         plan.id shouldBe "09c9248f-76d1-40e9-9399-975a452b6e9a"
     }
