@@ -61,6 +61,10 @@ val `samarbeidsplan-tema-bigquery-v1` = object : SchemaDefinition {
                     required()
                     description("Om et tema er inkludert i en plan eller ikke")
                 }
+                string("planId") {
+                    required()
+                    description("Id til samarbeidsplan")
+                }
             }
         }
 
@@ -87,6 +91,19 @@ val `samarbeidsplan-innhold-bigquery-v1` = object : SchemaDefinition {
                 boolean("inkludert") {
                     required()
                     description("Om et tema er inkludert i en plan eller ikke")
+                }
+                integer("temaId") {
+                    required()
+                    description("Id til et tema i en plan")
+                }
+                string("status") {
+                    description("status på innhold i Plan")
+                }
+                timestamp("startDato") {
+                    description("Dato for når et innhold er planlagt å starte")
+                }
+                timestamp("sluttDato") {
+                    description("Dato for når et innhold er planlagt å avsluttes")
                 }
             }
         }

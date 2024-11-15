@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -124,11 +125,12 @@ class SamarbeidsplanConsumer(
         val inkludert: Boolean,
         val innhold: List<InnholdValue>,
     ) {
-        fun tilRad(): InsertAllRequest.RowToInsert =
+        fun tilRad(planId: String): InsertAllRequest.RowToInsert =
             mapOf(
                 "id" to id,
                 "navn" to navn,
                 "inkludert" to inkludert,
+                "planId" to planId,
             ).toRowToInsert()
     }
 
@@ -137,12 +139,26 @@ class SamarbeidsplanConsumer(
         val id: Int,
         val navn: String,
         val inkludert: Boolean,
+        val status: Status?,
+        val startDato: LocalDate?,
+        val sluttDato: LocalDate?,
     ) {
-        fun tilRad(): InsertAllRequest.RowToInsert =
+        enum class Status {
+            PLANLAGT,
+            PÅGÅR,
+            FULLFØRT,
+            AVBRUTT,
+        }
+
+        fun tilRad(temaId: Int): InsertAllRequest.RowToInsert =
             mapOf(
                 "id" to id,
                 "navn" to navn,
                 "inkludert" to inkludert,
+                "status" to status,
+                "startDato" to startDato,
+                "sluttdato" to startDato,
+                "temaId" to temaId,
             ).toRowToInsert()
     }
 }

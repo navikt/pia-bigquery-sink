@@ -70,9 +70,9 @@ class BigQueryService(
         runCatching {
             client.insert(planTableId, plan.tilRad())
             plan.temaer.forEach { tema ->
-                client.insert(temaTableId, tema.tilRad())
+                client.insert(temaTableId, tema.tilRad(planId = plan.id))
                 tema.innhold.forEach { innhold ->
-                    client.insert(innholdTableId, innhold.tilRad())
+                    client.insert(innholdTableId, innhold.tilRad(temaId = tema.id))
                 }
             }
         }.onFailure { exception ->
