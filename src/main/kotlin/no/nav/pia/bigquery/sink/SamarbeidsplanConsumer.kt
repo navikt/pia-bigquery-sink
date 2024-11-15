@@ -80,7 +80,7 @@ class SamarbeidsplanConsumer(
                             }
                         }
 
-                        log.info("Behandlet ${records.count()} meldinger i $consumer (topic '${topic.navnMedNamespace}') ")
+                        log.info("Behandlet ${records.count()} meldinger i $consumer (topic '${topic.navn}') ")
                         consumer.commitSync()
                     } catch (e: RetriableException) {
                         log.warn("Had a retriable exception in $consumer (topic '${topic.navnMedNamespace}'), retrying", e)
