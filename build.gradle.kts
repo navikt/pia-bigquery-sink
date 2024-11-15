@@ -1,5 +1,5 @@
 val ktorVersion = "3.0.1"
-val iaFellesVersion = "1.7.1"
+val iaFellesVersion = "1.9.0-RC2"
 val prometheusVersion = "1.13.6"
 val bigQueryVersion = "2.43.3"
 val kafkaVersion = "3.8.1"

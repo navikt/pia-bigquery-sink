@@ -1,6 +1,10 @@
 package no.nav.pia.bigquery.sink
 
 import com.google.cloud.bigquery.InsertAllRequest
+import ia.felles.integrasjoner.kafkameldinger.eksport.InnholdMelding
+import ia.felles.integrasjoner.kafkameldinger.eksport.InnholdStatus
+import ia.felles.integrasjoner.kafkameldinger.eksport.PlanMelding
+import ia.felles.integrasjoner.kafkameldinger.eksport.TemaMelding
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -104,11 +108,11 @@ class SamarbeidsplanConsumer(
 
     @Serializable
     data class PlanKafkamelding(
-        val id: String,
-        val samarbeidId: Int,
-        val sistEndret: LocalDateTime,
-        val temaer: List<TemaKafkamelding>,
-    ) {
+        override val id: String,
+        override val samarbeidId: Int,
+        override val sistEndret: LocalDateTime,
+        override val temaer: List<TemaKafkamelding>,
+    ) : PlanMelding {
         fun tilRad(): InsertAllRequest.RowToInsert =
             mapOf(
                 "id" to id,
@@ -120,11 +124,11 @@ class SamarbeidsplanConsumer(
 
     @Serializable
     data class TemaKafkamelding(
-        val id: Int,
-        val navn: String,
-        val inkludert: Boolean,
-        val innhold: List<InnholdKafkamelding>,
-    ) {
+        override val id: Int,
+        override val navn: String,
+        override val inkludert: Boolean,
+        override val innhold: List<InnholdKafkamelding>,
+    ) : TemaMelding {
         fun tilRad(planId: String): InsertAllRequest.RowToInsert =
             mapOf(
                 "id" to id,
@@ -136,20 +140,13 @@ class SamarbeidsplanConsumer(
 
     @Serializable
     data class InnholdKafkamelding(
-        val id: Int,
-        val navn: String,
-        val inkludert: Boolean,
-        val status: Status? = null,
-        val startDato: LocalDate? = null,
-        val sluttDato: LocalDate? = null,
-    ) {
-        enum class Status {
-            PLANLAGT,
-            PÅGÅR,
-            FULLFØRT,
-            AVBRUTT,
-        }
-
+        override val id: Int,
+        override val navn: String,
+        override val inkludert: Boolean,
+        override val status: InnholdStatus? = null,
+        override val startDato: LocalDate? = null,
+        override val sluttDato: LocalDate? = null,
+    ) : InnholdMelding {
         fun tilRad(temaId: Int): InsertAllRequest.RowToInsert {
             val obligatoriskeFelter = mapOf(
                 "id" to id,
