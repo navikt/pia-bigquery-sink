@@ -166,7 +166,7 @@ class SamarbeidsplanConsumer(
                 ).toRowToInsert()
             } else if (inkludert) {
                 log.warn(
-                    "Innhold er inkludert, men felter er ikke rett status='$status', startDato='$startDato', sluttDato'$sluttDato'. Hopper over melding..",
+                    "Innhold er inkludert for id=$id i tema=$temaId, men felter er ikke rett status='$status', startDato='$startDato', sluttDato'$sluttDato'. Hopper over melding..",
                 )
                 obligatoriskeFelter.toRowToInsert()
             } else {
