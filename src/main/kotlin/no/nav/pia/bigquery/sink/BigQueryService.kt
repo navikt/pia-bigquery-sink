@@ -76,7 +76,9 @@ class BigQueryService(
                 }
             }
         }.onFailure { exception ->
-            log.error("insert feilet for planID '${plan.id}' og samarbeid '${plan.samarbeidId}' - feilmelding: ${exception.message}")
+            log.error(
+                "insert feilet for planID '${plan.id}' og samarbeid '${plan.samarbeidId}' - feilmelding: ${exception.message} - plan: $plan",
+            )
             throw exception
         }
     }
