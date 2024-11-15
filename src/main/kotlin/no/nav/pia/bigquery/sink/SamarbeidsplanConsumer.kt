@@ -150,15 +150,25 @@ class SamarbeidsplanConsumer(
             AVBRUTT,
         }
 
-        fun tilRad(temaId: Int): InsertAllRequest.RowToInsert =
-            mapOf(
+        fun tilRad(temaId: Int): InsertAllRequest.RowToInsert {
+            val obligatoriskeFelter = mapOf(
                 "id" to id,
+                "temaId" to temaId,
                 "navn" to navn,
                 "inkludert" to inkludert,
-                "status" to status,
-                "startDato" to startDato,
-                "sluttdato" to startDato,
-                "temaId" to temaId,
-            ).toRowToInsert()
+            )
+
+            return if (!inkludert) {
+                obligatoriskeFelter.toRowToInsert()
+            } else {
+                obligatoriskeFelter.plus(
+                    mapOf(
+                        "status" to status,
+                        "startDato" to startDato,
+                        "sluttdato" to startDato,
+                    ),
+                ).toRowToInsert()
+            }
+        }
     }
 }
