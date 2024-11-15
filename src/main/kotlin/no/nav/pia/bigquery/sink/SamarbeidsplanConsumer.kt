@@ -113,6 +113,7 @@ class SamarbeidsplanConsumer(
                 "id" to id,
                 "samarbeidId" to samarbeidId,
                 "endret" to sistEndret.toString(),
+                "tidsstempel" to "AUTO",
             ).toRowToInsert()
     }
 
