@@ -14,6 +14,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import no.nav.pia.bigquery.sink.BigQueryService.Companion.log
 import no.nav.pia.bigquery.sink.datadefenisjoner.toRowToInsert
 import no.nav.pia.bigquery.sink.helse.Helse
 import no.nav.pia.bigquery.sink.helse.Helsesjekk
@@ -155,9 +156,7 @@ class SamarbeidsplanConsumer(
                 "inkludert" to inkludert,
             )
 
-            return if (!inkludert) {
-                obligatoriskeFelter.toRowToInsert()
-            } else {
+            return if (inkludert && status != null && startDato != null && sluttDato != null) {
                 obligatoriskeFelter.plus(
                     mapOf(
                         "status" to status.toString(),
@@ -165,6 +164,13 @@ class SamarbeidsplanConsumer(
                         "sluttdato" to startDato.toString(),
                     ),
                 ).toRowToInsert()
+            } else if (inkludert) {
+                log.warn(
+                    "Innhold er inkludert, men felter er ikke rett status='$status', startDato='$startDato', sluttDato'$sluttDato'. Hopper over melding..",
+                )
+                obligatoriskeFelter.toRowToInsert()
+            } else {
+                obligatoriskeFelter.toRowToInsert()
             }
         }
     }
