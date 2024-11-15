@@ -99,10 +99,10 @@ val `samarbeidsplan-innhold-bigquery-v1` = object : SchemaDefinition {
                 string("status") {
                     description("status på innhold i Plan")
                 }
-                timestamp("startDato") {
+                date("startDato") {
                     description("Dato for når et innhold er planlagt å starte")
                 }
-                timestamp("sluttDato") {
+                date("sluttDato") {
                     description("Dato for når et innhold er planlagt å avsluttes")
                 }
             }
