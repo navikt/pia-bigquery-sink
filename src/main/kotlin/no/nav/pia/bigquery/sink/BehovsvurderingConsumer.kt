@@ -66,8 +66,8 @@ class BehovsvurderingConsumer(
                         records.forEach { melding ->
                             try {
                                 val behovsvurdering = json.decodeFromString<BehovsvurderingKafkamelding>(melding.value())
-                                log.info("Mottok plan med id: ${behovsvurdering.id}")
-                                bigQueryService.insertBehovsvurdering(behovsvurdering = behovsvurdering)
+                                log.info("Mottok behovsvurdering med id: ${behovsvurdering.id}")
+                                bigQueryService.insert(behovsvurdering = behovsvurdering)
                             } catch (e: IllegalArgumentException) {
                                 log.error(
                                     "Mottok feil formatert kafkamelding i topic: ${topic.navnMedNamespace}, melding: '${melding.value()}'",

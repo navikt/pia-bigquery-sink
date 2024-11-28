@@ -64,7 +64,7 @@ class BigQueryService(
         }
     }
 
-    fun insertPlan(plan: PlanKafkamelding) {
+    fun insert(plan: PlanKafkamelding) {
         val planTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-bigquery-v1")
         val temaTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-tema-bigquery-v1")
         val innholdTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-innhold-bigquery-v1")
@@ -85,7 +85,7 @@ class BigQueryService(
         }
     }
 
-    fun insertBehovsvurdering(behovsvurdering: BehovsvurderingKafkamelding) {
+    fun insert(behovsvurdering: BehovsvurderingKafkamelding) {
         val tableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "behovsvurdering-bigquery-v1")
 
         runCatching {

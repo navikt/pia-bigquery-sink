@@ -71,7 +71,7 @@ class SamarbeidsplanConsumer(
                             try {
                                 val plan = json.decodeFromString<PlanKafkamelding>(melding.value())
                                 log.info("Mottok plan med id: ${plan.id}")
-                                bigQueryService.insertPlan(plan = plan)
+                                bigQueryService.insert(plan = plan)
                             } catch (e: IllegalArgumentException) {
                                 log.error(
                                     "Mottok feil formatert kafkamelding i topic: ${topic.navnMedNamespace}, melding: '${melding.value()}'",
