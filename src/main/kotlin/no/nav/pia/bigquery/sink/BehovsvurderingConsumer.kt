@@ -127,7 +127,7 @@ class BehovsvurderingConsumer(
                 "samarbeidId" to samarbeidId,
                 "saksnummer" to saksnummer,
                 "opprettetAv" to opprettetAv,
-                "opprettet" to opprettet,
+                "opprettet" to opprettet.toString(),
                 "harMinstEttSvar" to harMinstEttSvar,
                 "tidsstempel" to "AUTO",
             )
