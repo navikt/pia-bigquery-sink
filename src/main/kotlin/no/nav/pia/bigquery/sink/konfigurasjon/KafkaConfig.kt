@@ -1,7 +1,6 @@
 package no.nav.pia.bigquery.sink.konfigurasjon
 
 import no.nav.pia.bigquery.sink.konfigurasjon.KafkaConfig.Companion.CLIENT_ID
-import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.BEHOVSVURDERING_TOPIC
 import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.IA_SAK_LEVERANSE_TOPIC
 import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.IA_SAK_STATISTIKK_TOPIC
 import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.SAMARBEID_TOPIC
@@ -23,7 +22,6 @@ class KafkaConfig(
     val generelleTopics = listOf(
         IA_SAK_STATISTIKK_TOPIC,
         IA_SAK_LEVERANSE_TOPIC,
-        BEHOVSVURDERING_TOPIC,
         SAMARBEID_TOPIC,
     )
 

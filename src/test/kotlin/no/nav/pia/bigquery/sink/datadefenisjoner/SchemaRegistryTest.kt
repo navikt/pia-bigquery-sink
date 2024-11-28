@@ -5,8 +5,8 @@ import com.google.cloud.bigquery.DatasetId
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
 import kotlinx.serialization.json.Json
+import no.nav.pia.bigquery.sink.BehovsvurderingConsumer.BehovsvurderingKafkamelding
 import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanKafkamelding
-import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`behovsvurdering-bigquery-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeid-bigquery-v1`
@@ -210,28 +210,27 @@ internal class SchemaRegistryTest {
 
     @Test
     internal fun `kan transformere behovsvurdering melding`() {
-        val json = ObjectMapper().readTree(
+        val melding =
             """
             {
-              "id": "822ce02f-e5d5-430d-b0f5-b14669ef2701",
-              "orgnr": "912345678",
-              "status": "AVSLUTTET",
-              "opprettetAv": "Z990233",
-              "opprettet": "2024-07-30T13:13:36.851040",
-              "endret": "2024-07-30T13:16:06.021655",
-              "samarbeidId": 5
+                "id": "ada47eaf-8171-44ef-91b7-12f776d70545",
+                "orgnr": "315901332",
+                "status": "AVSLUTTET",
+                "samarbeidId": 427,
+                "saksnummer": "01JDMA0Z3A50MN1V2C2GGD1YG9",
+                "opprettetAv": "Z994459",
+                "opprettet": "2024-11-26T14:19:59.247777",
+                "harMinstEttSvar": false
             }
-            """.trimIndent(),
-        )
+            """.trimIndent()
 
-        val content = `behovsvurdering-bigquery-v1`.transform(json).content
-        content.shouldContain("id" to "822ce02f-e5d5-430d-b0f5-b14669ef2701")
-        content.shouldContain("orgnr" to "912345678")
-        content.shouldContain("status" to "AVSLUTTET")
-        content.shouldContain("opprettetAv" to "Z990233")
-        content.shouldContain("opprettet" to "2024-07-30T11:13:36.851040")
-        content.shouldContain("endret" to "2024-07-30T11:16:06.021655")
-        content.shouldContain("samarbeidId" to 5)
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
+
+        val content = json.decodeFromString<BehovsvurderingKafkamelding>(melding)
+
+        content.id shouldBe "ada47eaf-8171-44ef-91b7-12f776d70545"
     }
 
     @Test

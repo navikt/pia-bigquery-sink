@@ -37,6 +37,10 @@ fun main() {
         run()
     }.also { HelseMonitor.leggTilHelsesjekk(it) }
 
+    BehovsvurderingConsumer(kafkaConfig = kafkaConfig, bigQueryService = bigQueryService).apply {
+        run()
+    }.also { HelseMonitor.leggTilHelsesjekk(it) }
+
     embeddedServer(Netty, port = 8080, module = Application::myApplicationModule).also {
         // https://doc.nais.io/nais-application/good-practices/#handles-termination-gracefully
         it.addShutdownHook {

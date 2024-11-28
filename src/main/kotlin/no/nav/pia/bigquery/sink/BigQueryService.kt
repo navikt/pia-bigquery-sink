@@ -2,6 +2,8 @@ package no.nav.pia.bigquery.sink
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.TableId
+import no.nav.pia.bigquery.sink.BehovsvurderingConsumer.BehovsvurderingKafkamelding
+import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanKafkamelding
 import no.nav.pia.bigquery.sink.datadefenisjoner.DATASET_ID
 import no.nav.pia.bigquery.sink.datadefenisjoner.schemaRegistry
 import no.nav.pia.bigquery.sink.konfigurasjon.Clusters
@@ -62,7 +64,7 @@ class BigQueryService(
         }
     }
 
-    fun insertPlan(plan: SamarbeidsplanConsumer.PlanKafkamelding) {
+    fun insertPlan(plan: PlanKafkamelding) {
         val planTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-bigquery-v1")
         val temaTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-tema-bigquery-v1")
         val innholdTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-innhold-bigquery-v1")
@@ -78,6 +80,19 @@ class BigQueryService(
         }.onFailure { exception ->
             log.error(
                 "insert feilet for planID '${plan.id}' og samarbeid '${plan.samarbeidId}' - feilmelding: ${exception.message} - plan: $plan",
+            )
+            throw exception
+        }
+    }
+
+    fun insertBehovsvurdering(behovsvurdering: BehovsvurderingKafkamelding) {
+        val tableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "behovsvurdering-bigquery-v1")
+
+        runCatching {
+            client.insert(tableId = tableId, behovsvurdering.tilRad())
+        }.onFailure { exception ->
+            log.error(
+                "insert feilet for behovsvurdering '${behovsvurdering.id}' og for samarbeid '${behovsvurdering.samarbeidId}' - feilmelding: ${exception.message} - behovsvurdering: $behovsvurdering",
             )
             throw exception
         }

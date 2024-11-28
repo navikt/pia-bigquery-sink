@@ -3,11 +3,8 @@ package no.nav.pia.bigquery.sink.datadefenisjoner.fia
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.InsertAllRequest
 import com.google.cloud.bigquery.TableDefinition
-import no.nav.pia.bigquery.sink.asUtcDateTime
-import no.nav.pia.bigquery.sink.datadefenisjoner.toRowToInsert
 import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import no.nav.pia.bigquery.sink.schema.standardTableDefinition
-import no.nav.pia.bigquery.sink.use
 
 val `behovsvurdering-bigquery-v1` = object : SchemaDefinition {
     override val schemaId: SchemaDefinition.Id = SchemaDefinition.Id(
@@ -30,6 +27,10 @@ val `behovsvurdering-bigquery-v1` = object : SchemaDefinition {
                     required()
                     description("Status som viser om behovsvurdering er opprettet, påbegynt eller avsluttet")
                 }
+                integer("samarbeidId") {
+                    required()
+                    description("Id til samarbeidet behovsvurderingen er knyttet til")
+                }
                 string("opprettetAv") {
                     required()
                     description("Navident til rådgiver som opprettet behovsvurderingen")
@@ -38,15 +39,34 @@ val `behovsvurdering-bigquery-v1` = object : SchemaDefinition {
                     required()
                     description("Tidspunkt for opprettelse av behovsvurdering")
                 }
-                timestamp("endret") {
+                boolean("harMinstEttSvar") {
                     required()
+                    description("Om behovsvurderingen har fått minst ett svar")
+                }
+                timestamp("endret") {
                     description(
-                        "Tidspunkt for sist endring av behovsvurdering, settes til opprettetTidspunkt ved sending til Bigquery om ikke eksiterende",
+                        "Tidspunkt for sist endring av behovsvurdering",
                     )
                 }
-                integer("samarbeidId") {
-                    required()
-                    description("Id til samarbeidet behovsvurderingen er knyttet til")
+                timestamp("påbegynt") {
+                    description(
+                        "Tidspunkt for når behovsvurderingen ble påbegynt",
+                    )
+                }
+                timestamp("fullført") {
+                    description(
+                        "Tidspunkt for når behovsvurderingen ble fullført",
+                    )
+                }
+                timestamp("førsteSvarMotatt") {
+                    description(
+                        "Tidspunkt for når behovsvurderingen fikk første svar",
+                    )
+                }
+                timestamp("sisteSvarMottatt") {
+                    description(
+                        "Tidspunkt for når behovsvurderingen fikk det siste svaret",
+                    )
                 }
                 timestamp("tidsstempel") {
                     required()
@@ -55,15 +75,10 @@ val `behovsvurdering-bigquery-v1` = object : SchemaDefinition {
             }
         }
 
+    @Deprecated(
+        "Ikke bruk denne transformasjonen",
+        ReplaceWith("Kafka-consumer som bruker Serializable og ikke denne transformasjonen"),
+    )
     override fun transform(payload: JsonNode): InsertAllRequest.RowToInsert =
-        mapOf(
-            payload.use("id") { textValue() },
-            payload.use("orgnr") { textValue() },
-            payload.use("status") { textValue() },
-            payload.use("opprettetAv") { textValue() },
-            payload.use("opprettet") { asUtcDateTime() },
-            payload.use("endret") { asUtcDateTime() },
-            payload.use("samarbeidId") { intValue() },
-            "tidsstempel" to "AUTO",
-        ).toRowToInsert()
+        throw IllegalArgumentException("Transformasjon er Deprecated for ${schemaId.name}")
 }
