@@ -31,6 +31,10 @@ val `behovsvurdering-bigquery-v1` = object : SchemaDefinition {
                     required()
                     description("Id til samarbeidet behovsvurderingen er knyttet til")
                 }
+                string("saksnummer") {
+                    required()
+                    description("Saksnummer")
+                }
                 string("opprettetAv") {
                     required()
                     description("Navident til rådgiver som opprettet behovsvurderingen")
