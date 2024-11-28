@@ -134,9 +134,9 @@ class BehovsvurderingConsumer(
 
             // Optional felter
             endret?.let { felter["endret"] = it.toString() }
-            påbegynt?.let { felter["påbegynt"] = it.toString() }
-            fullført?.let { felter["fullført"] = it.toString() }
-            førsteSvarMotatt?.let { felter["førsteSvarMotatt"] = it.toString() }
+            påbegynt?.let { felter["pabegynt"] = it.toString() }
+            fullført?.let { felter["fullfort"] = it.toString() }
+            førsteSvarMotatt?.let { felter["forsteSvarMottatt"] = it.toString() }
             sisteSvarMottatt?.let { felter["sisteSvarMottatt"] = it.toString() }
 
             return felter.toRowToInsert()
