@@ -80,10 +80,10 @@ class SamarbeidsplanConsumer(
                             }
                         }
 
-                        log.info("Behandlet ${records.count()} meldinger i $consumer (topic '${topic.navn}') ")
+                        log.info("Behandlet ${records.count()} meldinger i topic '${topic.navn}'")
                         consumer.commitSync()
                     } catch (e: RetriableException) {
-                        log.warn("Had a retriable exception in $consumer (topic '${topic.navnMedNamespace}'), retrying", e)
+                        log.warn("Had a retriable exception in topic '${topic.navnMedNamespace}', retrying", e)
                     } catch (e: Exception) {
                         log.error("Exception is shutting down kafka listner for ${topic.navnMedNamespace}", e)
                         job.cancel(CancellationException(e.message))

@@ -71,17 +71,35 @@ class BigQueryService(
 
         runCatching {
             client.insert(planTableId, plan.tilRad())
-            plan.temaer.forEach { tema ->
-                client.insert(temaTableId, tema.tilRad(planId = plan.id))
-                tema.innhold.forEach { innhold ->
-                    client.insert(innholdTableId, innhold.tilRad(temaId = tema.id))
-                }
-            }
         }.onFailure { exception ->
             log.error(
-                "insert feilet for planID '${plan.id}' og samarbeid '${plan.samarbeidId}' - feilmelding: ${exception.message} - plan: $plan",
+                "insert feilet for planID '${plan.id}' - feilmelding: ${exception.message} - plan: $plan",
             )
             throw exception
+        }
+
+        plan.temaer.forEach { tema ->
+            runCatching {
+                client.insert(temaTableId, tema.tilRad(planId = plan.id))
+            }.onFailure { exception ->
+                log.error(
+                    "insert feilet for tema: '${tema.id}' knyttet til plan: '${plan.id}' - feilmelding: ${exception.message} - plan: $plan",
+                )
+                throw exception
+            }
+        }
+
+        plan.temaer.forEach { tema ->
+            tema.innhold.forEach { innhold ->
+                runCatching {
+                    client.insert(innholdTableId, innhold.tilRad(temaId = tema.id))
+                }.onFailure { exception ->
+                    log.error(
+                        "insert feilet for innhold: '${innhold.id}' knyttet til tema: '${tema.id}', knyttet til plan: '${plan.id}' - feilmelding: ${exception.message} - plan: $plan",
+                    )
+                    throw exception
+                }
+            }
         }
     }
 
