@@ -62,7 +62,7 @@ val `behovsvurdering-bigquery-v1` = object : SchemaDefinition {
                         "Tidspunkt for når behovsvurderingen ble fullført",
                     )
                 }
-                timestamp("forsteSvarMotatt") {
+                timestamp("forsteSvarMottatt") {
                     description(
                         "Tidspunkt for når behovsvurderingen fikk første svar",
                     )
