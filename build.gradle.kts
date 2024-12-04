@@ -77,9 +77,9 @@ dependencies {
     constraints {
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.1.114.Final")
+                require("4.1.115.Final")
             }
-            because("From Ktor version: 2.3.5 -> io.netty:netty-codec-http2 vulnerable to HTTP/2 Rapid Reset Attack")
+            because("Ktor 3.0.1 inneholder 4.1.114.Final som er sårbar for DoS")
         }
         testImplementation("org.apache.commons:commons-compress") {
             version {
