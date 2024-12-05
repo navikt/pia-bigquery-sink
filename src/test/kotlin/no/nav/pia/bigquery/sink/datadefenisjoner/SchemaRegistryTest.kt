@@ -6,7 +6,7 @@ import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
 import kotlinx.serialization.json.Json
 import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanKafkamelding
-import no.nav.pia.bigquery.sink.SpørreundersøkelseConsumer.BehovsvurderingKafkamelding
+import no.nav.pia.bigquery.sink.SpørreundersøkelseConsumer.SpørreundersøkelseEksport
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeid-bigquery-v1`
@@ -229,7 +229,7 @@ internal class SchemaRegistryTest {
             ignoreUnknownKeys = true
         }
 
-        val content = json.decodeFromString<BehovsvurderingKafkamelding>(melding)
+        val content = json.decodeFromString<SpørreundersøkelseEksport>(melding)
 
         content.id shouldBe "ada47eaf-8171-44ef-91b7-12f776d70545"
     }

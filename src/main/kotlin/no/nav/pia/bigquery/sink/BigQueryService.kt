@@ -3,8 +3,12 @@ package no.nav.pia.bigquery.sink
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.TableId
 import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanKafkamelding
-import no.nav.pia.bigquery.sink.SpørreundersøkelseConsumer.BehovsvurderingKafkamelding
+import no.nav.pia.bigquery.sink.SpørreundersøkelseConsumer.SpørreundersøkelseEksport
 import no.nav.pia.bigquery.sink.datadefenisjoner.DATASET_ID
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeidsplan-bigquery-v1`
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeidsplan-innhold-bigquery-v1`
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeidsplan-tema-bigquery-v1`
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`sporreundersokelse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.schemaRegistry
 import no.nav.pia.bigquery.sink.konfigurasjon.Clusters
 import no.nav.pia.bigquery.sink.konfigurasjon.NaisEnvironment
@@ -65,9 +69,22 @@ class BigQueryService(
     }
 
     fun insert(plan: PlanKafkamelding) {
-        val planTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-bigquery-v1")
-        val temaTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-tema-bigquery-v1")
-        val innholdTableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "samarbeidsplan-innhold-bigquery-v1")
+        val planTableId = TableId.of(
+            DATASET_ID.project,
+            DATASET_ID.dataset,
+            `samarbeidsplan-bigquery-v1`.schemaId.toTableName(),
+        )
+        val temaTableId = TableId.of(
+            DATASET_ID.project,
+            DATASET_ID.dataset,
+            `samarbeidsplan-tema-bigquery-v1`.schemaId.toTableName(),
+        )
+
+        val innholdTableId = TableId.of(
+            DATASET_ID.project,
+            DATASET_ID.dataset,
+            `samarbeidsplan-innhold-bigquery-v1`.schemaId.toTableName(),
+        )
 
         runCatching {
             client.insert(planTableId, plan.tilRad())
@@ -103,8 +120,8 @@ class BigQueryService(
         }
     }
 
-    fun insert(behovsvurdering: BehovsvurderingKafkamelding) {
-        val tableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, "behovsvurdering-bigquery-v1")
+    fun insert(behovsvurdering: SpørreundersøkelseEksport) {
+        val tableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, `sporreundersokelse-v1`.schemaId.toTableName())
 
         runCatching {
             client.insert(tableId = tableId, behovsvurdering.tilRad())

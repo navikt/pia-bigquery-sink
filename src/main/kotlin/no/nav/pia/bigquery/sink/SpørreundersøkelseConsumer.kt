@@ -65,7 +65,7 @@ class SpørreundersøkelseConsumer(
 
                         records.forEach { melding ->
                             try {
-                                val behovsvurdering = json.decodeFromString<BehovsvurderingKafkamelding>(melding.value())
+                                val behovsvurdering = json.decodeFromString<SpørreundersøkelseEksport>(melding.value())
                                 log.info("Mottok spørreundersøkelse av typen '${behovsvurdering.type}' med id: ${behovsvurdering.id}")
                                 bigQueryService.insert(behovsvurdering = behovsvurdering)
                             } catch (e: IllegalArgumentException) {
@@ -76,10 +76,10 @@ class SpørreundersøkelseConsumer(
                             }
                         }
 
-                        log.info("Behandlet ${records.count()} meldinger i $consumer (topic '${topic.navn}') ")
+                        log.info("Behandlet ${records.count()} meldinger i topic '${topic.navn}'")
                         consumer.commitSync()
                     } catch (e: RetriableException) {
-                        log.warn("Had a retriable exception in $consumer (topic '${topic.navnMedNamespace}'), retrying", e)
+                        log.warn("Had a retriable exception in topic '${topic.navnMedNamespace}', retrying", e)
                     } catch (e: Exception) {
                         log.error("Exception is shutting down kafka listner for ${topic.navnMedNamespace}", e)
                         job.cancel(CancellationException(e.message))
@@ -104,7 +104,7 @@ class SpørreundersøkelseConsumer(
     override fun helse() = if (isRunning()) Helse.UP else Helse.DOWN
 
     @Serializable
-    data class BehovsvurderingKafkamelding(
+    data class SpørreundersøkelseEksport(
         override val id: String,
         override val orgnr: String,
         override val type: String,

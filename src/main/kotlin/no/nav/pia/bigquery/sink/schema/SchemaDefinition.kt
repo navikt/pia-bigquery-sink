@@ -34,6 +34,8 @@ interface SchemaDefinition {
                 listOf(name, version).joinToString(SEPARATOR),
             )
 
+        fun toTableName(): String = "$name$SEPARATOR$version"
+
         companion object {
             private const val SEPARATOR = "-v"
             private const val REGEX_PATTERN = "^(.+)-v(\\d+)$"
