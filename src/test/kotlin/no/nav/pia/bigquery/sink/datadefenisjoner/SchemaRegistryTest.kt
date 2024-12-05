@@ -5,8 +5,8 @@ import com.google.cloud.bigquery.DatasetId
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
 import kotlinx.serialization.json.Json
-import no.nav.pia.bigquery.sink.BehovsvurderingConsumer.BehovsvurderingKafkamelding
 import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanKafkamelding
+import no.nav.pia.bigquery.sink.SpørreundersøkelseConsumer.BehovsvurderingKafkamelding
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeid-bigquery-v1`
@@ -209,12 +209,13 @@ internal class SchemaRegistryTest {
     }
 
     @Test
-    internal fun `kan transformere behovsvurdering melding`() {
+    internal fun `kan transformere spørreundersøkelse melding`() {
         val melding =
             """
             {
                 "id": "ada47eaf-8171-44ef-91b7-12f776d70545",
                 "orgnr": "315901332",
+                "type": "Behovsvurdering",
                 "status": "AVSLUTTET",
                 "samarbeidId": 427,
                 "saksnummer": "01JDMA0Z3A50MN1V2C2GGD1YG9",

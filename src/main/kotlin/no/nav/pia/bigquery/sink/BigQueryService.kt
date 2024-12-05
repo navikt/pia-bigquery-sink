@@ -2,8 +2,8 @@ package no.nav.pia.bigquery.sink
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.TableId
-import no.nav.pia.bigquery.sink.BehovsvurderingConsumer.BehovsvurderingKafkamelding
 import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanKafkamelding
+import no.nav.pia.bigquery.sink.SpørreundersøkelseConsumer.BehovsvurderingKafkamelding
 import no.nav.pia.bigquery.sink.datadefenisjoner.DATASET_ID
 import no.nav.pia.bigquery.sink.datadefenisjoner.schemaRegistry
 import no.nav.pia.bigquery.sink.konfigurasjon.Clusters

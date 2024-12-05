@@ -6,9 +6,9 @@ import com.google.cloud.bigquery.TableDefinition
 import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import no.nav.pia.bigquery.sink.schema.standardTableDefinition
 
-val `behovsvurdering-bigquery-v1` = object : SchemaDefinition {
+val `sporreundersokelse-v1` = object : SchemaDefinition {
     override val schemaId: SchemaDefinition.Id = SchemaDefinition.Id(
-        name = "behovsvurdering-bigquery",
+        name = "sporreundersokelse",
         version = 1,
     )
 
@@ -22,6 +22,10 @@ val `behovsvurdering-bigquery-v1` = object : SchemaDefinition {
                 string("orgnr") {
                     required()
                     description("Virksomhetsnummer (b.nummer)")
+                }
+                string("type") {
+                    required()
+                    description("Type spørreundersøkelse, f.eks. 'Behovsvurdering' eller 'Evaluering'")
                 }
                 string("status") {
                     required()

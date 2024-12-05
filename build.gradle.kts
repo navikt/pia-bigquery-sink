@@ -1,5 +1,5 @@
 val ktorVersion = "3.0.1"
-val iaFellesVersion = "1.9.2"
+val iaFellesVersion = "1.10.0-RC2"
 val prometheusVersion = "1.13.6"
 val bigQueryVersion = "2.43.3"
 val kafkaVersion = "3.8.1"
@@ -105,7 +105,7 @@ tasks {
 
     test {
         dependsOn(shadowJar)
-        environment("NAIS_CLUSTER_NAME", "local") // TODO: usikker på om disse trengs om det settes i testcontainers
+        environment("NAIS_CLUSTER_NAME", "local")
         environment("GCP_TEAM_PROJECT_ID", "pia")
         environment("BIGQUERY_DATASET_ID", "pia_bigquery_sink_v1_dataset_local")
         environment("KAFKA_CONSUMER_LOOP_DELAY", "1000")

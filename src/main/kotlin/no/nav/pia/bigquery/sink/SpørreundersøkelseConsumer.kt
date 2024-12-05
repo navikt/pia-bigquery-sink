@@ -1,7 +1,7 @@
 package no.nav.pia.bigquery.sink
 
 import com.google.cloud.bigquery.InsertAllRequest
-import ia.felles.integrasjoner.kafkameldinger.eksport.BehovsvurderingMelding
+import ia.felles.integrasjoner.kafkameldinger.eksport.SpørreundersøkelseEksportMelding
 import ia.felles.integrasjoner.kafkameldinger.spørreundersøkelse.SpørreundersøkelseStatus
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory
 import java.time.Duration
 import kotlin.coroutines.CoroutineContext
 
-class BehovsvurderingConsumer(
+class SpørreundersøkelseConsumer(
     kafkaConfig: KafkaConfig,
     private val bigQueryService: BigQueryService,
 ) : CoroutineScope,
@@ -66,7 +66,7 @@ class BehovsvurderingConsumer(
                         records.forEach { melding ->
                             try {
                                 val behovsvurdering = json.decodeFromString<BehovsvurderingKafkamelding>(melding.value())
-                                log.info("Mottok behovsvurdering med id: ${behovsvurdering.id}")
+                                log.info("Mottok spørreundersøkelse av typen '${behovsvurdering.type}' med id: ${behovsvurdering.id}")
                                 bigQueryService.insert(behovsvurdering = behovsvurdering)
                             } catch (e: IllegalArgumentException) {
                                 log.error(
@@ -107,6 +107,7 @@ class BehovsvurderingConsumer(
     data class BehovsvurderingKafkamelding(
         override val id: String,
         override val orgnr: String,
+        override val type: String,
         override val status: SpørreundersøkelseStatus,
         override val samarbeidId: Int,
         override val saksnummer: String,
@@ -118,11 +119,12 @@ class BehovsvurderingConsumer(
         override val fullført: LocalDateTime? = null,
         override val førsteSvarMotatt: LocalDateTime? = null,
         override val sisteSvarMottatt: LocalDateTime? = null,
-    ) : BehovsvurderingMelding {
+    ) : SpørreundersøkelseEksportMelding {
         fun tilRad(): InsertAllRequest.RowToInsert {
             val felter = mutableMapOf(
                 "id" to id,
                 "orgnr" to orgnr,
+                "type" to type,
                 "status" to status.toString(),
                 "samarbeidId" to samarbeidId,
                 "saksnummer" to saksnummer,

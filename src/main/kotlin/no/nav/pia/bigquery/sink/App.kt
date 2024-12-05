@@ -37,7 +37,7 @@ fun main() {
         run()
     }.also { HelseMonitor.leggTilHelsesjekk(it) }
 
-    BehovsvurderingConsumer(kafkaConfig = kafkaConfig, bigQueryService = bigQueryService).apply {
+    SpørreundersøkelseConsumer(kafkaConfig = kafkaConfig, bigQueryService = bigQueryService).apply {
         run()
     }.also { HelseMonitor.leggTilHelsesjekk(it) }
 
