@@ -1,16 +1,16 @@
-val ktorVersion = "3.0.1"
-val iaFellesVersion = "1.10.0-RC2"
-val prometheusVersion = "1.13.6"
-val bigQueryVersion = "2.43.3"
-val kafkaVersion = "3.8.1"
-val mockkVersion = "1.13.13"
+val ktorVersion = "3.0.3"
+val iaFellesVersion = "1.10.1"
+val prometheusVersion = "1.14.2"
+val bigQueryVersion = "2.45.0"
+val kafkaVersion = "3.9.0"
+val mockkVersion = "1.13.14"
 val kotestVerstion = "6.0.0.M1"
-val testcontainersVersion = "1.20.3"
-val logbackVersion = "1.5.12"
+val testcontainersVersion = "1.20.4"
+val logbackVersion = "1.5.15"
 
 plugins {
-    kotlin("jvm") version "2.0.21"
-    kotlin("plugin.serialization") version "2.0.21"
+    kotlin("jvm") version "2.1.0"
+    kotlin("plugin.serialization") version "2.1.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -29,7 +29,7 @@ dependencies {
     implementation("com.github.navikt:ia-felles:$iaFellesVersion")
 
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
-    testImplementation("org.wiremock:wiremock-standalone:3.9.2")
+    testImplementation("org.wiremock:wiremock-standalone:3.10.0")
 
     // Ktor Server
     implementation("io.ktor:ktor-server-core:$ktorVersion")
@@ -77,7 +77,7 @@ dependencies {
     constraints {
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.1.115.Final")
+                require("4.1.116.Final")
             }
             because("Ktor 3.0.1 inneholder 4.1.114.Final som er sårbar for DoS")
         }
@@ -89,7 +89,7 @@ dependencies {
         }
         testImplementation("commons-io:commons-io") {
             version {
-                require("2.17.0")
+                require("2.18.0")
             }
             because("testcontainers har sårbar versjon")
         }
