@@ -74,6 +74,14 @@ dependencies {
     testImplementation("org.testcontainers:gcloud:$testcontainersVersion")
 
     constraints {
+        implementation("net.minidev:json-smart") {
+            version {
+                require("2.5.2")
+            }
+            because(
+                "versjoner < 2.5.2 har diverse sårbarheter. Inkludert i kotest 6.0.0.M1",
+            )
+        }
         implementation("io.netty:netty-codec-http2") {
             version {
                 require("4.1.118.Final")
