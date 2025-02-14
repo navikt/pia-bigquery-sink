@@ -1,16 +1,16 @@
-val ktorVersion = "3.0.3"
-val iaFellesVersion = "1.10.1"
-val prometheusVersion = "1.14.2"
-val bigQueryVersion = "2.45.0"
+val ktorVersion = "3.1.0"
+val iaFellesVersion = "1.10.2"
+val prometheusVersion = "1.14.4"
+val bigQueryVersion = "2.48.0"
 val kafkaVersion = "3.9.0"
-val mockkVersion = "1.13.14"
+val mockkVersion = "1.13.16"
 val kotestVerstion = "6.0.0.M1"
 val testcontainersVersion = "1.20.4"
-val logbackVersion = "1.5.15"
+val logbackVersion = "1.5.16"
 
 plugins {
-    kotlin("jvm") version "2.1.0"
-    kotlin("plugin.serialization") version "2.1.0"
+    kotlin("jvm") version "2.1.10"
+    kotlin("plugin.serialization") version "2.1.10"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -28,8 +28,7 @@ dependencies {
     // Felles definisjoner for IA-domenet
     implementation("com.github.navikt:ia-felles:$iaFellesVersion")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
-    testImplementation("org.wiremock:wiremock-standalone:3.10.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
     // Ktor Server
     implementation("io.ktor:ktor-server-core:$ktorVersion")
@@ -69,7 +68,7 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:$kotestVerstion")
     testImplementation("io.kotest:kotest-assertions-json:$kotestVerstion")
     testImplementation("io.mockk:mockk:$mockkVersion")
-
+    testImplementation("org.wiremock:wiremock-standalone:3.12.0")
     testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
     testImplementation("org.testcontainers:kafka:$testcontainersVersion")
     testImplementation("org.testcontainers:gcloud:$testcontainersVersion")
@@ -77,9 +76,9 @@ dependencies {
     constraints {
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.1.116.Final")
+                require("4.1.118.Final")
             }
-            because("Ktor 3.0.1 inneholder 4.1.114.Final som er sårbar for DoS")
+            because("Versjoner <4.1.117 er sårbare. Inkludert i ktor 3.1.0")
         }
         testImplementation("org.apache.commons:commons-compress") {
             version {
