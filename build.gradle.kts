@@ -1,12 +1,12 @@
-val ktorVersion = "3.1.0"
+val ktorVersion = "3.1.1"
 val iaFellesVersion = "1.10.2"
 val prometheusVersion = "1.14.4"
-val bigQueryVersion = "2.48.0"
+val bigQueryVersion = "2.48.1"
 val kafkaVersion = "3.9.0"
-val mockkVersion = "1.13.16"
+val mockkVersion = "1.13.17"
 val kotestVerstion = "6.0.0.M1"
-val testcontainersVersion = "1.20.4"
-val logbackVersion = "1.5.16"
+val testcontainersVersion = "1.20.6"
+val logbackVersion = "1.5.17"
 
 plugins {
     kotlin("jvm") version "2.1.10"
@@ -68,7 +68,7 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:$kotestVerstion")
     testImplementation("io.kotest:kotest-assertions-json:$kotestVerstion")
     testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("org.wiremock:wiremock-standalone:3.12.0")
+    testImplementation("org.wiremock:wiremock-standalone:3.12.1")
     testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
     testImplementation("org.testcontainers:kafka:$testcontainersVersion")
     testImplementation("org.testcontainers:gcloud:$testcontainersVersion")
@@ -84,7 +84,7 @@ dependencies {
         }
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.1.118.Final")
+                require("4.1.119.Final")
             }
             because("Versjoner <4.1.117 er sårbare. Inkludert i ktor 3.1.0")
         }
