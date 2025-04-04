@@ -48,10 +48,6 @@ class BigQueryService(
         }
         val tableId = schemaId.toTableId(registry.datasetId)
 
-        if (NaisEnvironment.cluster == Clusters.DEV_GCP.clusterId) {
-            log.info("payload: '$payload'")
-        }
-
         if (schemaDefinition.skip(payload)) {
             if (NaisEnvironment.cluster == Clusters.DEV_GCP.clusterId) {
                 log.info("skip: true, payload: '$payload'")
