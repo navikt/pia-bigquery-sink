@@ -1,8 +1,6 @@
 package no.nav.pia.bigquery.sink
 
 import com.google.cloud.bigquery.InsertAllRequest
-import ia.felles.integrasjoner.kafkameldinger.eksport.SpørreundersøkelseEksportMelding
-import ia.felles.integrasjoner.kafkameldinger.spørreundersøkelse.SpørreundersøkelseStatus
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -105,21 +103,21 @@ class SpørreundersøkelseConsumer(
 
     @Serializable
     data class SpørreundersøkelseEksport(
-        override val id: String,
-        override val orgnr: String,
-        override val type: String,
-        override val status: SpørreundersøkelseStatus,
-        override val samarbeidId: Int,
-        override val saksnummer: String,
-        override val opprettetAv: String,
-        override val opprettet: LocalDateTime,
-        override val harMinstEttSvar: Boolean,
-        override val endret: LocalDateTime? = null,
-        override val påbegynt: LocalDateTime? = null,
-        override val fullført: LocalDateTime? = null,
-        override val førsteSvarMotatt: LocalDateTime? = null,
-        override val sisteSvarMottatt: LocalDateTime? = null,
-    ) : SpørreundersøkelseEksportMelding {
+        val id: String,
+        val orgnr: String,
+        val type: String,
+        val status: SpørreundersøkelseStatus,
+        val samarbeidId: Int,
+        val saksnummer: String,
+        val opprettetAv: String,
+        val opprettet: LocalDateTime,
+        val harMinstEttSvar: Boolean,
+        val endret: LocalDateTime? = null,
+        val påbegynt: LocalDateTime? = null,
+        val fullført: LocalDateTime? = null,
+        val førsteSvarMotatt: LocalDateTime? = null,
+        val sisteSvarMottatt: LocalDateTime? = null,
+    ) {
         fun tilRad(): InsertAllRequest.RowToInsert {
             val felter = mutableMapOf(
                 "id" to id,
@@ -143,5 +141,12 @@ class SpørreundersøkelseConsumer(
 
             return felter.toRowToInsert()
         }
+    }
+
+    enum class SpørreundersøkelseStatus {
+        OPPRETTET,
+        PÅBEGYNT,
+        AVSLUTTET,
+        SLETTET,
     }
 }

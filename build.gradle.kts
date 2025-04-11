@@ -18,15 +18,11 @@ group = "no.nav"
 
 repositories {
     mavenCentral()
-    maven("https://jitpack.io")
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
-
-    // Felles definisjoner for IA-domenet
-    implementation("com.github.navikt:ia-felles:$iaFellesVersion")
 
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
