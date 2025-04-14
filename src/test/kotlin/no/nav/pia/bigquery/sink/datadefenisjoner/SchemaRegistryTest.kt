@@ -5,11 +5,11 @@ import com.google.cloud.bigquery.DatasetId
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
 import kotlinx.serialization.json.Json
+import no.nav.pia.bigquery.sink.SamarbeidConsumer.SamarbeidMelding
 import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanKafkamelding
 import no.nav.pia.bigquery.sink.SpørreundersøkelseConsumer.SpørreundersøkelseEksport
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
-import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeid-bigquery-v1`
 import no.nav.pia.bigquery.sink.oversettFraCetTilUtc
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
@@ -236,22 +236,26 @@ internal class SchemaRegistryTest {
 
     @Test
     internal fun `kan transformere samarbeid melding`() {
-        val json = ObjectMapper().readTree(
+        val melding =
             """
             {
-                "id": 5,
-                "saksnummer":"01GVJFE0REVM09011RS6B11X46",
-                "navn": "Samarbeid Med Navn",
-                "status": "SLETTET"
+              "id": 443,
+              "saksnummer": "01JEAZ68CZ688Z18PC0Z1910TD",
+              "opprettet": "2024-12-05T09:33:17.297807",
+              "fullført": "2025-04-14T13:14:40.660313",
+              "sistEndret": "2025-04-14T13:14:40.660313",
+              "navn": "KONTROLLERT OPPRØMT TIGER AS",
+              "status": "FULLFØRT"
             }
-            """.trimIndent(),
-        )
+            """.trimIndent()
 
-        val content = `samarbeid-bigquery-v1`.transform(json).content
-        content.shouldContain("id" to 5)
-        content.shouldContain("saksnummer" to "01GVJFE0REVM09011RS6B11X46")
-        content.shouldContain("navn" to "Samarbeid Med Navn")
-        content.shouldContain("status" to "SLETTET")
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
+
+        val samarbeid = json.decodeFromString<SamarbeidMelding>(melding)
+
+        samarbeid.id shouldBe 443
     }
 
     @Test

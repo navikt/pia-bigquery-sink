@@ -63,7 +63,7 @@ class SamarbeidConsumer(
 
                         records.forEach { melding ->
                             try {
-                                val samarbeid = json.decodeFromString<SamarbeidEksport>(melding.value())
+                                val samarbeid = json.decodeFromString<SamarbeidMelding>(melding.value())
                                 bigQueryService.insert(samarbeid = samarbeid)
                             } catch (e: IllegalArgumentException) {
                                 log.error(
@@ -101,7 +101,7 @@ class SamarbeidConsumer(
     override fun helse() = if (isRunning()) Helse.UP else Helse.DOWN
 
     @Serializable
-    data class SamarbeidEksport(
+    data class SamarbeidMelding(
         val id: Int,
         val saksnummer: String,
         val opprettet: LocalDateTime,

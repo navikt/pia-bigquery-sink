@@ -2,7 +2,7 @@ package no.nav.pia.bigquery.sink
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.TableId
-import no.nav.pia.bigquery.sink.SamarbeidConsumer.SamarbeidEksport
+import no.nav.pia.bigquery.sink.SamarbeidConsumer.SamarbeidMelding
 import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanKafkamelding
 import no.nav.pia.bigquery.sink.SpørreundersøkelseConsumer.SpørreundersøkelseEksport
 import no.nav.pia.bigquery.sink.datadefenisjoner.DATASET_ID
@@ -131,7 +131,7 @@ class BigQueryService(
         }
     }
 
-    fun insert(samarbeid: SamarbeidEksport) {
+    fun insert(samarbeid: SamarbeidMelding) {
         val tableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, `samarbeid-bigquery-v1`.schemaId.toTableName())
 
         runCatching {
