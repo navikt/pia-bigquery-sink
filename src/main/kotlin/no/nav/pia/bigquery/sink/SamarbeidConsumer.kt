@@ -29,7 +29,7 @@ class SamarbeidConsumer(
     Helsesjekk {
     private val log: Logger = LoggerFactory.getLogger(this::class.java)
     private val job: Job = Job()
-    private val topic = KafkaTopic.BEHOVSVURDERING_TOPIC
+    private val topic = KafkaTopic.SAMARBEID_TOPIC
     private val kafkaConsumer = KafkaConsumer(
         kafkaConfig.consumerProperties(consumerGroupId = topic.konsumentGruppe),
         StringDeserializer(),
