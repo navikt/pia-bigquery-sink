@@ -2,9 +2,11 @@ package no.nav.pia.bigquery.sink
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.TableId
+import no.nav.pia.bigquery.sink.SamarbeidConsumer.SamarbeidEksport
 import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanKafkamelding
 import no.nav.pia.bigquery.sink.SpørreundersøkelseConsumer.SpørreundersøkelseEksport
 import no.nav.pia.bigquery.sink.datadefenisjoner.DATASET_ID
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeid-bigquery-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeidsplan-bigquery-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeidsplan-innhold-bigquery-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeidsplan-tema-bigquery-v1`
@@ -86,7 +88,7 @@ class BigQueryService(
             client.insert(planTableId, plan.tilRad())
         }.onFailure { exception ->
             log.error(
-                "insert feilet for planID '${plan.id}' - feilmelding: ${exception.message} - plan: $plan",
+                "insert feilet for planID '${plan.id}' - feilmelding: ${exception.message}",
             )
             throw exception
         }
@@ -96,7 +98,7 @@ class BigQueryService(
                 client.insert(temaTableId, tema.tilRad(planId = plan.id))
             }.onFailure { exception ->
                 log.error(
-                    "insert feilet for tema: '${tema.id}' knyttet til plan: '${plan.id}' - feilmelding: ${exception.message} - plan: $plan",
+                    "insert feilet for tema: '${tema.id}' knyttet til plan: '${plan.id}' - feilmelding: ${exception.message}",
                 )
                 throw exception
             }
@@ -108,7 +110,7 @@ class BigQueryService(
                     client.insert(innholdTableId, innhold.tilRad(temaId = tema.id))
                 }.onFailure { exception ->
                     log.error(
-                        "insert feilet for innhold: '${innhold.id}' knyttet til tema: '${tema.id}', knyttet til plan: '${plan.id}' - feilmelding: ${exception.message} - plan: $plan",
+                        "insert feilet for innhold: '${innhold.id}' knyttet til tema: '${tema.id}', knyttet til plan: '${plan.id}' - feilmelding: ${exception.message}",
                     )
                     throw exception
                 }
@@ -123,8 +125,19 @@ class BigQueryService(
             client.insert(tableId = tableId, behovsvurdering.tilRad())
         }.onFailure { exception ->
             log.error(
-                "insert feilet for behovsvurdering '${behovsvurdering.id}' og for samarbeid '${behovsvurdering.samarbeidId}' - feilmelding: ${exception.message} - behovsvurdering: $behovsvurdering",
+                "insert feilet for behovsvurdering '${behovsvurdering.id}' og for samarbeid '${behovsvurdering.samarbeidId}' - feilmelding: ${exception.message}",
             )
+            throw exception
+        }
+    }
+
+    fun insert(samarbeid: SamarbeidEksport) {
+        val tableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, `samarbeid-bigquery-v1`.schemaId.toTableName())
+
+        runCatching {
+            client.insert(tableId = tableId, samarbeid.tilRad())
+        }.onFailure { exception ->
+            log.error("insert feilet for samarbeid '${samarbeid.id}' feilmelding: ${exception.message}")
             throw exception
         }
     }

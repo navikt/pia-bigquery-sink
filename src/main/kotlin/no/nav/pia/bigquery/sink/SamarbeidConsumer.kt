@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory
 import java.time.Duration
 import kotlin.coroutines.CoroutineContext
 
-class SpørreundersøkelseConsumer(
+class SamarbeidConsumer(
     kafkaConfig: KafkaConfig,
     private val bigQueryService: BigQueryService,
 ) : CoroutineScope,
@@ -63,9 +63,8 @@ class SpørreundersøkelseConsumer(
 
                         records.forEach { melding ->
                             try {
-                                val behovsvurdering = json.decodeFromString<SpørreundersøkelseEksport>(melding.value())
-                                log.info("Mottok spørreundersøkelse av typen '${behovsvurdering.type}' med id: ${behovsvurdering.id}")
-                                bigQueryService.insert(behovsvurdering = behovsvurdering)
+                                val samarbeid = json.decodeFromString<SamarbeidEksport>(melding.value())
+                                bigQueryService.insert(samarbeid = samarbeid)
                             } catch (e: IllegalArgumentException) {
                                 log.error(
                                     "Mottok feil formatert kafkamelding i topic: ${topic.navnMedNamespace}, melding: '${melding.value()}'",
@@ -102,52 +101,33 @@ class SpørreundersøkelseConsumer(
     override fun helse() = if (isRunning()) Helse.UP else Helse.DOWN
 
     @Serializable
-    data class SpørreundersøkelseEksport(
-        val id: String,
-        val orgnr: String,
-        val type: String,
-        val status: SpørreundersøkelseStatus,
-        val samarbeidId: Int,
+    data class SamarbeidEksport(
+        val id: Int,
         val saksnummer: String,
-        val opprettetAv: String,
         val opprettet: LocalDateTime,
-        val harMinstEttSvar: Boolean,
-        val endret: LocalDateTime? = null,
-        val påbegynt: LocalDateTime? = null,
+        val navn: String? = null,
+        val status: String? = null,
+        val avbrutt: LocalDateTime? = null,
         val fullført: LocalDateTime? = null,
-        val førsteSvarMotatt: LocalDateTime? = null,
-        val sisteSvarMottatt: LocalDateTime? = null,
+        val sistEndret: LocalDateTime? = null,
     ) {
         fun tilRad(): InsertAllRequest.RowToInsert {
             // Required
             val felter = mutableMapOf(
                 "id" to id,
-                "orgnr" to orgnr,
-                "type" to type,
-                "status" to status.toString(),
-                "samarbeidId" to samarbeidId,
                 "saksnummer" to saksnummer,
-                "opprettetAv" to opprettetAv,
                 "opprettet" to opprettet.toString(),
-                "harMinstEttSvar" to harMinstEttSvar,
                 "tidsstempel" to "AUTO",
             )
 
             // Optional
-            endret?.let { felter["endret"] = it.toString() }
-            påbegynt?.let { felter["pabegynt"] = it.toString() }
+            navn?.let { felter["navn"] = it }
+            status?.let { felter["status"] = it }
+            avbrutt?.let { felter["avbrutt"] = it.toString() }
             fullført?.let { felter["fullfort"] = it.toString() }
-            førsteSvarMotatt?.let { felter["forsteSvarMottatt"] = it.toString() }
-            sisteSvarMottatt?.let { felter["sisteSvarMottatt"] = it.toString() }
+            sistEndret?.let { felter["endret"] = it.toString() }
 
             return felter.toRowToInsert()
         }
-    }
-
-    enum class SpørreundersøkelseStatus {
-        OPPRETTET,
-        PÅBEGYNT,
-        AVSLUTTET,
-        SLETTET,
     }
 }
