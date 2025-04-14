@@ -70,6 +70,7 @@ jobs:
   deploy-dev-branch:
     permissions:
       id-token: write
+      contents: read # for private/internal repository
     name: Deploy app to dev
     needs: build
     if: github.ref == 'refs/heads/nytt-samarbeid-table'
