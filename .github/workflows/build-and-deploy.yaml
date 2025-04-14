@@ -1,14 +1,12 @@
 name: Build and deploy pia-bigquery-sink
 
-on:
-  push:
-    paths-ignore:
-      - '**.md'
-      - .gitignore
-      - LICENCE
-      - CODEOWNERS
-    branches:
-      - main
+on: [ push ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
 
 jobs:
   build:
@@ -25,22 +23,25 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+      - name: Setup Gradle to generate and submit dependency graphs
+        uses: gradle/actions/setup-gradle@v4
         with:
           dependency-graph: generate-and-submit
       - name: Compile, run tests and build
-        run: ./gradlew build --info
+        run: ./gradlew build
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
           platforms: linux/amd64,linux/arm64
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Build and push the Docker image
+      - name: Build and push docker image
         uses: nais/docker-build-push@v0
         id: docker-push
         with:
           team: pia
+          tag: ${{ github.ref == 'refs/heads/main' && 'latest' || 'branch_latest' }}
+          platforms: linux/amd64,linux/arm64
     outputs:
       image: ${{ steps.docker-push.outputs.image }}
 
@@ -51,17 +52,38 @@ jobs:
     strategy:
       matrix:
         cluster: [ dev, prod ]
-    name: Deploy to ${{ matrix.cluster }}
+    name: Deploy app to ${{ matrix.cluster }}
     needs: build
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy to ${{ matrix.cluster }}
+      - name: Deploy application to ${{ matrix.cluster }}
         uses: nais/deploy/actions/deploy@v2
         env:
           IMAGE: ${{ needs.build.outputs.image }}
           CLUSTER: ${{ matrix.cluster }}-gcp
-          RESOURCE: .nais/nais-${{ matrix.cluster }}.yaml
+          RESOURCE: .nais/nais.yaml
+          VARS: .nais/${{ matrix.cluster }}.yaml
+
+  deploy-dev-branch:
+    permissions:
+      id-token: write
+    name: Deploy app to dev
+    needs: build
+    if: github.ref == 'refs/heads/unik-klient-id-per-produsent'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy application to dev
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          IMAGE: ${{ needs.build.outputs.image }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/nais.yaml
+          VARS: .nais/dev.yaml
 
   trivy-scan:
     name: Scanner docker image med Trivy
@@ -69,7 +91,7 @@ jobs:
     needs: build
     permissions:
       contents: read # to write sarif
-      security-events: write # push sarif to github security
+      security-events: write # push sarif to GitHub security
       id-token: write # for nais/login
       actions: read # for private repositories
     runs-on: ubuntu-latest

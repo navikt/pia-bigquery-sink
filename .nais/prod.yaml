@@ -1,0 +1,2 @@
+kafkaPool: nav-prod
+dataset: pia_bigquery_sink_v1_dataset_prod

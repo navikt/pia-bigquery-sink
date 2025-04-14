@@ -35,7 +35,7 @@ spec:
     application:
       enabled: true
   kafka:
-    pool: nav-prod
+    pool: {{kafkaPool}}
   resources:
     limits:
       memory: 1024Mi
@@ -45,8 +45,8 @@ spec:
     enabled: true
   gcp:
     bigQueryDatasets:
-      - name: pia_bigquery_sink_v1_dataset_prod
+      - name: {{dataset}}
         permission: READWRITE
   env:
     - name: BIGQUERY_DATASET_ID
-      value: pia_bigquery_sink_v1_dataset_prod
+      value: {{dataset}}
