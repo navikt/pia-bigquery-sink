@@ -3,7 +3,6 @@ package no.nav.pia.bigquery.sink.konfigurasjon
 import no.nav.pia.bigquery.sink.konfigurasjon.KafkaConfig.Companion.CLIENT_ID
 import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.IA_SAK_LEVERANSE_TOPIC
 import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.IA_SAK_STATISTIKK_TOPIC
-import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.SAMARBEID_TOPIC
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.config.SaslConfigs
@@ -22,7 +21,6 @@ class KafkaConfig(
     val generelleTopics = listOf(
         IA_SAK_STATISTIKK_TOPIC,
         IA_SAK_LEVERANSE_TOPIC,
-        SAMARBEID_TOPIC,
     )
 
     private fun securityConfigs() =
