@@ -1,12 +1,13 @@
-val bigQueryVersion = "2.48.1"
+val bigQueryVersion = "2.50.0"
 val kafkaVersion = "3.9.0"
 val kotestVerstion = "6.0.0.M1"
 val ktorVersion = "3.1.3"
+val logbackEncoderVersion = "8.1"
 val logbackVersion = "1.5.18"
-val mockkVersion = "1.13.17"
+val mockkVersion = "1.14.2"
 val prometheusVersion = "1.14.6"
-val testcontainersVersion = "1.20.6"
-val wiremockVersion = "3.12.1"
+val testcontainersVersion = "1.21.0"
+val wiremockVersion = "3.13.0"
 
 plugins {
     kotlin("jvm") version "2.1.20"
@@ -43,7 +44,7 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages-jvm:$ktorVersion")
 
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
-    implementation("net.logstash.logback:logstash-logback-encoder:8.0")
+    implementation("net.logstash.logback:logstash-logback-encoder:$logbackEncoderVersion")
 
     // Metrics
     implementation("io.ktor:ktor-server-metrics-micrometer-jvm:$ktorVersion")
@@ -86,7 +87,7 @@ dependencies {
         }
         testImplementation("commons-io:commons-io") {
             version {
-                require("2.18.0")
+                require("2.19.0")
             }
             because("testcontainers har sårbar versjon")
         }
