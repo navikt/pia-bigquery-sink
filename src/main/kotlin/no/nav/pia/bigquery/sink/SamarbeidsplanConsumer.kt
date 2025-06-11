@@ -65,9 +65,9 @@ class SamarbeidsplanConsumer(
 
                         records.forEach { melding ->
                             try {
-                                val plan = json.decodeFromString<PlanKafkamelding>(melding.value())
-                                log.info("Mottok plan med id: ${plan.id}")
-                                bigQueryService.insert(plan = plan)
+                                val undertemaer = json.decodeFromString<List<InnholdIPlanMelding>>(melding.value())
+                                log.info("Mottok plan med id: ${undertemaer.first().planId}")
+                                bigQueryService.insert(undertemaer = undertemaer)
                             } catch (e: IllegalArgumentException) {
                                 log.error(
                                     "Mottok feil formatert kafkamelding i topic: ${topic.navnMedNamespace}, melding: '${melding.value()}'",
@@ -104,52 +104,38 @@ class SamarbeidsplanConsumer(
     override fun helse() = if (isRunning()) Helse.UP else Helse.DOWN
 
     @Serializable
-    data class PlanKafkamelding(
-        val id: String,
+    data class InnholdIPlanMelding(
+        val id: Int,
+        val temaId: Int,
+        val planId: String,
         val samarbeidId: Int,
-        val sistEndret: LocalDateTime,
-        val temaer: List<TemaKafkamelding>,
-    ) {
-        fun tilRad(): InsertAllRequest.RowToInsert =
-            mapOf(
-                "id" to id,
-                "samarbeidId" to samarbeidId,
-                "endret" to sistEndret.toString(),
-                "tidsstempel" to "AUTO",
-            ).toRowToInsert()
-    }
-
-    @Serializable
-    data class TemaKafkamelding(
-        val id: Int,
         val navn: String,
+        val temanavn: String,
         val inkludert: Boolean,
-        val innhold: List<InnholdKafkamelding>,
-    ) {
-        fun tilRad(planId: String): InsertAllRequest.RowToInsert =
-            mapOf(
-                "id" to id,
-                "navn" to navn,
-                "inkludert" to inkludert,
-                "planId" to planId,
-            ).toRowToInsert()
-    }
-
-    @Serializable
-    data class InnholdKafkamelding(
-        val id: Int,
-        val navn: String,
-        val inkludert: Boolean,
-        val status: InnholdStatus? = null,
+        val sistEndretTidspunktPlan: LocalDateTime,
+        val status: Status? = null,
         val startDato: LocalDate? = null,
         val sluttDato: LocalDate? = null,
     ) {
-        fun tilRad(temaId: Int): InsertAllRequest.RowToInsert {
+        @Serializable
+        enum class Status {
+            PLANLAGT,
+            PÅGÅR,
+            FULLFØRT,
+            AVBRUTT,
+        }
+
+        fun tilRad(): InsertAllRequest.RowToInsert {
             val obligatoriskeFelter = mapOf(
                 "id" to id,
-                "temaId" to temaId,
+                "tema_id" to temaId,
+                "plan_id" to planId,
+                "samarbeid_id" to samarbeidId,
                 "navn" to navn,
+                "temanavn" to temanavn,
                 "inkludert" to inkludert,
+                "sist_endret_tidspunkt_plan" to sistEndretTidspunktPlan.toString(),
+                "tidsstempel" to "AUTO",
             )
 
             return if (inkludert && status != null && startDato != null && sluttDato != null) {
@@ -169,13 +155,5 @@ class SamarbeidsplanConsumer(
                 obligatoriskeFelter.toRowToInsert()
             }
         }
-    }
-
-    @Serializable
-    enum class InnholdStatus {
-        PLANLAGT,
-        PÅGÅR,
-        FULLFØRT,
-        AVBRUTT,
     }
 }
