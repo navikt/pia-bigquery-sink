@@ -3,13 +3,11 @@ package no.nav.pia.bigquery.sink
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.bigquery.TableId
 import no.nav.pia.bigquery.sink.SamarbeidConsumer.SamarbeidMelding
-import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanKafkamelding
+import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.InnholdIPlanMelding
 import no.nav.pia.bigquery.sink.SpørreundersøkelseConsumer.SpørreundersøkelseEksport
 import no.nav.pia.bigquery.sink.datadefenisjoner.DATASET_ID
-import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeid-bigquery-v1`
-import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeidsplan-bigquery-v1`
-import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeidsplan-innhold-bigquery-v1`
-import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeidsplan-tema-bigquery-v1`
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeid-v1`
+import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`samarbeidsplan-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`sporreundersokelse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.schemaRegistry
 import no.nav.pia.bigquery.sink.konfigurasjon.Clusters
@@ -28,16 +26,16 @@ class BigQueryService(
 
     fun migrate(registry: Registry) {
         log.info("Kjører migrering")
-        val tableInfoById = registry.mapValues { it.value.toTableInfo(registry.datasetId) }
+        val tableInfoById = registry.mapValues { it.value.toTableInfo(datasetId = registry.datasetId) }
 
         // create missing tables
         tableInfoById
-            .filterValues { !client.tablePresent(it.tableId) }
+            .filterValues { !client.tablePresent(tableId = it.tableId) }
             .forEach { (_, tableInfo) -> client.create(tableInfo) }
         // add missing columns
         tableInfoById
-            .filterValues { client.tablePresent(it.tableId) }
-            .forEach { (_, tableInfo) -> client.update(tableInfo.tableId, tableInfo) }
+            .filterValues { client.tablePresent(tableId = it.tableId) }
+            .forEach { (_, tableInfo) -> client.update(tableId = tableInfo.tableId, updatedTableInfo = tableInfo) }
     }
 
     fun insert(
@@ -48,7 +46,7 @@ class BigQueryService(
         val schemaDefinition = requireNotNull(registry[schemaId]) {
             "Mangler skjema: '$schemaId' i schemaRegistry, følgende skjema finnes: ${schemaRegistry.keys}"
         }
-        val tableId = schemaId.toTableId(registry.datasetId)
+        val tableId = schemaId.toTableId(datasetId = registry.datasetId)
 
         if (schemaDefinition.skip(payload)) {
             if (NaisEnvironment.cluster == Clusters.DEV_GCP.clusterId) {
@@ -58,7 +56,7 @@ class BigQueryService(
         }
 
         runCatching {
-            client.insert(tableId, schemaDefinition.transform(payload))
+            client.insert(tableId, row = schemaDefinition.transform(payload))
         }.onFailure { exception ->
 
             log.error("insert feilet: ${exception.message}")
@@ -66,54 +64,21 @@ class BigQueryService(
         }
     }
 
-    fun insert(plan: PlanKafkamelding) {
-        val planTableId = TableId.of(
+    fun insert(undertemaer: List<InnholdIPlanMelding>) {
+        val samarbeidsplanTableId = TableId.of(
             DATASET_ID.project,
             DATASET_ID.dataset,
-            `samarbeidsplan-bigquery-v1`.schemaId.toTableName(),
-        )
-        val temaTableId = TableId.of(
-            DATASET_ID.project,
-            DATASET_ID.dataset,
-            `samarbeidsplan-tema-bigquery-v1`.schemaId.toTableName(),
+            `samarbeidsplan-v1`.schemaId.toTableName(),
         )
 
-        val innholdTableId = TableId.of(
-            DATASET_ID.project,
-            DATASET_ID.dataset,
-            `samarbeidsplan-innhold-bigquery-v1`.schemaId.toTableName(),
-        )
-
-        runCatching {
-            client.insert(planTableId, plan.tilRad())
-        }.onFailure { exception ->
-            log.error(
-                "insert feilet for planID '${plan.id}' - feilmelding: ${exception.message}",
-            )
-            throw exception
-        }
-
-        plan.temaer.forEach { tema ->
+        undertemaer.forEach { undertema ->
             runCatching {
-                client.insert(temaTableId, tema.tilRad(planId = plan.id))
+                client.insert(tableId = samarbeidsplanTableId, row = undertema.tilRad())
             }.onFailure { exception ->
                 log.error(
-                    "insert feilet for tema: '${tema.id}' knyttet til plan: '${plan.id}' - feilmelding: ${exception.message}",
+                    "insert feilet for undertema: '${undertema.id}' knyttet til tema: '${undertema.temaId}', knyttet til plan: '${undertema.planId}' - feilmelding: ${exception.message}",
                 )
                 throw exception
-            }
-        }
-
-        plan.temaer.forEach { tema ->
-            tema.innhold.forEach { innhold ->
-                runCatching {
-                    client.insert(innholdTableId, innhold.tilRad(temaId = tema.id))
-                }.onFailure { exception ->
-                    log.error(
-                        "insert feilet for innhold: '${innhold.id}' knyttet til tema: '${tema.id}', knyttet til plan: '${plan.id}' - feilmelding: ${exception.message}",
-                    )
-                    throw exception
-                }
             }
         }
     }
@@ -122,7 +87,7 @@ class BigQueryService(
         val tableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, `sporreundersokelse-v1`.schemaId.toTableName())
 
         runCatching {
-            client.insert(tableId = tableId, behovsvurdering.tilRad())
+            client.insert(tableId = tableId, row = behovsvurdering.tilRad())
         }.onFailure { exception ->
             log.error(
                 "insert feilet for behovsvurdering '${behovsvurdering.id}' og for samarbeid '${behovsvurdering.samarbeidId}' - feilmelding: ${exception.message}",
@@ -132,10 +97,10 @@ class BigQueryService(
     }
 
     fun insert(samarbeid: SamarbeidMelding) {
-        val tableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, `samarbeid-bigquery-v1`.schemaId.toTableName())
+        val tableId = TableId.of(DATASET_ID.project, DATASET_ID.dataset, `samarbeid-v1`.schemaId.toTableName())
 
         runCatching {
-            client.insert(tableId = tableId, samarbeid.tilRad())
+            client.insert(tableId = tableId, row = samarbeid.tilRad())
         }.onFailure { exception ->
             log.error("insert feilet for samarbeid '${samarbeid.id}' feilmelding: ${exception.message}")
             throw exception

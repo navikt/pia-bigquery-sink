@@ -6,7 +6,7 @@ import com.google.cloud.bigquery.TableDefinition
 import no.nav.pia.bigquery.sink.schema.SchemaDefinition
 import no.nav.pia.bigquery.sink.schema.standardTableDefinition
 
-val `samarbeid-bigquery-v1` = object : SchemaDefinition {
+val `samarbeid-v1` = object : SchemaDefinition {
     override val schemaId: SchemaDefinition.Id = SchemaDefinition.Id(
         name = "samarbeid",
         version = 1,

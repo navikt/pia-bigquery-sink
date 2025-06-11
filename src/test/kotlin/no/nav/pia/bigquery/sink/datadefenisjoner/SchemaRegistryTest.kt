@@ -2,11 +2,14 @@ package no.nav.pia.bigquery.sink.datadefenisjoner
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.cloud.bigquery.DatasetId
+import io.kotest.inspectors.shouldForAll
+import io.kotest.inspectors.shouldForOne
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.json.Json
 import no.nav.pia.bigquery.sink.SamarbeidConsumer.SamarbeidMelding
-import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.PlanKafkamelding
+import no.nav.pia.bigquery.sink.SamarbeidsplanConsumer.InnholdIPlanMelding
 import no.nav.pia.bigquery.sink.SpørreundersøkelseConsumer.SpørreundersøkelseEksport
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-leveranse-v1`
 import no.nav.pia.bigquery.sink.datadefenisjoner.fia.`ia-sak-statistikk-v1`
@@ -262,97 +265,166 @@ internal class SchemaRegistryTest {
     internal fun `kan transformere samarbeidsplan melding`() {
         val melding =
             """
-            {
-              "id": "09c9248f-76d1-40e9-9399-975a452b6e9a",
-              "samarbeidId": 381,
-              "sistEndret": "2024-11-14T16:34:09.494447",
-              "temaer": [
-                {
-                  "id": 496,
-                  "navn": "Partssamarbeid",
-                  "inkludert": true,
-                  "innhold": [
-                    {
-                      "id": 1805,
-                      "navn": "Utvikle partssamarbeidet",
-                      "inkludert": true
-                    }
-                  ]
-                },
-                {
-                  "id": 497,
-                  "navn": "Sykefraværsarbeid",
-                  "inkludert": true,
-                  "innhold": [
-                    {
-                      "id": 1806,
-                      "navn": "Sykefraværsrutiner",
-                      "inkludert": true
-                    },
-                    {
-                      "id": 1808,
-                      "navn": "Tilretteleggings- og medvirkningsplikt",
-                      "inkludert": false
-                    },
-                    {
-                      "id": 1809,
-                      "navn": "Sykefravær - enkeltsaker",
-                      "inkludert": true
-                    },
-                    {
-                      "id": 1807,
-                      "navn": "Oppfølgingssamtaler",
-                      "inkludert": true
-                    }
-                  ]
-                },
-                {
-                  "id": 498,
-                  "navn": "Arbeidsmiljø",
-                  "inkludert": true,
-                  "innhold": [
-                    {
-                      "id": 1812,
-                      "navn": "Oppfølging av arbeidsmiljøundersøkelser",
-                      "inkludert": true
-                    },
-                    {
-                      "id": 1811,
-                      "navn": "Endring og omstilling",
-                      "inkludert": false
-                    },
-                    {
-                      "id": 1813,
-                      "navn": "Livsfaseorientert personalpolitikk",
-                      "inkludert": false
-                    },
-                    {
-                      "id": 1814,
-                      "navn": "Psykisk helse",
-                      "inkludert": false
-                    },
-                    {
-                      "id": 1815,
-                      "navn": "HelseIArbeid",
-                      "inkludert": false
-                    },
-                    {
-                      "id": 1810,
-                      "navn": "Utvikle arbeidsmiljøet",
-                      "inkludert": true
-                    }
-                  ]
-                }
-              ]
-            }
+            [
+              {
+                "id": 3840,
+                "temaId": 1051,
+                "planId": "7801c4ef-f357-49b2-a8c2-32892ba38268",
+                "samarbeidId": 73,
+                "navn": "Utvikle partssamarbeidet",
+                "temanavn": "Partssamarbeid",
+                "inkludert": false,
+                "sistEndretTidspunktPlan": "2025-06-11T13:18:47.082837",
+                "status": null,
+                "startDato": null,
+                "sluttDato": null
+              },
+              {
+                "id": 3843,
+                "temaId": 1052,
+                "planId": "7801c4ef-f357-49b2-a8c2-32892ba38268",
+                "samarbeidId": 73,
+                "navn": "Tilretteleggings- og medvirkningsplikt",
+                "temanavn": "Sykefraværsarbeid",
+                "inkludert": false,
+                "sistEndretTidspunktPlan": "2025-06-11T13:18:47.082837",
+                "status": null,
+                "startDato": null,
+                "sluttDato": null
+              },
+              {
+                "id": 3844,
+                "temaId": 1052,
+                "planId": "7801c4ef-f357-49b2-a8c2-32892ba38268",
+                "samarbeidId": 73,
+                "navn": "Sykefravær - enkeltsaker",
+                "temanavn": "Sykefraværsarbeid",
+                "inkludert": false,
+                "sistEndretTidspunktPlan": "2025-06-11T13:18:47.082837",
+                "status": null,
+                "startDato": null,
+                "sluttDato": null
+              },
+              {
+                "id": 3841,
+                "temaId": 1052,
+                "planId": "7801c4ef-f357-49b2-a8c2-32892ba38268",
+                "samarbeidId": 73,
+                "navn": "Sykefraværsrutiner",
+                "temanavn": "Sykefraværsarbeid",
+                "inkludert": false,
+                "sistEndretTidspunktPlan": "2025-06-11T13:18:47.082837",
+                "status": null,
+                "startDato": null,
+                "sluttDato": null
+              },
+              {
+                "id": 3842,
+                "temaId": 1052,
+                "planId": "7801c4ef-f357-49b2-a8c2-32892ba38268",
+                "samarbeidId": 73,
+                "navn": "Oppfølgingssamtaler",
+                "temanavn": "Sykefraværsarbeid",
+                "inkludert": false,
+                "sistEndretTidspunktPlan": "2025-06-11T13:18:47.082837",
+                "status": null,
+                "startDato": null,
+                "sluttDato": null
+              },
+              {
+                "id": 3845,
+                "temaId": 1053,
+                "planId": "7801c4ef-f357-49b2-a8c2-32892ba38268",
+                "samarbeidId": 73,
+                "navn": "Utvikle arbeidsmiljøet",
+                "temanavn": "Arbeidsmiljø",
+                "inkludert": false,
+                "sistEndretTidspunktPlan": "2025-06-11T13:18:47.082837",
+                "status": null,
+                "startDato": null,
+                "sluttDato": null
+              },
+              {
+                "id": 3846,
+                "temaId": 1053,
+                "planId": "7801c4ef-f357-49b2-a8c2-32892ba38268",
+                "samarbeidId": 73,
+                "navn": "Endring og omstilling",
+                "temanavn": "Arbeidsmiljø",
+                "inkludert": false,
+                "sistEndretTidspunktPlan": "2025-06-11T13:18:47.082837",
+                "status": null,
+                "startDato": null,
+                "sluttDato": null
+              },
+              {
+                "id": 3847,
+                "temaId": 1053,
+                "planId": "7801c4ef-f357-49b2-a8c2-32892ba38268",
+                "samarbeidId": 73,
+                "navn": "Oppfølging av arbeidsmiljøundersøkelser",
+                "temanavn": "Arbeidsmiljø",
+                "inkludert": false,
+                "sistEndretTidspunktPlan": "2025-06-11T13:18:47.082837",
+                "status": "AVBRUTT",
+                "startDato": "2025-06-06",
+                "sluttDato": "2025-07-06"
+              },
+              {
+                "id": 3848,
+                "temaId": 1053,
+                "planId": "7801c4ef-f357-49b2-a8c2-32892ba38268",
+                "samarbeidId": 73,
+                "navn": "Livsfaseorientert personalpolitikk",
+                "temanavn": "Arbeidsmiljø",
+                "inkludert": false,
+                "sistEndretTidspunktPlan": "2025-06-11T13:18:47.082837",
+                "status": "PLANLAGT",
+                "startDato": "2025-06-06",
+                "sluttDato": "2025-07-06"
+              },
+              {
+                "id": 3850,
+                "temaId": 1053,
+                "planId": "7801c4ef-f357-49b2-a8c2-32892ba38268",
+                "samarbeidId": 73,
+                "navn": "HelseIArbeid",
+                "temanavn": "Arbeidsmiljø",
+                "inkludert": true,
+                "sistEndretTidspunktPlan": "2025-06-11T13:18:47.082837",
+                "status": "FULLFØRT",
+                "startDato": "2025-06-06",
+                "sluttDato": "2025-07-06"
+              },
+              {
+                "id": 3849,
+                "temaId": 1053,
+                "planId": "7801c4ef-f357-49b2-a8c2-32892ba38268",
+                "samarbeidId": 73,
+                "navn": "Psykisk helse",
+                "temanavn": "Arbeidsmiljø",
+                "inkludert": true,
+                "sistEndretTidspunktPlan": "2025-06-11T13:18:47.082837",
+                "status": "PÅGÅR",
+                "startDato": "2025-06-26",
+                "sluttDato": "2025-07-02"
+              }
+            ]
             """.trimIndent()
 
         val json = Json {
             ignoreUnknownKeys = true
         }
 
-        val plan = json.decodeFromString<PlanKafkamelding>(melding)
+        val undertemaer = json.decodeFromString<List<InnholdIPlanMelding>>(melding)
 
-        plan.id shouldBe "09c9248f-76d1-40e9-9399-975a452b6e9a"
+        undertemaer.shouldForAll { it.planId shouldBe "7801c4ef-f357-49b2-a8c2-32892ba38268" }
+        undertemaer.shouldForAll { it.samarbeidId shouldBe 73 }
+        undertemaer.shouldForAll { it.temaId == 1052 || it.temaId == 1053 || it.temaId == 1051 }
+        undertemaer.shouldForAll { it.sistEndretTidspunktPlan shouldBe LocalDateTime.parse("2025-06-11T13:18:47.082837") }
+        undertemaer.shouldForOne { it.status shouldBe InnholdIPlanMelding.Status.PÅGÅR }
+        undertemaer.shouldForOne { it.status shouldBe InnholdIPlanMelding.Status.FULLFØRT }
+        undertemaer.shouldForOne { it.status shouldBe InnholdIPlanMelding.Status.PLANLAGT }
+        undertemaer.shouldForOne { it.status shouldBe InnholdIPlanMelding.Status.AVBRUTT }
     }
 }
