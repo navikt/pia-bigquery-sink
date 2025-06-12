@@ -74,6 +74,7 @@ class BigQueryService(
         undertemaer.forEach { undertema ->
             runCatching {
                 client.insert(tableId = samarbeidsplanTableId, row = undertema.tilRad())
+                log.debug("Samarbeidsplan lagret i Bigquery")
             }.onFailure { exception ->
                 log.error(
                     "insert feilet for undertema: '${undertema.id}' knyttet til tema: '${undertema.temaId}', knyttet til plan: '${undertema.planId}' - feilmelding: ${exception.message}",

@@ -66,7 +66,7 @@ class SamarbeidsplanConsumer(
                         records.forEach { melding ->
                             try {
                                 val undertemaer = json.decodeFromString<List<InnholdIPlanMelding>>(melding.value())
-                                log.info("Mottok plan med id: ${undertemaer.first().planId}")
+
                                 bigQueryService.insert(undertemaer = undertemaer)
                             } catch (e: IllegalArgumentException) {
                                 log.error(
