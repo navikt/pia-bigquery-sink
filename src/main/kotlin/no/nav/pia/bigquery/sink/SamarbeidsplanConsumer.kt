@@ -142,8 +142,8 @@ class SamarbeidsplanConsumer(
                 obligatoriskeFelter.plus(
                     mapOf(
                         "status" to status.toString(),
-                        "startDato" to startDato.toString(),
-                        "sluttdato" to startDato.toString(),
+                        "start_dato" to startDato.toString(),
+                        "slutt_dato" to sluttDato.toString(),
                     ),
                 ).toRowToInsert()
             } else if (inkludert) {

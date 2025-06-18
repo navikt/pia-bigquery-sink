@@ -56,10 +56,10 @@ val `samarbeidsplan-v1` = object : SchemaDefinition {
                 string(name = "status") {
                     description(description = "status på innhold i Plan")
                 }
-                date(name = "startDato") {
+                date(name = "start_dato") {
                     description(description = "Dato for når et innhold er planlagt å starte")
                 }
-                date(name = "sluttDato") {
+                date(name = "slutt_dato") {
                     description(description = "Dato for når et innhold er planlagt å avsluttes")
                 }
             }
