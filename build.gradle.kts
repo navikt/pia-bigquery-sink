@@ -1,13 +1,13 @@
-val bigQueryVersion = "2.50.0"
+val bigQueryVersion = "2.52.0"
 val kafkaVersion = "4.0.0"
-val kotestVerstion = "6.0.0.M1"
+val kotestVerstion = "6.0.0.M4"
 val ktorVersion = "3.2.0"
 val logbackEncoderVersion = "8.1"
 val logbackVersion = "1.5.18"
-val mockkVersion = "1.14.2"
-val prometheusVersion = "1.14.6"
-val testcontainersVersion = "1.21.0"
-val wiremockVersion = "3.13.0"
+val mockkVersion = "1.14.4"
+val prometheusVersion = "1.15.1"
+val testcontainersVersion = "1.21.3"
+val wiremockVersion = "3.13.1"
 
 plugins {
     kotlin("jvm") version "2.2.0"
@@ -76,7 +76,7 @@ dependencies {
                 require("2.5.2")
             }
             because(
-                "versjoner < 2.5.2 har diverse sårbarheter. Inkludert i kotest 6.0.0.M1",
+                "versjoner < 2.5.2 har diverse sårbarheter. Inkludert i kotest 6.0.0.M4",
             )
         }
         testImplementation("org.apache.commons:commons-compress") {
