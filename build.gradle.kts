@@ -10,8 +10,8 @@ val testcontainersVersion = "1.21.0"
 val wiremockVersion = "3.13.0"
 
 plugins {
-    kotlin("jvm") version "2.1.20"
-    kotlin("plugin.serialization") version "2.1.20"
+    kotlin("jvm") version "2.2.0"
+    kotlin("plugin.serialization") version "2.2.0"
     id("com.gradleup.shadow") version "8.3.5"
 }
 
