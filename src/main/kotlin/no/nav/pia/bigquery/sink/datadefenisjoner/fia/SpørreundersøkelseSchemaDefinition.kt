@@ -66,16 +66,6 @@ val `sporreundersokelse-v1` = object : SchemaDefinition {
                         "Tidspunkt for når behovsvurderingen ble fullført",
                     )
                 }
-                timestamp("forsteSvarMottatt") {
-                    description(
-                        "Tidspunkt for når behovsvurderingen fikk første svar",
-                    )
-                }
-                timestamp("sisteSvarMottatt") {
-                    description(
-                        "Tidspunkt for når behovsvurderingen fikk det siste svaret",
-                    )
-                }
                 timestamp("tidsstempel") {
                     required()
                     description("Tidsstempel for lagring i BigQuery")

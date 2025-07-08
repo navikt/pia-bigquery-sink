@@ -115,8 +115,6 @@ class SpørreundersøkelseConsumer(
         val endret: LocalDateTime? = null,
         val påbegynt: LocalDateTime? = null,
         val fullført: LocalDateTime? = null,
-        val førsteSvarMotatt: LocalDateTime? = null,
-        val sisteSvarMottatt: LocalDateTime? = null,
     ) {
         fun tilRad(): InsertAllRequest.RowToInsert {
             // Required
@@ -137,8 +135,6 @@ class SpørreundersøkelseConsumer(
             endret?.let { felter["endret"] = it.toString() }
             påbegynt?.let { felter["pabegynt"] = it.toString() }
             fullført?.let { felter["fullfort"] = it.toString() }
-            førsteSvarMotatt?.let { felter["forsteSvarMottatt"] = it.toString() }
-            sisteSvarMottatt?.let { felter["sisteSvarMottatt"] = it.toString() }
 
             return felter.toRowToInsert()
         }
