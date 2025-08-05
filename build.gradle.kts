@@ -1,11 +1,11 @@
-val bigQueryVersion = "2.52.0"
+val bigQueryVersion = "2.54.0"
 val kafkaVersion = "4.0.0"
 val kotestVerstion = "6.0.0.M4"
-val ktorVersion = "3.2.0"
+val ktorVersion = "3.2.3"
 val logbackEncoderVersion = "8.1"
 val logbackVersion = "1.5.18"
-val mockkVersion = "1.14.4"
-val prometheusVersion = "1.15.1"
+val mockkVersion = "1.14.5"
+val prometheusVersion = "1.15.2"
 val testcontainersVersion = "1.21.3"
 val wiremockVersion = "3.13.1"
 
@@ -81,13 +81,13 @@ dependencies {
         }
         testImplementation("org.apache.commons:commons-compress") {
             version {
-                require("1.27.1")
+                require("1.28.0")
             }
             because("testcontainers har sårbar versjon")
         }
         testImplementation("commons-io:commons-io") {
             version {
-                require("2.19.0")
+                require("2.20.0")
             }
             because("testcontainers har sårbar versjon")
         }
