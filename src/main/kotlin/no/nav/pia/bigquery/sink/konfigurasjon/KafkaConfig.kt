@@ -1,8 +1,6 @@
 package no.nav.pia.bigquery.sink.konfigurasjon
 
 import no.nav.pia.bigquery.sink.konfigurasjon.KafkaConfig.Companion.CLIENT_ID
-import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.IA_SAK_LEVERANSE_TOPIC
-import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.IA_SAK_STATISTIKK_TOPIC
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.config.SaslConfigs
@@ -17,11 +15,6 @@ class KafkaConfig(
     companion object {
         const val CLIENT_ID: String = "pia-bigquery-sink"
     }
-
-    val generelleTopics = listOf(
-        IA_SAK_STATISTIKK_TOPIC,
-        IA_SAK_LEVERANSE_TOPIC,
-    )
 
     private fun securityConfigs() =
         mapOf(
@@ -62,7 +55,6 @@ enum class KafkaTopic(
     private val prefix: String = "pia",
 ) {
     IA_SAK_STATISTIKK_TOPIC("ia-sak-statistikk-v1"),
-    IA_SAK_LEVERANSE_TOPIC("ia-sak-leveranse-v1"),
     BEHOVSVURDERING_TOPIC("behovsvurdering-bigquery-v1"),
     SAMARBEID_TOPIC("samarbeid-bigquery-v1"),
     SAMARBEIDSPLAN_TOPIC("samarbeidsplan-bigquery-v1"), ;

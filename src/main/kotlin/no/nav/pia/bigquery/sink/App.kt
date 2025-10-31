@@ -10,6 +10,7 @@ import no.nav.pia.bigquery.sink.helse.HelseMonitor
 import no.nav.pia.bigquery.sink.helse.healthChecks
 import no.nav.pia.bigquery.sink.konfigurasjon.Clusters
 import no.nav.pia.bigquery.sink.konfigurasjon.KafkaConfig
+import no.nav.pia.bigquery.sink.konfigurasjon.KafkaTopic.IA_SAK_STATISTIKK_TOPIC
 import no.nav.pia.bigquery.sink.konfigurasjon.NaisEnvironment
 import no.nav.pia.bigquery.sink.mertics.metrics
 import java.util.concurrent.TimeUnit
@@ -27,11 +28,13 @@ fun main() {
 
     val kafkaConfig = KafkaConfig()
 
-    kafkaConfig.generelleTopics.forEach { topic ->
-        PiaKafkaLytter(kafkaConfig = kafkaConfig, bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService), topic = topic).apply {
-            run()
-        }.also { HelseMonitor.leggTilHelsesjekk(it) }
-    }
+    PiaKafkaLytter(
+        kafkaConfig = kafkaConfig,
+        bigQueryHendelseMottak = BigQueryHendelseMottak(bigQueryService),
+        topic = IA_SAK_STATISTIKK_TOPIC,
+    ).apply {
+        run()
+    }.also { HelseMonitor.leggTilHelsesjekk(it) }
 
     SamarbeidsplanConsumer(kafkaConfig = kafkaConfig, bigQueryService = bigQueryService).apply {
         run()
