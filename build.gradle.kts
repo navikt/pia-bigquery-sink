@@ -12,7 +12,7 @@ val wiremockVersion = "3.13.1"
 plugins {
     kotlin("jvm") version "2.2.0"
     kotlin("plugin.serialization") version "2.2.0"
-    id("com.gradleup.shadow") version "8.3.5"
+    id("application")
 }
 
 group = "no.nav"
@@ -95,14 +95,7 @@ dependencies {
 }
 
 tasks {
-    shadowJar {
-        manifest {
-            attributes("Main-Class" to "no.nav.pia.bigquery.sink.AppKt")
-        }
-    }
-
     test {
-        dependsOn(shadowJar)
         environment("NAIS_CLUSTER_NAME", "local")
         environment("GCP_TEAM_PROJECT_ID", "pia")
         environment("BIGQUERY_DATASET_ID", "pia_bigquery_sink_v1_dataset_local")
