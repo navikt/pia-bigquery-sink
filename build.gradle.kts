@@ -1,17 +1,17 @@
-val bigQueryVersion = "2.54.0"
-val kafkaVersion = "4.0.0"
-val kotestVerstion = "6.0.0.M4"
-val ktorVersion = "3.2.3"
-val logbackEncoderVersion = "8.1"
-val logbackVersion = "1.5.18"
-val mockkVersion = "1.14.5"
-val prometheusVersion = "1.15.2"
-val testcontainersVersion = "1.21.3"
+val bigQueryVersion = "2.55.3"
+val kafkaVersion = "4.1.0"
+val kotestVerstion = "6.0.4"
+val ktorVersion = "3.3.1"
+val logbackEncoderVersion = "9.0"
+val logbackVersion = "1.5.20"
+val mockkVersion = "1.14.6"
+val prometheusVersion = "1.15.5"
+val testcontainersVersion = "2.0.1"
 val wiremockVersion = "3.13.1"
 
 plugins {
-    kotlin("jvm") version "2.2.0"
-    kotlin("plugin.serialization") version "2.2.0"
+    kotlin("jvm") version "2.2.21"
+    kotlin("plugin.serialization") version "2.2.21"
     id("application")
 }
 
@@ -67,8 +67,8 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
     testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
-    testImplementation("org.testcontainers:kafka:$testcontainersVersion")
-    testImplementation("org.testcontainers:gcloud:$testcontainersVersion")
+    testImplementation("org.testcontainers:testcontainers-kafka:$testcontainersVersion")
+    testImplementation("org.testcontainers:testcontainers-gcloud:$testcontainersVersion")
 
     constraints {
         implementation("net.minidev:json-smart") {
@@ -78,18 +78,6 @@ dependencies {
             because(
                 "versjoner < 2.5.2 har diverse sårbarheter. Inkludert i kotest 6.0.0.M4",
             )
-        }
-        testImplementation("org.apache.commons:commons-compress") {
-            version {
-                require("1.28.0")
-            }
-            because("testcontainers har sårbar versjon")
-        }
-        testImplementation("commons-io:commons-io") {
-            version {
-                require("2.20.0")
-            }
-            because("testcontainers har sårbar versjon")
         }
     }
 }
