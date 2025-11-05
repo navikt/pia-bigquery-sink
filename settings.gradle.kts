@@ -1,1 +1,1 @@
-rootProject.name = "app"
+rootProject.name = "pia-bigquery-sink"
