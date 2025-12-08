@@ -54,7 +54,11 @@ dependencies {
     implementation("com.google.cloud:google-cloud-bigquery:$bigQueryVersion")
 
     // Kafka
-    implementation("org.apache.kafka:kafka-clients:$kafkaVersion")
+    implementation("at.yawk.lz4:lz4-java:1.10.1")
+    implementation("org.apache.kafka:kafka-clients:$kafkaVersion") {
+        // "Fikser CVE-2025-12183 - lz4-java >1.8.1 har sårbar versjon (transitive dependency fra kafka-clients:4.1.0)"
+        exclude("org.lz4", "lz4-java")
+    }
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
@@ -71,19 +75,6 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers-gcloud:$testcontainersVersion")
 
     constraints {
-        implementation("org.lz4:lz4-java") {
-            modules {
-                module("org.lz4:lz4-java") {
-                    replacedBy("at.yawk.lz4:lz4-java", "Fork of the original unmaintained lz4-java library that fixes a CVE")
-                }
-            }
-            version {
-                require("1.8.1")
-            }
-            because(
-                "Fikser CVE-2025-12183 - lz4-java 1.8.0 har sårbar versjon (transitive dependency fra kafka-clients:4.1.0)",
-            )
-        }
         implementation("net.minidev:json-smart") {
             version {
                 require("2.5.2")
@@ -97,6 +88,7 @@ dependencies {
 
 tasks {
     test {
+        dependsOn(installDist)
         environment("NAIS_CLUSTER_NAME", "local")
         environment("GCP_TEAM_PROJECT_ID", "pia")
         environment("BIGQUERY_DATASET_ID", "pia_bigquery_sink_v1_dataset_local")
