@@ -75,6 +75,14 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers-gcloud:$testcontainersVersion")
 
     constraints {
+        implementation("io.netty:netty-codec-http2") {
+            version {
+                require("4.2.8.Final")
+            }
+            because(
+                "io.ktor:ktor-server-netty 3.3.3 har sårbar versjon 4.2.7.Final",
+            )
+        }
         implementation("net.minidev:json-smart") {
             version {
                 require("2.6.0")
