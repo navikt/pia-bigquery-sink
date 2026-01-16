@@ -1,17 +1,17 @@
-val bigQueryVersion = "2.56.0"
-val kafkaVersion = "4.1.0"
-val kotestVerstion = "6.0.4"
-val ktorVersion = "3.3.1"
+val bigQueryVersion = "2.57.1"
+val kafkaVersion = "4.1.1"
+val kotestVerstion = "6.0.7"
+val ktorVersion = "3.3.3"
 val logbackEncoderVersion = "9.0"
-val logbackVersion = "1.5.20"
-val mockkVersion = "1.14.6"
-val prometheusVersion = "1.15.5"
-val testcontainersVersion = "2.0.1"
-val wiremockVersion = "3.13.1"
+val logbackVersion = "1.5.24"
+val mockkVersion = "1.14.7"
+val prometheusVersion = "1.16.2"
+val testcontainersVersion = "2.0.3"
+val wiremockVersion = "3.13.2"
 
 plugins {
-    kotlin("jvm") version "2.2.21"
-    kotlin("plugin.serialization") version "2.2.21"
+    kotlin("jvm") version "2.3.0"
+    kotlin("plugin.serialization") version "2.3.0"
     id("application")
 }
 
@@ -54,7 +54,7 @@ dependencies {
     implementation("com.google.cloud:google-cloud-bigquery:$bigQueryVersion")
 
     // Kafka
-    implementation("at.yawk.lz4:lz4-java:1.10.1")
+    implementation("at.yawk.lz4:lz4-java:1.10.2")
     implementation("org.apache.kafka:kafka-clients:$kafkaVersion") {
         // "Fikser CVE-2025-12183 - lz4-java >1.8.1 har sårbar versjon (transitive dependency fra kafka-clients:4.1.0)"
         exclude("org.lz4", "lz4-java")
@@ -77,7 +77,7 @@ dependencies {
     constraints {
         implementation("net.minidev:json-smart") {
             version {
-                require("2.5.2")
+                require("2.6.0")
             }
             because(
                 "versjoner < 2.5.2 har diverse sårbarheter. Inkludert i kotest 6.0.0.M4",
