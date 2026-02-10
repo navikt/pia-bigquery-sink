@@ -1,17 +1,17 @@
-val bigQueryVersion = "2.57.1"
+val bigQueryVersion = "2.58.0"
 val kafkaVersion = "4.1.1"
-val kotestVerstion = "6.0.7"
-val ktorVersion = "3.3.3"
+val kotestVerstion = "6.1.3"
+val ktorVersion = "3.4.0"
 val logbackEncoderVersion = "9.0"
-val logbackVersion = "1.5.24"
-val mockkVersion = "1.14.7"
-val prometheusVersion = "1.16.2"
+val logbackVersion = "1.5.29"
+val mockkVersion = "1.14.9"
+val prometheusVersion = "1.16.3"
 val testcontainersVersion = "2.0.3"
 val wiremockVersion = "3.13.2"
 
 plugins {
-    kotlin("jvm") version "2.2.21"
-    kotlin("plugin.serialization") version "2.2.21"
+    kotlin("jvm") version "2.3.0"
+    kotlin("plugin.serialization") version "2.3.0"
     id("application")
 }
 
@@ -54,7 +54,7 @@ dependencies {
     implementation("com.google.cloud:google-cloud-bigquery:$bigQueryVersion")
 
     // Kafka
-    implementation("at.yawk.lz4:lz4-java:1.10.2")
+    implementation("at.yawk.lz4:lz4-java:1.10.3")
     implementation("org.apache.kafka:kafka-clients:$kafkaVersion") {
         // "Fikser CVE-2025-12183 - lz4-java >1.8.1 har sårbar versjon (transitive dependency fra kafka-clients:4.1.0)"
         exclude("org.lz4", "lz4-java")
@@ -73,25 +73,6 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
     testImplementation("org.testcontainers:testcontainers-kafka:$testcontainersVersion")
     testImplementation("org.testcontainers:testcontainers-gcloud:$testcontainersVersion")
-
-    constraints {
-        implementation("io.netty:netty-codec-http2") {
-            version {
-                require("4.2.8.Final")
-            }
-            because(
-                "io.ktor:ktor-server-netty 3.3.3 har sårbar versjon 4.2.7.Final",
-            )
-        }
-        implementation("net.minidev:json-smart") {
-            version {
-                require("2.6.0")
-            }
-            because(
-                "versjoner < 2.5.2 har diverse sårbarheter. Inkludert i kotest 6.0.0.M4",
-            )
-        }
-    }
 }
 
 tasks {
