@@ -41,8 +41,6 @@ spec:
       memory: 1024Mi
     requests:
       cpu: 50m
-  secureLogs:
-    enabled: true
   gcp:
     bigQueryDatasets:
       - name: {{dataset}}
