@@ -1,4 +1,4 @@
-val bigQueryVersion = "2.61.0"
+val bigQueryVersion = "2.62.0"
 val kafkaVersion = "4.2.0"
 val kotestVerstion = "6.1.7"
 val ktorVersion = "3.4.1"
@@ -6,12 +6,12 @@ val logbackEncoderVersion = "9.0"
 val logbackVersion = "1.5.32"
 val mockkVersion = "1.14.9"
 val prometheusVersion = "1.16.4"
-val testcontainersVersion = "2.0.3"
+val testcontainersVersion = "2.0.4"
 val wiremockVersion = "3.13.2"
 
 plugins {
-    kotlin("jvm") version "2.3.10"
-    kotlin("plugin.serialization") version "2.3.10"
+    kotlin("jvm") version "2.3.20"
+    kotlin("plugin.serialization") version "2.3.20"
     id("application")
 }
 
