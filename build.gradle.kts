@@ -1,11 +1,11 @@
 val bigQueryVersion = "2.67.0"
-val kafkaVersion = "4.3.0"
-val kotestVerstion = "6.1.11"
-val ktorVersion = "3.5.0"
+val kafkaVersion = "4.3.1"
+val kotestVerstion = "6.2.1"
+val ktorVersion = "3.5.1"
 val logbackEncoderVersion = "9.0"
-val logbackVersion = "1.5.34"
+val logbackVersion = "1.5.35"
 val mockkVersion = "1.14.11"
-val prometheusVersion = "1.16.5"
+val prometheusVersion = "1.17.0"
 val testcontainersVersion = "2.0.5"
 val wiremockVersion = "3.13.2"
 
@@ -73,19 +73,19 @@ dependencies {
 
     constraints {
         implementation("com.fasterxml.jackson.core:jackson-core") {
-            version { require("2.21.3") }
+            version { require("2.22.0") }
             because("versjoner < 2.21.1 har sårbarhet. inkludert i ktor-server-auth:3.4.0")
         }
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.2.13.Final")
+                require("4.2.15.Final")
             }
             because(
                 "versjoner < 4.2.13.Final har sårbarhet. inkludert i ktor-server-netty-jvm:3.4.3",
             )
         }
         implementation("tools.jackson.core:jackson-core") {
-            version { require("3.1.3") }
+            version { require("3.2.0") }
             because("versjoner < 3.1.0 har sårbarhet. inkludert i logstash-logback-encoder:9.0")
         }
     }
