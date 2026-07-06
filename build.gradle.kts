@@ -3,15 +3,15 @@ val kafkaVersion = "4.3.1"
 val kotestVerstion = "6.2.1"
 val ktorVersion = "3.5.1"
 val logbackEncoderVersion = "9.0"
-val logbackVersion = "1.5.35"
+val logbackVersion = "1.5.37"
 val mockkVersion = "1.14.11"
 val prometheusVersion = "1.17.0"
 val testcontainersVersion = "2.0.5"
 val wiremockVersion = "3.13.2"
 
 plugins {
-    kotlin("jvm") version "2.3.21"
-    kotlin("plugin.serialization") version "2.3.21"
+    kotlin("jvm") version "2.4.0"
+    kotlin("plugin.serialization") version "2.4.0"
     id("application")
 }
 
