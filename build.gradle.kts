@@ -1,17 +1,17 @@
-val bigQueryVersion = "2.67.0"
+val bigQueryVersion = "2.68.0"
 val kafkaVersion = "4.3.1"
-val kotestVerstion = "6.2.1"
+val kotestVerstion = "6.2.2"
 val ktorVersion = "3.5.1"
 val logbackEncoderVersion = "9.0"
-val logbackVersion = "1.5.35"
+val logbackVersion = "1.5.37"
 val mockkVersion = "1.14.11"
 val prometheusVersion = "1.17.0"
 val testcontainersVersion = "2.0.5"
 val wiremockVersion = "3.13.2"
 
 plugins {
-    kotlin("jvm") version "2.3.21"
-    kotlin("plugin.serialization") version "2.3.21"
+    kotlin("jvm") version "2.4.0"
+    kotlin("plugin.serialization") version "2.4.0"
     id("application")
 }
 
@@ -51,7 +51,7 @@ dependencies {
     implementation("com.google.cloud:google-cloud-bigquery:$bigQueryVersion")
 
     // Kafka
-    implementation("at.yawk.lz4:lz4-java:1.11.0")
+    implementation("at.yawk.lz4:lz4-java:1.11.1")
     implementation("org.apache.kafka:kafka-clients:$kafkaVersion") {
         // "Fikser CVE-2025-12183 - lz4-java >1.8.1 har sårbar versjon (transitive dependency fra kafka-clients:4.1.0)"
         exclude("org.lz4", "lz4-java")
