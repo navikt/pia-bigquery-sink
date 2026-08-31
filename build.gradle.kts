@@ -5,7 +5,7 @@ val ktorVersion = "3.5.2"
 val logbackEncoderVersion = "9.0"
 val logbackVersion = "1.6.3"
 val mockkVersion = "1.14.11"
-val prometheusVersion = "1.17.0"
+val prometheusVersion = "1.17.1"
 val testcontainersVersion = "2.0.5"
 val wiremockVersion = "3.13.2"
 
