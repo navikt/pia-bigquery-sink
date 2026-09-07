@@ -1,11 +1,11 @@
-val bigQueryVersion = "2.69.0"
+val bigQueryVersion = "2.70.0"
 val kafkaVersion = "4.3.1"
 val kotestVerstion = "6.2.4"
 val ktorVersion = "3.5.2"
 val logbackEncoderVersion = "9.0"
 val logbackVersion = "1.6.3"
 val mockkVersion = "1.14.11"
-val prometheusVersion = "1.17.0"
+val prometheusVersion = "1.17.1"
 val testcontainersVersion = "2.0.5"
 val wiremockVersion = "3.13.2"
 
