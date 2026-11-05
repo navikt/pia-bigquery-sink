@@ -1,17 +1,17 @@
-val bigQueryVersion = "2.71.0"
-val kafkaVersion = "4.3.1"
-val kotestVerstion = "6.2.5"
-val ktorVersion = "3.5.2"
+val bigQueryVersion = "2.74.0"
+val kafkaVersion = "4.4.0"
+val kotestVerstion = "6.2.6"
+val ktorVersion = "3.6.1"
 val logbackEncoderVersion = "9.0"
-val logbackVersion = "1.6.3"
+val logbackVersion = "1.6.6"
 val mockkVersion = "1.14.11"
-val prometheusVersion = "1.17.1"
+val prometheusVersion = "1.17.2"
 val testcontainersVersion = "2.0.5"
 val wiremockVersion = "3.13.2"
 
 plugins {
-    kotlin("jvm") version "2.4.10"
-    kotlin("plugin.serialization") version "2.4.10"
+    kotlin("jvm") version "2.4.21"
+    kotlin("plugin.serialization") version "2.4.21"
     id("application")
 }
 
@@ -51,7 +51,7 @@ dependencies {
     implementation("com.google.cloud:google-cloud-bigquery:$bigQueryVersion")
 
     // Kafka
-    implementation("at.yawk.lz4:lz4-java:1.11.2")
+    implementation("at.yawk.lz4:lz4-java:1.13.0")
     implementation("org.apache.kafka:kafka-clients:$kafkaVersion") {
         // "Fikser CVE-2025-12183 - lz4-java >1.8.1 har sårbar versjon (transitive dependency fra kafka-clients:4.1.0)"
         exclude("org.lz4", "lz4-java")
@@ -72,20 +72,28 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers-gcloud:$testcontainersVersion")
 
     constraints {
+        implementation("org.xerial.snappy:snappy-java") {
+            version { require("1.1.10.12") }
+            because("Sikkerhetsoppdatering av transitiv avhengighet")
+        }
+        implementation("com.google.guava:guava") {
+            version { require("33.8.0-jre") }
+            because("Sikkerhetsoppdatering av transitiv avhengighet")
+        }
         implementation("com.fasterxml.jackson.core:jackson-core") {
-            version { require("2.22.2") }
+            version { require("2.22.4") }
             because("versjoner < 2.22.1 har sårbarhet. inkludert i ktor-server-auth:3.4.0")
         }
         implementation("io.netty:netty-codec-http2") {
             version {
-                require("4.2.18.Final")
+                require("4.2.20.Final")
             }
             because(
                 "versjoner < 4.2.16.Final har sårbarhet. inkludert i ktor-server-netty-jvm:3.4.3",
             )
         }
         implementation("tools.jackson.core:jackson-core") {
-            version { require("3.2.2") }
+            version { require("3.2.4") }
             because("versjoner < 3.2.0 har sårbarhet. inkludert i logstash-logback-encoder:9.0")
         }
     }
