@@ -24,12 +24,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-java@v6.0.1
+      - uses: actions/setup-java@v6.1.0
         with:
           distribution: temurin
           java-version: 21
       - name: Setup Gradle to generate and submit dependency graphs
-        uses: gradle/actions/setup-gradle@v6.4.0
+        uses: gradle/actions/setup-gradle@v6.4.1
         with:
           cache-provider: basic
           dependency-graph: generate-and-submit
@@ -66,7 +66,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Deploy application to ${{ matrix.cluster }}
-        uses: nais/deploy/actions/deploy@v2
+        uses: nais/deploy/actions/deploy@v3
         env:
           IMAGE: ${{ needs.build.outputs.image }}
           CLUSTER: ${{ matrix.cluster }}-gcp
@@ -85,7 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Deploy application to dev
-        uses: nais/deploy/actions/deploy@v2
+        uses: nais/deploy/actions/deploy@v3
         env:
           IMAGE: ${{ needs.build.outputs.image }}
           CLUSTER: dev-gcp
@@ -103,7 +103,7 @@ jobs:
       actions: read # for private repositories
     runs-on: ubuntu-latest
     steps:
-      - uses: navikt/pia-actions/trivy-scan@v1.1.16 # https://github.com/navikt/pia-actions/tree/main/trivy-scan
+      - uses: navikt/pia-actions/trivy-scan@v1.1.17 # https://github.com/navikt/pia-actions/tree/main/trivy-scan
         with:
           image: ${{ needs.build.outputs.image }}
           team: pia
