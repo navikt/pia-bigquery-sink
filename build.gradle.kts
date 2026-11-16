@@ -1,4 +1,4 @@
-val bigQueryVersion = "2.74.0"
+val bigQueryVersion = "2.76.0"
 val kafkaVersion = "4.4.0"
 val kotestVerstion = "6.2.6"
 val ktorVersion = "3.6.1"
